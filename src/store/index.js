@@ -8,7 +8,12 @@ const initialState = {
 };
 
 export default new Vuex.Store({
-  state: { initialState },
+  state: initialState,
+  getters: {
+    user: (state) => {
+      return state.user;
+    },
+  },
   mutations: {},
   actions: {},
   modules: {},
