@@ -3,8 +3,12 @@ import Vuex from "vuex";
 
 Vue.use(Vuex);
 
+const initialState = {
+  user: null,
+};
+
 export default new Vuex.Store({
-  state: {},
+  state: { initialState },
   mutations: {},
   actions: {},
   modules: {},
