@@ -11,7 +11,7 @@
       </div>
     </v-col>
     <v-col cols="12" md="6">
-      <div class="welcome my-2">
+      <div class="welcome mb-5">
         <div>
           <span class="text-h3">Bienvenido</span>
         </div>
@@ -20,7 +20,10 @@
         >
       </div>
       <div class="form">
-        <loginForm></loginForm>
+        <loginForm />
+      </div>
+      <div class="create-account">
+        <createAccount />
       </div>
     </v-col>
   </v-row>
@@ -28,16 +31,14 @@
 
 <script>
 import loginForm from "./loginForm";
+import createAccount from "./createAccount";
 
 export default {
   name: "loginView",
 
   components: {
     loginForm,
-  },
-
-  mounted() {
-    console.log(this.$vuetify.breakpoint);
+    createAccount,
   },
 };
 </script>
