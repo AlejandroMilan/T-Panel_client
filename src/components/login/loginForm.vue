@@ -41,9 +41,7 @@
           >
         </v-col>
         <v-col cols="12" v-if="loginError" class="my-5">
-          <v-alert type="error" dense outlined>{{
-            loginError
-          }}</v-alert>
+          <v-alert type="error" dense outlined>{{ loginError }}</v-alert>
         </v-col>
       </v-row>
     </v-form>
@@ -128,8 +126,7 @@ export default {
         } catch (error) {
           this.loading = false;
           this.loginError = error.response.data.message;
-          if (error.response.status >= 500)
-            console.error(error.response);
+          if (error.response.status >= 500) console.error(error.response);
         }
       }
     },
