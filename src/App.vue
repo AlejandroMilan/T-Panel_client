@@ -31,7 +31,7 @@ export default {
         this.$store.dispatch("setUser", response.data.user);
         this.$store.dispatch("setSessionToken", sessionToken);
         if (this.$route.path === "/login")
-          this.$router.push("/panel")
+          this.$router.replace("/panel")
       } catch (error) {
         if (error.response.status >= 500) console.error(error);
         else {
@@ -40,7 +40,7 @@ export default {
           );
           localStorage.removeItem("sessionToken");
           if (this.$route.path !== "/login")
-            this.$router.push("/login")
+            this.$router.replace("/login")
         }
       }
     }
