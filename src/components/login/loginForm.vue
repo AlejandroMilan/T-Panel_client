@@ -110,6 +110,10 @@ export default {
     },
 
     async submit() {
+      console.log(
+        "Token en el localStorage",
+        localStorage.getItem("sessionToken")
+      );
       this.loginError = "";
       this.validateEmail();
       this.validatePassword();
@@ -121,8 +125,8 @@ export default {
             password: this.password,
           };
           const response = await loginAction(this.httpUrl, user);
-          console.log(response);
           this.loading = false;
+          this.$emit("userLogged", response.data);
         } catch (error) {
           this.loading = false;
           this.loginError = error.response.data.message;

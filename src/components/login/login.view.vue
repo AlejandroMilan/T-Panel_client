@@ -20,7 +20,7 @@
         >
       </div>
       <div class="form">
-        <loginForm />
+        <loginForm @userLogged="userLogged" />
       </div>
       <div class="create-account">
         <createAccount />
@@ -39,6 +39,14 @@ export default {
   components: {
     loginForm,
     createAccount,
+  },
+
+  methods: {
+    userLogged(data) {
+      this.$store.dispatch("setUser", data.user);
+      this.$store.dispatch("setSessionToken", data.token);
+      console.log("Logueado", data);
+    },
   },
 };
 </script>
