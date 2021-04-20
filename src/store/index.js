@@ -9,6 +9,7 @@ const initialState = {
     return this.enviroment == "dev" ? process.env.VUE_APP_HTTP_URL_DEV : "";
   },
   user: null,
+  sessionToken: null,
 };
 
 export default new Vuex.Store({
@@ -23,13 +24,19 @@ export default new Vuex.Store({
   },
   mutations: {
     setUserHandler: (state, payload) => {
-      state.user = payload
-    }
+      state.user = payload;
+    },
+    setSessionTokenHandler: (state, payload) => {
+      state.sessionToken = payload;
+    },
   },
   actions: {
     setUser: (context, user) => {
-      context.commit('setUserHandler', user)
-    }
+      context.commit("setUserHandler", user);
+    },
+    setSessionToken: (context, token) => {
+      context.commit("setSessionTokenHandler", token);
+    },
   },
   modules: {},
 });
