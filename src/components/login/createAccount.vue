@@ -31,6 +31,7 @@
             necesitas registrate, pide al dueño del taller o a un administrador
             que lleve a cabo tu registro.</v-alert
           >
+          <registerForm @cancel="showRegister = false"></registerForm>
         </v-card-text>
       </v-card>
     </v-dialog>
@@ -38,8 +39,12 @@
 </template>
 
 <script>
+import registerForm from "./registerForm";
+
 export default {
   name: "createAccount",
+
+  components: { registerForm },
 
   data: () => ({
     showRegister: false,
