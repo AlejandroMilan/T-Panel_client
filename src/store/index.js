@@ -9,7 +9,7 @@ const initialState = {
     return this.enviroment == "dev" ? process.env.VUE_APP_HTTP_URL_DEV : "";
   },
   user: null,
-  sessionToken: null,
+  sessionToken: localStorage.getItem("sessionToken") || null,
 };
 
 export default new Vuex.Store({
@@ -36,6 +36,7 @@ export default new Vuex.Store({
     },
     setSessionToken: (context, token) => {
       context.commit("setSessionTokenHandler", token);
+      localStorage.setItem("sessionToken", token);
     },
   },
   modules: {},
