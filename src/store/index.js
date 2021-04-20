@@ -6,11 +6,10 @@ Vue.use(Vuex);
 const initialState = {
   enviroment: process.env.VUE_APP_ENVIROMENT,
   httpUrl: function () {
-    return this.enviroment == "dev" ? process.env.VUE_APP_HTTP_URL_DEV : ""
+    return this.enviroment == "dev" ? process.env.VUE_APP_HTTP_URL_DEV : "";
   },
   user: null,
 };
-
 
 export default new Vuex.Store({
   state: initialState,
@@ -19,7 +18,7 @@ export default new Vuex.Store({
       return state.user;
     },
     httpUrl: (state) => {
-      return state.httpUrl()
+      return state.httpUrl();
     },
   },
   mutations: {},

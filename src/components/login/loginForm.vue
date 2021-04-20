@@ -40,13 +40,18 @@
             >Iniciar sesión</v-btn
           >
         </v-col>
+        <v-col cols="12" v-if="loginError" class="my-5">
+          <v-alert type="error" dense outlined>{{
+            loginError
+          }}</v-alert>
+        </v-col>
       </v-row>
     </v-form>
   </div>
 </template>
 
 <script>
-import { mapGetters } from "vuex"
+import { mapGetters } from "vuex";
 import { validationMixin } from "vuelidate";
 import { required, email } from "vuelidate/lib/validators";
 
@@ -77,6 +82,7 @@ export default {
     loading: false,
     email: "",
     password: "",
+    loginError: "",
     errors: {
       email: [],
       password: [],
@@ -106,6 +112,7 @@ export default {
     },
 
     async submit() {
+      this.loginError = "";
       this.validateEmail();
       this.validatePassword();
       if (this.isFormValid) {
@@ -120,7 +127,9 @@ export default {
           this.loading = false;
         } catch (error) {
           this.loading = false;
-          console.error(error.response.data);
+          this.loginError = error.response.data.message;
+          if (error.response.status >= 500)
+            console.error(error.response);
         }
       }
     },
