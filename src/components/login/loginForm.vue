@@ -32,7 +32,11 @@
           <forgottenPassword />
         </v-col>
         <v-col cols="12" class="mt-5">
-          <v-btn color="primary" :disabled="!isFormValid" @click="submit" :loading="loading"
+          <v-btn
+            color="primary"
+            :disabled="!isFormValid"
+            @click="submit"
+            :loading="loading"
             >Iniciar sesión</v-btn
           >
         </v-col>
@@ -42,10 +46,13 @@
 </template>
 
 <script>
-import forgottenPassword from "./forgottenPassword";
-
+import { mapGetters } from "vuex"
 import { validationMixin } from "vuelidate";
 import { required, email } from "vuelidate/lib/validators";
+
+import forgottenPassword from "./forgottenPassword";
+
+import loginAction from "./login.service";
 
 export default {
   name: "loginForm",
@@ -57,6 +64,7 @@ export default {
   },
 
   computed: {
+    ...mapGetters(["httpUrl"]),
     isFormValid() {
       if (this.errors.email.length) return false;
       if (this.errors.password.length) return false;
@@ -97,12 +105,23 @@ export default {
       this.errors.password = errors;
     },
 
-    submit() {
+    async submit() {
       this.validateEmail();
       this.validatePassword();
       if (this.isFormValid) {
-        console.log("validado");
-        this.loading = true
+        this.loading = true;
+        try {
+          const user = {
+            email: this.email,
+            password: this.password,
+          };
+          const response = await loginAction(this.httpUrl, user);
+          console.log(response);
+          this.loading = false;
+        } catch (error) {
+          this.loading = false;
+          console.error(error.response.data);
+        }
       }
     },
   },
