@@ -21,7 +21,15 @@ export default new Vuex.Store({
       return state.httpUrl();
     },
   },
-  mutations: {},
-  actions: {},
+  mutations: {
+    setUserHandler: (state, payload) => {
+      state.user = payload
+    }
+  },
+  actions: {
+    setUser: (context, user) => {
+      context.commit('setUserHandler', user)
+    }
+  },
   modules: {},
 });
