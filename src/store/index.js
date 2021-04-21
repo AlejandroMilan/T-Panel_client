@@ -12,7 +12,6 @@ const initialState = {
   httpUrl: function () {
     return this.enviroment == "dev" ? process.env.VUE_APP_HTTP_URL_DEV : "";
   },
-  sessionToken: localStorage.getItem("sessionToken") || null,
 };
 
 export default new Vuex.Store({
@@ -20,9 +19,6 @@ export default new Vuex.Store({
   getters: {
     httpUrl: (state) => {
       return state.httpUrl();
-    },
-    sessionToken: (state) => {
-      return state.sessionToken;
     },
     masterToken: (state) => {
       return state.masterToken;
@@ -33,12 +29,7 @@ export default new Vuex.Store({
       state.sessionToken = payload;
     },
   },
-  actions: {
-    setSessionToken: (context, token) => {
-      context.commit("setSessionTokenHandler", token);
-      localStorage.setItem("sessionToken", token);
-    },
-  },
+  actions: {},
   modules: { auth },
   plugins: [createPersistedState()],
 });
