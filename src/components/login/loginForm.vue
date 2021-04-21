@@ -55,7 +55,7 @@ import { required, email } from "vuelidate/lib/validators";
 
 import forgottenPassword from "./forgottenPassword";
 
-import loginAction from "./login.service";
+import { loginAction } from "./login.service";
 
 export default {
   name: "loginForm",
@@ -110,10 +110,6 @@ export default {
     },
 
     async submit() {
-      console.log(
-        "Token en el localStorage",
-        localStorage.getItem("sessionToken")
-      );
       this.loginError = "";
       this.validateEmail();
       this.validatePassword();
