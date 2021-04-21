@@ -1,4 +1,4 @@
-//import axios from 'axios';
+import axios from "axios";
 
 const initialState = {
   user: null,
@@ -11,8 +11,13 @@ const getters = {
   },
 };
 const actions = {
-  setUser: (context, user) => {
-    context.commit("setUserHandler", user);
+  signUp: async (context, userData) => {
+    const response = await axios.post("/users/signup", userData);
+    context.commit("setUserHandler", response.user);
+  },
+  logIn: async (context, userData) => {
+    const response = await axios.post("/users/login", userData);
+    context.commit("setUserHandler", response.user);
   },
 };
 const mutations = {
