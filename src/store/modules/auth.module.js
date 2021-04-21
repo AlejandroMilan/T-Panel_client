@@ -6,6 +6,7 @@ const initialState = {
 
 const state = { initialState };
 const getters = {
+  isAuthenticated: (state) => !!state.user,
   user: (state) => {
     return state.user;
   },
