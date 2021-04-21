@@ -82,8 +82,11 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import { validationMixin } from "vuelidate";
 import { required, email, minLength } from "vuelidate/lib/validators";
+
+import { signupAction } from "./login.service";
 
 export default {
   name: "registerForm",
@@ -91,6 +94,7 @@ export default {
   mixins: [validationMixin],
 
   computed: {
+    ...mapGetters(["httpUrl", "masterToken"]),
     isFormValid() {
       if (this.errors.name.length) return false;
       if (this.errors.email.length) return false;
@@ -160,8 +164,32 @@ export default {
       this.errors.secondPassword = errors;
     },
 
-    submit() {
-      console.log("valida");
+    async submit() {
+      this.validateName();
+      this.validateEmail();
+      this.validateFirstPassword();
+      this.validateSecondPassword();
+      if (this.isFormValid) {
+        try {
+          this.loading = true;
+          const user = {
+            name: this.name,
+            email: this.email,
+            password: this.firstPassword,
+            role: 0,
+          };
+
+          const response = await signupAction(
+            this.httpUrl,
+            user,
+            this.masterToken
+          );
+
+          console.log(response);
+        } catch (error) {
+          console.error(error);
+        }
+      }
     },
   },
 };
