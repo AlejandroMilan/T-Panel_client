@@ -4,6 +4,8 @@ import createPersistedState from "vuex-persistedstate";
 
 Vue.use(Vuex);
 
+import auth from "./modules/auth.module";
+
 const initialState = {
   enviroment: process.env.VUE_APP_ENVIROMENT,
   masterToken: process.env.VUE_APP_MASTER_TOKEN,
@@ -47,5 +49,6 @@ export default new Vuex.Store({
       localStorage.setItem("sessionToken", token);
     },
   },
+  modules: { auth },
   plugins: [createPersistedState()],
 });

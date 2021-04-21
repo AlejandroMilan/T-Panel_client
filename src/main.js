@@ -5,6 +5,13 @@ import router from "./router";
 import store from "./store";
 import vuetify from "./plugins/vuetify";
 import Vuelidate from "vuelidate";
+import axios from "axios";
+
+axios.defaults.withCredentials = true;
+const isDev = process.env.VUE_APP_ENVIROMENT == "dev";
+axios.defaults.baseURL = isDev
+  ? process.env.VUE_APP_HTTP_URL_DEV
+  : "https://gabbyblog.herokuapp.com/";
 
 Vue.config.productionTip = false;
 
