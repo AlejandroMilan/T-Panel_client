@@ -45,6 +45,7 @@ export default {
     userLogged(data) {
       this.$store.dispatch("setUser", data.user);
       this.$store.dispatch("setSessionToken", data.token);
+      this.$router.replace("/panel");
     },
   },
 };
