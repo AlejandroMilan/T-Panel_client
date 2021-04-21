@@ -31,7 +31,10 @@
             necesitas registrate, pide al dueño del taller o a un administrador
             que lleve a cabo tu registro.</v-alert
           >
-          <registerForm @cancel="showRegister = false"></registerForm>
+          <registerForm
+            @cancel="showRegister = false"
+            @userLogged="userLogged"
+          ></registerForm>
         </v-card-text>
       </v-card>
     </v-dialog>
@@ -49,5 +52,12 @@ export default {
   data: () => ({
     showRegister: false,
   }),
+
+  methods: {
+    userLogged(data) {
+      this.showRegister = false;
+      this.$emit("userLogged", data);
+    },
+  },
 };
 </script>

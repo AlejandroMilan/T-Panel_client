@@ -23,7 +23,7 @@
         <loginForm @userLogged="userLogged" />
       </div>
       <div class="create-account">
-        <createAccount />
+        <createAccount @userLogged="userLogged" />
       </div>
     </v-col>
   </v-row>
@@ -45,7 +45,6 @@ export default {
     userLogged(data) {
       this.$store.dispatch("setUser", data.user);
       this.$store.dispatch("setSessionToken", data.token);
-      console.log("Logueado", data);
     },
   },
 };

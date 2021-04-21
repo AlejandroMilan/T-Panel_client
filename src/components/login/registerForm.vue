@@ -73,8 +73,12 @@
             :disabled="!isFormValid || loading"
             :loading="loading"
             class="ml-2"
+            @click="submit"
             >Crear cuenta</v-btn
           >
+        </v-col>
+        <v-col cols="12" v-if="signupError" class="my-5">
+          <v-alert type="error" dense outlined>{{ signupError }}</v-alert>
         </v-col>
       </v-row>
     </v-form>
@@ -116,6 +120,7 @@ export default {
       firstPassword: [],
       secondPassword: [],
     },
+    signupError: "",
   }),
 
   validations: {
@@ -165,6 +170,7 @@ export default {
     },
 
     async submit() {
+      this.signupError = "";
       this.validateName();
       this.validateEmail();
       this.validateFirstPassword();
@@ -185,9 +191,12 @@ export default {
             this.masterToken
           );
 
-          console.log(response);
+          this.loading = false;
+          this.$emit("userLogged", response.data);
         } catch (error) {
-          console.error(error);
+          this.loading = false;
+          this.signupError = error.response.data.message;
+          if (error.response.status >= 500) console.error(error.response);
         }
       }
     },
