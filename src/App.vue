@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-navigation-drawer v-if="user" app></v-navigation-drawer>
+    <navigationDrawer v-if="user"></navigationDrawer>
     <v-app-bar v-if="user" app></v-app-bar>
     <v-main>
       <v-container fluid>
@@ -22,7 +22,7 @@ export default {
   components: { navigationDrawer },
 
   computed: {
-    ...mapGetters(["user", "httpUrl"]),
+    ...mapGetters(["user"]),
   },
 };
 </script>

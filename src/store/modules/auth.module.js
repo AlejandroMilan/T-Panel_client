@@ -16,20 +16,20 @@ const getters = {
   },
 };
 const actions = {
-  signUp: async (context, userData) => {
+  signUp: async ({ commit }, userData) => {
     const response = await axios.post("/users/signup", userData.user, {
       headers: { token: userData.token },
     });
-    context.commit("setUserHandler", response.user);
-    context.commit("setSessionTokenHandler", response.token);
+    commit("setUserHandler", response.data.user);
+    commit("setSessionTokenHandler", response.data.token);
   },
-  logIn: async (context, userData) => {
+  logIn: async ({ commit }, userData) => {
     const response = await axios.post("/users/login", userData);
-    context.commit("setUserHandler", response.user);
-    context.commit("setSessionTokenHandler", response.token);
+    commit("setUserHandler", response.data.user);
+    commit("setSessionTokenHandler", response.data.token);
   },
-  logout: (context) => {
-    context.commit("setUserHandler", null);
+  logout: ({ commit }) => {
+    commit("setUserHandler", null);
   },
 };
 const mutations = {

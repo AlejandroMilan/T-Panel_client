@@ -54,9 +54,8 @@ export default {
   }),
 
   methods: {
-    userLogged(data) {
+    userLogged() {
       this.showRegister = false;
-      this.$emit("userLogged", data);
     },
   },
 };
