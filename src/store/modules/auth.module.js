@@ -17,7 +17,9 @@ const getters = {
 };
 const actions = {
   signUp: async (context, userData) => {
-    const response = await axios.post("/users/signup", userData);
+    const response = await axios.post("/users/signup", userData.user, {
+      headers: { token: userData.token },
+    });
     context.commit("setUserHandler", response.user);
     context.commit("setSessionTokenHandler", response.token);
   },
@@ -25,6 +27,9 @@ const actions = {
     const response = await axios.post("/users/login", userData);
     context.commit("setUserHandler", response.user);
     context.commit("setSessionTokenHandler", response.token);
+  },
+  logout: (context) => {
+    context.commit("setUserHandler", null);
   },
 };
 const mutations = {

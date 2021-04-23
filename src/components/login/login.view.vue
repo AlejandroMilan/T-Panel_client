@@ -20,10 +20,10 @@
         >
       </div>
       <div class="form">
-        <loginForm @userLogged="userLogged" />
+        <loginForm />
       </div>
       <div class="create-account">
-        <createAccount @userLogged="userLogged" />
+        <createAccount />
       </div>
     </v-col>
   </v-row>
@@ -39,14 +39,6 @@ export default {
   components: {
     loginForm,
     createAccount,
-  },
-
-  methods: {
-    userLogged(data) {
-      this.$store.dispatch("setUser", data.user);
-      this.$store.dispatch("setSessionToken", data.token);
-      this.$router.replace("/panel");
-    },
   },
 };
 </script>
