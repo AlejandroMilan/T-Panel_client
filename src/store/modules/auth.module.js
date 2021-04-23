@@ -28,8 +28,17 @@ const actions = {
     commit("setUserHandler", response.data.user);
     commit("setSessionTokenHandler", response.data.token);
   },
-  logout: ({ commit }) => {
+  logOut: ({ commit }) => {
     commit("setUserHandler", null);
+    commit("setSessionTokenHandler", null);
+  },
+  validateSession: async ({ commit }, token) => {
+    const response = await axios.post(
+      "/users/validateSession",
+      {},
+      { headers: { token } }
+    );
+    commit("setUserHandler", response.data.user);
   },
 };
 const mutations = {

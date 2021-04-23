@@ -49,13 +49,11 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapActions } from "vuex";
 import { validationMixin } from "vuelidate";
 import { required, email } from "vuelidate/lib/validators";
 
 import forgottenPassword from "./forgottenPassword";
-
-import { loginAction } from "./login.service";
 
 export default {
   name: "loginForm",
@@ -67,7 +65,6 @@ export default {
   },
 
   computed: {
-    ...mapGetters(["httpUrl"]),
     isFormValid() {
       if (this.errors.email.length) return false;
       if (this.errors.password.length) return false;
@@ -93,6 +90,8 @@ export default {
   },
 
   methods: {
+    ...mapActions(["logIn"]),
+
     validateEmail() {
       const errors = [];
       this.$v.email.$touch();
@@ -120,9 +119,10 @@ export default {
             email: this.email,
             password: this.password,
           };
-          const response = await loginAction(this.httpUrl, user);
+
+          await this.logIn(user);
+
           this.loading = false;
-          this.$emit("userLogged", response.data);
         } catch (error) {
           this.loading = false;
           this.loginError = error.response.data.message;

@@ -13,7 +13,7 @@ const routes = [
     component: loginView,
     meta: {
       guest: true,
-    }
+    },
   },
   {
     path: "/panel",
@@ -21,7 +21,7 @@ const routes = [
     component: loginView,
     meta: {
       requiresAuth: true,
-    }
+    },
   },
 ];
 

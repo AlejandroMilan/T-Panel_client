@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 
 import navigationDrawer from "./components/layout/navigationDrawer";
 
@@ -22,7 +22,23 @@ export default {
   components: { navigationDrawer },
 
   computed: {
-    ...mapGetters(["user"]),
+    ...mapGetters(["user", "sessionToken"]),
+  },
+
+  async mounted() {
+    if (this.user) {
+      try {
+        await this.validateSession(this.sessionToken);
+      } catch (error) {
+        this.logOut();
+        this.$router.push("/login");
+        console.log(error.response.data);
+      }
+    }
+  },
+
+  methods: {
+    ...mapActions(["validateSession", "logOut"]),
   },
 };
 </script>
