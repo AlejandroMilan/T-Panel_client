@@ -1,5 +1,10 @@
 <template>
   <v-app>
+    <globalError
+      v-if="globalError"
+      :show="globalError"
+      :error="globalError"
+    ></globalError>
     <navigationDrawer v-if="user"></navigationDrawer>
     <v-app-bar v-if="user" app></v-app-bar>
     <v-main>
@@ -14,15 +19,16 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 
+import globalError from "./components/error/globalError";
 import navigationDrawer from "./components/layout/navigationDrawer";
 
 export default {
   name: "App",
 
-  components: { navigationDrawer },
+  components: { navigationDrawer, globalError },
 
   computed: {
-    ...mapGetters(["user", "sessionToken"]),
+    ...mapGetters(["user", "sessionToken", "globalError"]),
   },
 
   async mounted() {
@@ -30,15 +36,19 @@ export default {
       try {
         await this.validateSession(this.sessionToken);
       } catch (error) {
+        this.setGlobalError({
+          title: "Sesión caducada",
+          message:
+            "La sesión ha caducado, por favor, vuelva a iniciar sesión con su cuenta.",
+        });
         this.logOut();
         this.$router.push("/login");
-        console.log(error.response.data);
       }
     }
   },
 
   methods: {
-    ...mapActions(["validateSession", "logOut"]),
+    ...mapActions(["validateSession", "logOut", "setGlobalError"]),
   },
 };
 </script>

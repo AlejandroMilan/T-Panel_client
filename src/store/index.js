@@ -9,6 +9,7 @@ import auth from "./modules/auth.module";
 const initialState = {
   enviroment: process.env.VUE_APP_ENVIROMENT,
   masterToken: process.env.VUE_APP_MASTER_TOKEN,
+  globalError: null,
 };
 
 export default new Vuex.Store({
@@ -17,9 +18,27 @@ export default new Vuex.Store({
     masterToken: (state) => {
       return state.masterToken;
     },
+    globalError: (state) => {
+      return state.globalError;
+    },
   },
-  mutations: {},
-  actions: {},
+  mutations: {
+    setGlobalErrorHandler: (state, payload) => {
+      state.globalError = payload;
+    },
+  },
+  actions: {
+    setGlobalError: ({ commit }, error) => {
+      const err = {
+        title: error.title,
+        message: error.message,
+      };
+      commit("setGlobalErrorHandler", err);
+    },
+    clearGlobalError: ({ commit }) => {
+      commit("setGlobalErrorHandler", null);
+    },
+  },
   modules: { auth },
   plugins: [createPersistedState()],
 });
