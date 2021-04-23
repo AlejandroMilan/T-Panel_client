@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 import { validationMixin } from "vuelidate";
 import { required, email } from "vuelidate/lib/validators";
 
@@ -65,6 +65,7 @@ export default {
   },
 
   computed: {
+    ...mapGetters(["user"]),
     isFormValid() {
       if (this.errors.email.length) return false;
       if (this.errors.password.length) return false;
@@ -121,8 +122,11 @@ export default {
           };
 
           await this.logIn(user);
-
           this.loading = false;
+
+          this.user.businessId
+            ? this.$router.push("/panel")
+            : this.$router.push("/panel/negocio");
         } catch (error) {
           this.loading = false;
           this.loginError = error.response.data.message;

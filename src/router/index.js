@@ -34,8 +34,12 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some((record) => record.meta.requiresAuth)) {
-    if (store.getters.isAuthenticated) {
+    if (store.getters.isAuthenticated && store.getters.user.businessId) {
       next();
+      return;
+    }
+    if (store.getters.isAuthenticated && !store.getters.user.businessId) {
+      next("panel/negocio");
       return;
     }
     next("/login");
