@@ -5,6 +5,7 @@ import store from "../store/index";
 Vue.use(VueRouter);
 
 import loginView from "@/components/login/login.view";
+import homeView from "@/components/home/home.view";
 
 const routes = [
   {
@@ -18,7 +19,7 @@ const routes = [
   {
     path: "/panel",
     name: "Panel",
-    component: loginView,
+    component: homeView,
     meta: {
       requiresAuth: true,
     },
