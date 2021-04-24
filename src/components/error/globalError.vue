@@ -20,7 +20,10 @@ import { mapActions } from "vuex";
 export default {
   name: "globalError",
 
-  props: ["error", "show"],
+  props: {
+    error: { type: Object, required: true },
+    show: { type: [Boolean, Object], required: true },
+  },
 
   methods: { ...mapActions(["clearGlobalError"]) },
 };
