@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+  <v-card outlined>
     <div v-for="(section, index) in sections" :key="index">
       <v-subheader>{{ section.sectionName }}</v-subheader>
       <v-row dense>
@@ -27,6 +27,13 @@
 export default {
   name: "businessData",
 
+  props: {
+    business: {
+      type: Object,
+      default: null,
+    },
+  },
+
   data: () => ({
     sections: {
       generalData: {
@@ -43,5 +50,80 @@ export default {
       },
     },
   }),
+
+  mounted() {
+    this.setSections();
+  },
+
+  methods: {
+    setSections() {
+      const noFieldString = "Sin registrar";
+
+      this.sections.generalData.fields = [
+        {
+          fieldName: "Nombre del negocio",
+          fieldValue: this.business ? this.business.name : noFieldString,
+        },
+      ];
+
+      this.sections.contactData.fields = [
+        {
+          fieldName: "Correo electrónico",
+          fieldValue: this.business ? this.business.email : noFieldString,
+        },
+        {
+          fieldName: "Número telefónico",
+          fieldValue: this.business ? this.business.phoneNumber : noFieldString,
+        },
+        {
+          fieldName: "Sitio web",
+          fieldValue: this.business ? this.business.website : noFieldString,
+        },
+      ];
+
+      this.sections.adressData.fields = [
+        {
+          fieldName: "Calle",
+          fieldValue: this.business
+            ? this.business.adress.street
+            : noFieldString,
+        },
+        {
+          fieldName: "Número exterior",
+          fieldValue: this.business
+            ? this.business.adress.extNumber
+            : noFieldString,
+        },
+        {
+          fieldName: "Número interior",
+          fieldValue: this.business
+            ? this.business.adress.intNumber
+            : noFieldString,
+        },
+        {
+          fieldName: "Colonia",
+          fieldValue: this.business
+            ? this.business.adress.county
+            : noFieldString,
+        },
+        {
+          fieldName: "Ciudad",
+          fieldValue: this.business ? this.business.adress.city : noFieldString,
+        },
+        {
+          fieldName: "Estado",
+          fieldValue: this.business
+            ? this.business.adress.state
+            : noFieldString,
+        },
+        {
+          fieldName: "País",
+          fieldValue: this.business
+            ? this.business.adress.country
+            : noFieldString,
+        },
+      ];
+    },
+  },
 };
 </script>
