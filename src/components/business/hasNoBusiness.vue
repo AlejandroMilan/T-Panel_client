@@ -1,5 +1,5 @@
 <template>
-  <v-card outlined>
+  <v-card>
     <v-card-title>
       <span>!Nos alegra que quieras llevar tu taller a otro nivel!</span>
     </v-card-title>
