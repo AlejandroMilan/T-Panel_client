@@ -47,7 +47,7 @@ router.beforeEach((to, from, next) => {
 
   if (autorization && !user) {
     next("login");
-  } else if (!autorization && user && store.getters.user.businessId) {
+  } else if (!autorization && user) {
     next("panel");
   } else {
     next();
