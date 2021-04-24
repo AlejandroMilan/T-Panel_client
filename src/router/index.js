@@ -23,6 +23,7 @@ const routes = [
     component: homeView,
     meta: {
       requiresAuth: true,
+      requireBusiness: true,
     },
   },
   {
@@ -42,29 +43,31 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  let user = store.getters.isAuthenticated;
-  let autorization = to.matched.some((record) => record.meta.requiresAuth);
+  const user = store.getters.isAuthenticated;
+  const autorization = to.matched.some((record) => record.meta.requiresAuth);
 
-  if (autorization && !user) {
-    next("login");
-  } else if (!autorization && user) {
-    next("panel");
-  } else {
-    next();
-  }
+  if (autorization && !user) next("login");
+  else if (!autorization && user) next("panel");
+  else next();
 });
 
 router.beforeEach((to, from, next) => {
-  let user = store.getters.isAuthenticated;
-  let guest = to.matched.some((record) => record.meta.guest);
+  const user = store.getters.isAuthenticated;
+  const guest = to.matched.some((record) => record.meta.guest);
 
-  if (guest && user) {
-    next("panel");
-  } else if (guest && !user) {
-    next("login");
-  } else {
-    next();
-  }
+  if (guest && user) next("panel");
+  else if (guest && !user) next("login");
+  else next();
+});
+
+router.beforeEach((to, from, next) => {
+  const business = store.getters.user.businessId;
+  const requireBusiness = to.matched.some(
+    (record) => record.meta.requireBusiness
+  );
+
+  if (requireBusiness && !business) next("panel/negocio");
+  else next();
 });
 
 export default router;
