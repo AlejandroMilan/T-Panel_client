@@ -1,11 +1,9 @@
 <template>
-  <div>
-    <h1>Bienvenido</h1>
-  </div>
+  <div>Hola business</div>
 </template>
 
 <script>
 export default {
-  name: "homeView",
+  name: "businessView",
 };
 </script>
