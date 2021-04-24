@@ -13,9 +13,6 @@ const routes = [
     path: "/login",
     name: "Login",
     component: loginView,
-    meta: {
-      guest: true,
-    },
   },
   {
     path: "/panel",
@@ -52,16 +49,7 @@ router.beforeEach((to, from, next) => {
 });
 
 router.beforeEach((to, from, next) => {
-  const user = store.getters.isAuthenticated;
-  const guest = to.matched.some((record) => record.meta.guest);
-
-  if (guest && user) next("panel");
-  else if (guest && !user) next("login");
-  else next();
-});
-
-router.beforeEach((to, from, next) => {
-  const business = store.getters.user.businessId;
+  const business = store.getters.user?.businessId;
   const requireBusiness = to.matched.some(
     (record) => record.meta.requireBusiness
   );
