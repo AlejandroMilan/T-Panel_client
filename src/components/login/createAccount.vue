@@ -28,7 +28,7 @@
           >
           <v-alert type="warning" dense text
             >Este registro solo es para dueños de talleres, si no lo eres y
-            necesitas registrate, pide al dueño del taller o a un administrador
+            necesitas registrarte, pide al dueño del taller o a un administrador
             que lleve a cabo tu registro.</v-alert
           >
           <registerForm
