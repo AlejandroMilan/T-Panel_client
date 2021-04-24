@@ -1,5 +1,6 @@
 <template>
   <v-card outlined>
+    <v-card-title>Datos del negocio</v-card-title>
     <div v-for="(section, index) in sections" :key="index">
       <v-subheader>{{ section.sectionName }}</v-subheader>
       <v-row dense>
