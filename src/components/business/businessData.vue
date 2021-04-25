@@ -27,12 +27,19 @@
         </v-col>
       </v-row>
     </div>
+    <editBusinessDialog :show="editBusiness"></editBusinessDialog>
   </v-card>
 </template>
 
 <script>
+import editBusinessDialog from "./editBusinessDialog";
+
 export default {
   name: "businessData",
+
+  components: {
+    editBusinessDialog,
+  },
 
   props: {
     business: {
