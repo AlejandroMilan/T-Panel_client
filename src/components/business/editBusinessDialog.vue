@@ -335,6 +335,24 @@ export default {
       this.validateField("city");
       this.validateField("state");
       this.validateField("country");
+
+      if (this.isFormValid) {
+        let sendData = {
+          name: this.name,
+          email: this.email,
+          phoneNumber: this.phoneNumber,
+          adress: {
+            street: this.street,
+            extNumber: this.extNumber,
+            county: this.county,
+            city: this.city,
+            state: this.state,
+            country: this.country,
+          },
+        };
+        if (this.website) sendData.website = this.website;
+        if (this.intNumber) sendData.adress.intNumber = this.intNumber;
+      }
     },
   },
 };
