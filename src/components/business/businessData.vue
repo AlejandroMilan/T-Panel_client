@@ -4,11 +4,16 @@
       <span class="headline">Datos del negocio</span>
       <v-spacer></v-spacer>
       <v-btn icon>
-        <v-icon>mdi-pencil</v-icon>
+        <v-icon @click="editBusiness = true">mdi-pencil</v-icon>
       </v-btn>
     </v-card-title>
     <div v-for="(section, index) in sections" :key="index">
-      <v-subheader>{{ section.sectionName }}</v-subheader>
+      <v-subheader>
+        <v-icon color="primary" class="mr-2" small>{{
+          section.sectionIcon
+        }}</v-icon>
+        {{ section.sectionName }}</v-subheader
+      >
       <v-row dense>
         <v-col
           cols="12"
@@ -49,17 +54,21 @@ export default {
   },
 
   data: () => ({
+    editBusiness: false,
     sections: {
       generalData: {
         sectionName: "Datos generales",
+        sectionIcon: "mdi-information",
         fields: [],
       },
       contactData: {
         sectionName: "Datos de contacto",
+        sectionIcon: "mdi-message",
         fields: [],
       },
       adressData: {
         sectionName: "Domicilio",
+        sectionIcon: "mdi-map",
         fields: [],
       },
     },
