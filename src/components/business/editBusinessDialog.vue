@@ -10,7 +10,10 @@
       <v-card-title> Editar datos del negocio </v-card-title>
       <v-card-text>
         <v-form>
-          <v-subheader>Datos generales</v-subheader>
+          <div class="d-flex">
+            <v-icon small class="mr-2">mdi-information</v-icon>
+            <v-subheader>Datos generales</v-subheader>
+          </div>
           <v-row dense>
             <v-col cols="12" md="6">
               <v-text-field
@@ -27,7 +30,10 @@
               </v-text-field>
             </v-col>
           </v-row>
-          <v-subheader>Datos de contacto</v-subheader>
+          <div class="d-flex">
+            <v-icon small class="mr-2">mdi-message</v-icon>
+            <v-subheader>Datos de contacto</v-subheader>
+          </div>
           <v-row dense>
             <v-col cols="12" md="6">
               <v-text-field
@@ -72,7 +78,10 @@
               </v-text-field>
             </v-col>
           </v-row>
-          <v-subheader>Datos de domicilio</v-subheader>
+          <div class="d-flex">
+            <v-icon small class="mr-2">mdi-map</v-icon>
+            <v-subheader>Datos de domicilio</v-subheader>
+          </div>
           <v-row dense>
             <v-col cols="12" md="4">
               <v-text-field
