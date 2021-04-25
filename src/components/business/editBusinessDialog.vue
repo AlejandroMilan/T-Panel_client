@@ -1,6 +1,5 @@
 <template>
   <v-dialog
-    v-if="show"
     persistent
     v-model="show"
     :fullscreen="!$vuetify.breakpoint.mdAndUp"

@@ -33,6 +33,7 @@
       </v-row>
     </div>
     <editBusinessDialog
+      v-if="editBusiness"
       :show="editBusiness"
       @cancel="editBusiness = false"
     ></editBusinessDialog>
