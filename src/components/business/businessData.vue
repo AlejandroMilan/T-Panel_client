@@ -1,6 +1,12 @@
 <template>
   <v-card outlined>
-    <v-card-title>Datos del negocio</v-card-title>
+    <v-card-title>
+      <span class="headline">Datos del negocio</span>
+      <v-spacer></v-spacer>
+      <v-btn icon>
+        <v-icon>mdi-pencil</v-icon>
+      </v-btn>
+    </v-card-title>
     <div v-for="(section, index) in sections" :key="index">
       <v-subheader>{{ section.sectionName }}</v-subheader>
       <v-row dense>
