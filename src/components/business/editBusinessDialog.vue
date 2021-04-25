@@ -31,43 +31,43 @@
           <v-row dense>
             <v-col cols="12" md="6">
               <v-text-field
-                v-model="name"
+                v-model="email"
                 label="Correo electrónico"
                 outlined
                 dense
                 color="primary"
                 :disabled="loading"
-                :error-messages="errors.name"
-                @input="validateName()"
-                @blur="validateName()"
+                :error-messages="errors.email"
+                @input="validateEmail()"
+                @blur="validateEmail()"
               >
               </v-text-field>
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
-                v-model="name"
+                v-model="phoneNumber"
                 label="Número telefónico"
                 outlined
                 dense
                 color="primary"
                 :disabled="loading"
-                :error-messages="errors.name"
-                @input="validateName()"
-                @blur="validateName()"
+                :error-messages="errors.phoneNumber"
+                @input="validatePhoneNumber()"
+                @blur="validatePhoneNumber()"
               >
               </v-text-field>
             </v-col>
             <v-col cols="12">
               <v-text-field
-                v-model="name"
-                label="Sitio web"
+                v-model="website"
+                label="Sitio web (opcional)"
                 outlined
                 dense
                 color="primary"
                 :disabled="loading"
-                :error-messages="errors.name"
-                @input="validateName()"
-                @blur="validateName()"
+                :error-messages="errors.website"
+                @input="validateWebsite()"
+                @blur="validateWebsite()"
               >
               </v-text-field>
             </v-col>
@@ -76,99 +76,96 @@
           <v-row dense>
             <v-col cols="12" md="4">
               <v-text-field
-                v-model="name"
+                v-model="street"
                 label="Calle"
                 outlined
                 dense
                 color="primary"
                 :disabled="loading"
-                :error-messages="errors.name"
-                @input="validateName()"
-                @blur="validateName()"
+                :error-messages="errors.street"
+                @input="validateField('street')"
+                @blur="validateField('street')"
               >
               </v-text-field>
             </v-col>
             <v-col cols="12" md="4">
               <v-text-field
-                v-model="name"
+                v-model="extNumber"
                 label="Núm. Exterior"
                 outlined
                 dense
                 color="primary"
                 :disabled="loading"
-                :error-messages="errors.name"
-                @input="validateName()"
-                @blur="validateName()"
+                :error-messages="errors.extNumber"
+                @input="validateField('extNumber')"
+                @blur="validateField('extNumber')"
               >
               </v-text-field>
             </v-col>
             <v-col cols="12" md="4">
               <v-text-field
-                v-model="name"
-                label="Núm. Interior"
+                v-model="intNumber"
+                label="Núm. Interior (opcional)"
                 outlined
                 dense
                 color="primary"
                 :disabled="loading"
-                :error-messages="errors.name"
-                @input="validateName()"
-                @blur="validateName()"
               >
               </v-text-field>
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
-                v-model="name"
+                v-model="county"
                 label="Colonia"
                 outlined
                 dense
                 color="primary"
                 :disabled="loading"
-                :error-messages="errors.name"
-                @input="validateName()"
-                @blur="validateName()"
+                :error-messages="errors.county"
+                @input="validateField('county')"
+                @blur="validateField('county')"
               >
               </v-text-field>
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
-                v-model="name"
+                v-model="city"
                 label="Ciudad"
                 outlined
                 dense
                 color="primary"
                 :disabled="loading"
-                :error-messages="errors.name"
-                @input="validateName()"
-                @blur="validateName()"
+                :error-messages="errors.city"
+                @input="validateField('city')"
+                @blur="validateField('city')"
               >
               </v-text-field>
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
-                v-model="name"
+                v-model="state"
                 label="Estado"
                 outlined
                 dense
                 color="primary"
                 :disabled="loading"
-                :error-messages="errors.name"
-                @input="validateName()"
-                @blur="validateName()"
+                :error-messages="errors.state"
+                @input="validateField('state')"
+                @blur="validateField('state')"
               >
               </v-text-field>
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
-                v-model="name"
+                v-model="country"
                 label="País"
                 outlined
                 dense
                 color="primary"
                 :disabled="loading"
-                :error-messages="errors.name"
-                @input="validateName()"
-                @blur="validateName()"
+                :error-messages="errors.country"
+                @input="validateField('country')"
+                @blur="validateField('country')"
               >
               </v-text-field>
             </v-col>
@@ -180,19 +177,52 @@
         <v-btn color="secondary" outlined @click="$emit('cancel')"
           >Cancelar</v-btn
         >
-        <v-btn color="primary">Guardar</v-btn>
+        <v-btn
+          color="primary"
+          :disabled="!isFormValid || loading"
+          @click="submit"
+          >Guardar</v-btn
+        >
       </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
 
 <script>
+import { validationMixin } from "vuelidate";
+import {
+  required,
+  email,
+  minLength,
+  maxLength,
+  numeric,
+  url,
+} from "vuelidate/lib/validators";
+
 export default {
   name: "editBusinessDialog",
 
   props: {
     show: { type: Boolean, default: false },
     business: { type: Object, default: null },
+  },
+
+  mixins: [validationMixin],
+
+  computed: {
+    isFormValid() {
+      if (this.errors.name.length) return false;
+      if (this.errors.email.length) return false;
+      if (this.errors.phoneNumber.length) return false;
+      if (this.errors.website.length) return false;
+      if (this.errors.street.length) return false;
+      if (this.errors.extNumber.length) return false;
+      if (this.errors.county.length) return false;
+      if (this.errors.city.length) return false;
+      if (this.errors.state.length) return false;
+      if (this.errors.country.length) return false;
+      return true;
+    },
   },
 
   data: () => ({
@@ -215,7 +245,6 @@ export default {
       website: [],
       street: [],
       extNumber: [],
-      intNumber: [],
       county: [],
       city: [],
       state: [],
@@ -223,9 +252,81 @@ export default {
     },
   }),
 
+  validations: {
+    name: { required, minLength: minLength(3) },
+    email: { required, email },
+    phoneNumber: {
+      required,
+      numeric,
+      minLength: minLength(10),
+      maxLength: maxLength(10),
+    },
+    website: { url },
+    street: { required },
+    extNumber: { required },
+    county: { required },
+    city: { required },
+    state: { required },
+    country: { required },
+  },
+
   methods: {
     validateName() {
-      console.log("Validado");
+      const errors = [];
+      this.$v.name.$touch();
+      !this.$v.name.required && errors.push("El nombre es requerido");
+      !this.$v.name.minLength &&
+        errors.push("El nombre debe tener al menos 3 caracteres");
+      this.errors.name = errors;
+    },
+    validateEmail() {
+      const errors = [];
+      this.$v.email.$touch();
+      !this.$v.email.required &&
+        errors.push("El correo electrónico es requerido");
+      !this.$v.email.email && errors.push("Correo electrónico no válido");
+      this.errors.email = errors;
+    },
+    validatePhoneNumber() {
+      const errors = [];
+      this.$v.phoneNumber.$touch();
+      !this.$v.phoneNumber.required &&
+        errors.push("El número telefónico es requerido");
+      !this.$v.phoneNumber.numeric &&
+        errors.push("Número telefónico no válido");
+      !this.$v.phoneNumber.minLength &&
+        errors.push("El número telefónico debe tener 10 dígitos");
+      !this.$v.phoneNumber.maxLength &&
+        errors.push("El número telefónico debe tener 10 dígitos");
+      this.errors.phoneNumber = errors;
+    },
+    validateWebsite() {
+      const errors = [];
+      this.$v.website.$touch();
+      !this.$v.website.url &&
+        errors.push(
+          "Sitio web no válido, ejemplo de stio válido: https://misitio.com"
+        );
+      this.errors.website = errors;
+    },
+    validateField(fieldName) {
+      const errors = [];
+      this.$v[fieldName].$touch();
+      !this.$v[fieldName].required && errors.push("Campo requerido");
+      this.errors[fieldName] = errors;
+    },
+
+    submit() {
+      this.validateName();
+      this.validateEmail();
+      this.validateWebsite();
+      this.validatePhoneNumber();
+      this.validateField("street");
+      this.validateField("extNumber");
+      this.validateField("county");
+      this.validateField("city");
+      this.validateField("state");
+      this.validateField("country");
     },
   },
 };
