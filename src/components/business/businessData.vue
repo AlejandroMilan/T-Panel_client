@@ -32,7 +32,10 @@
         </v-col>
       </v-row>
     </div>
-    <editBusinessDialog :show="editBusiness"></editBusinessDialog>
+    <editBusinessDialog
+      :show="editBusiness"
+      @cancel="editBusiness = false"
+    ></editBusinessDialog>
   </v-card>
 </template>
 
