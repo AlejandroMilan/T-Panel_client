@@ -1,7 +1,7 @@
 <template>
   <v-card outlined :loading="loading">
     <v-card-title>
-      <span class="headline">Datos del negocio</span>
+      <span>Datos del negocio</span>
       <v-spacer></v-spacer>
       <v-btn icon>
         <v-icon @click="editBusiness = true">mdi-pencil</v-icon>
