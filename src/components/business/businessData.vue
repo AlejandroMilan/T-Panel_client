@@ -1,5 +1,5 @@
 <template>
-  <v-card outlined>
+  <v-card outlined :loading="loading">
     <v-card-title>
       <span class="headline">Datos del negocio</span>
       <v-spacer></v-spacer>
@@ -55,6 +55,11 @@ export default {
     business: {
       type: Object,
       default: null,
+    },
+
+    loading: {
+      type: Boolean,
+      default: false,
     },
   },
 
