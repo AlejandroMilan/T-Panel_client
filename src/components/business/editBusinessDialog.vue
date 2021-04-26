@@ -198,6 +198,7 @@
 
 <script>
 import { validationMixin } from "vuelidate";
+import serverRequestMixin from "@/mixins/serverRequest.mixin";
 import {
   required,
   email,
@@ -215,7 +216,7 @@ export default {
     business: { type: Object, default: null },
   },
 
-  mixins: [validationMixin],
+  mixins: [validationMixin, serverRequestMixin],
 
   computed: {
     isFormValid() {
@@ -324,7 +325,7 @@ export default {
       this.errors[fieldName] = errors;
     },
 
-    submit() {
+    async submit() {
       this.validateName();
       this.validateEmail();
       this.validateWebsite();
@@ -352,6 +353,9 @@ export default {
         };
         if (this.website) sendData.website = this.website;
         if (this.intNumber) sendData.adress.intNumber = this.intNumber;
+
+        const response = await this.postRequest("/business/", sendData);
+        console.log(response);
       }
     },
   },
