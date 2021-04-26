@@ -35,6 +35,20 @@ const serverRequestMixin = {
       }
     },
 
+    async putRequest(url, data, requireToken = true) {
+      try {
+        const response = requireToken
+          ? await axios.put(url, data, {
+              headers: { token: this.sessionToken },
+            })
+          : await axios.put(url, data);
+        return response.data;
+      } catch (error) {
+        if (error.response.data.tokenExpired) this.expiredSession();
+        else throw error.response;
+      }
+    },
+
     expiredSession() {
       this.setGlobalError({
         title: "Sesión caducada",

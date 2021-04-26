@@ -199,6 +199,7 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import { _ } from "vue-underscore";
 import { validationMixin } from "vuelidate";
 import serverRequestMixin from "@/mixins/serverRequest.mixin";
@@ -222,6 +223,7 @@ export default {
   mixins: [validationMixin, serverRequestMixin],
 
   computed: {
+    ...mapGetters(["user"]),
     isFormValid() {
       if (this.errors.name.length) return false;
       if (this.errors.email.length) return false;
@@ -376,11 +378,20 @@ export default {
           if (this.website) sendData.website = this.website;
           if (this.intNumber) sendData.adress.intNumber = this.intNumber;
 
-          const response = await this.postRequest("/business/", sendData);
+          const response = this.business
+            ? await this.putRequest(
+                `/business/${this.user.businessId}`,
+                sendData
+              )
+            : await this.postRequest("/business/", sendData);
 
           this.loading = false;
 
-          this.$emit("businessUpdated", response.businessCreated);
+          const emidData = this.business
+            ? response.businessUpdated
+            : response.businessCreated;
+
+          this.$emit("businessUpdated", emidData);
         } catch (error) {
           this.loading = false;
           error.status < 500
