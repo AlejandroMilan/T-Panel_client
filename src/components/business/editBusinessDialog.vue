@@ -199,6 +199,7 @@
 </template>
 
 <script>
+import { _ } from "vue-underscore";
 import { validationMixin } from "vuelidate";
 import serverRequestMixin from "@/mixins/serverRequest.mixin";
 import {
@@ -282,7 +283,22 @@ export default {
     country: { required },
   },
 
+  mounted() {
+    if (this.business) this.setData();
+  },
+
   methods: {
+    setData() {
+      const keys = _.keys(this.business);
+      const adressKeys = _.keys(this.business?.adress);
+      keys.forEach((key) => {
+        this[key] = this.business[key];
+      });
+      adressKeys.forEach((key) => {
+        this[key] = this.business.adress[key];
+      });
+    },
+
     validateName() {
       const errors = [];
       this.$v.name.$touch();

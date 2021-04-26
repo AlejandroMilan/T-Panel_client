@@ -35,6 +35,7 @@
     <editBusinessDialog
       v-if="editBusiness"
       :show="editBusiness"
+      :business="business"
       @cancel="editBusiness = false"
       @businessUpdated="businessUpdated"
     ></editBusinessDialog>
