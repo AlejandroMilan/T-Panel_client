@@ -11,9 +11,23 @@ const serverRequestMixin = {
       try {
         const response = requireToken
           ? await axios.post(url, data, {
-              headers: { token: this.sessionToken },
-            })
+            headers: { token: this.sessionToken },
+          })
           : await axios.post(url, data);
+        return response.data;
+      } catch (error) {
+        if (error.response.data.tokenExpired) this.expiredSession();
+        else throw error.response;
+      }
+    },
+
+    async getRequest(url, requireToken = true) {
+      try {
+        const response = requireToken
+          ? await axios.get(url, {
+            headers: { token: this.sessionToken },
+          })
+          : await axios.get(url);
         return response.data;
       } catch (error) {
         if (error.response.data.tokenExpired) this.expiredSession();
