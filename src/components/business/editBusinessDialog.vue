@@ -199,7 +199,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import { _ } from "vue-underscore";
 import { validationMixin } from "vuelidate";
 import serverRequestMixin from "@/mixins/serverRequest.mixin";
@@ -290,6 +290,8 @@ export default {
   },
 
   methods: {
+    ...mapActions(["editUser"]),
+
     setData() {
       const keys = _.keys(this.business);
       const adressKeys = _.keys(this.business?.adress);
@@ -387,12 +389,19 @@ export default {
 
           this.loading = false;
 
-          const emidData = this.business
+          if (!this.business)
+            this.editUser({
+              ...this.user,
+              businessId: response.businessCreated._id,
+            });
+
+          const emitData = this.business
             ? response.businessUpdated
             : response.businessCreated;
 
-          this.$emit("businessUpdated", emidData);
+          this.$emit("businessUpdated", emitData);
         } catch (error) {
+          console.log(error);
           this.loading = false;
           error.status < 500
             ? (this.error = error.data.message)

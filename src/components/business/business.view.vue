@@ -1,6 +1,6 @@
 <template>
   <div>
-    <hasNoBusiness v-if="!user.businessId"></hasNoBusiness>
+    <hasNoBusiness v-if="!business"></hasNoBusiness>
     <v-row dense class="my-5">
       <v-col cols="12">
         <v-alert v-if="error" type="error" dense outlined>{{ error }}</v-alert>
@@ -45,7 +45,7 @@ export default {
   }),
 
   mounted() {
-    if (this.business) this.getBusiness();
+    if (this.user.businessId) this.getBusiness();
   },
 
   methods: {

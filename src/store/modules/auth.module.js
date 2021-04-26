@@ -28,6 +28,9 @@ const actions = {
     commit("setUserHandler", response.data.user);
     commit("setSessionTokenHandler", response.data.token);
   },
+  editUser: async ({ commit }, userData) => {
+    commit("setUserHandler", userData);
+  },
   logOut: ({ commit }) => {
     commit("setUserHandler", null);
     commit("setSessionTokenHandler", null);
