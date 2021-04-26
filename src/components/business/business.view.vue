@@ -2,6 +2,9 @@
   <div>
     <hasNoBusiness v-if="!user.businessId"></hasNoBusiness>
     <v-row dense class="my-5">
+      <v-col cols="12">
+        <v-alert v-if="error" type="error" dense outlined>{{ error }}</v-alert>
+      </v-col>
       <v-col cols="12" md="6">
         <businessData
           :loading="loading"
@@ -38,14 +41,16 @@ export default {
   data: () => ({
     business: null,
     loading: false,
+    error: null,
   }),
 
   mounted() {
-    this.getBusiness();
+    if (this.business) this.getBusiness();
   },
 
   methods: {
     async getBusiness() {
+      this.error = null;
       this.loading = true;
       try {
         const response = await this.getRequest(
@@ -55,7 +60,9 @@ export default {
         this.business = response.business;
       } catch (error) {
         this.loading = false;
-        console.error(error);
+        error.status < 500
+          ? (this.error = error.data.message)
+          : console.error(error);
       }
     },
 
