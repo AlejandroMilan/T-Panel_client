@@ -8,6 +8,7 @@
     <v-card>
       <v-card-title> Editar datos del negocio </v-card-title>
       <v-card-text>
+        <v-alert v-if="error" type="error" dense outlined>{{ error }}</v-alert>
         <v-form>
           <div class="d-flex">
             <v-icon small class="mr-2">mdi-information</v-icon>
@@ -236,6 +237,7 @@ export default {
 
   data: () => ({
     loading: false,
+    error: null,
     name: "",
     email: "",
     phoneNumber: "",
@@ -326,6 +328,7 @@ export default {
     },
 
     async submit() {
+      this.error = null;
       this.validateName();
       this.validateEmail();
       this.validateWebsite();
@@ -338,24 +341,31 @@ export default {
       this.validateField("country");
 
       if (this.isFormValid) {
-        let sendData = {
-          name: this.name,
-          email: this.email,
-          phoneNumber: this.phoneNumber,
-          adress: {
-            street: this.street,
-            extNumber: this.extNumber,
-            county: this.county,
-            city: this.city,
-            state: this.state,
-            country: this.country,
-          },
-        };
-        if (this.website) sendData.website = this.website;
-        if (this.intNumber) sendData.adress.intNumber = this.intNumber;
+        try {
+          let sendData = {
+            name: this.name,
+            email: this.email,
+            phoneNumber: this.phoneNumber,
+            adress: {
+              street: this.street,
+              extNumber: this.extNumber,
+              county: this.county,
+              city: this.city,
+              state: this.state,
+              country: this.country,
+            },
+          };
+          if (this.website) sendData.website = this.website;
+          if (this.intNumber) sendData.adress.intNumber = this.intNumber;
 
-        const response = await this.postRequest("/business/", sendData);
-        console.log(response);
+          const response = await this.postRequest("/business/", sendData);
+
+          console.log(response);
+        } catch (error) {
+          error.status < 500
+            ? (this.error = error.data.message)
+            : console.error(error);
+        }
       }
     },
   },
