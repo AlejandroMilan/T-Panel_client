@@ -17,7 +17,7 @@ const serverRequestMixin = {
         return response.data;
       } catch (error) {
         if (error.response.data.tokenExpired) this.expiredSession();
-        else throw error.response.data;
+        else throw error.response;
       }
     },
 
