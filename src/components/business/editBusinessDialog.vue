@@ -329,7 +329,6 @@ export default {
     },
 
     async submit() {
-      this.loading = true;
       this.error = null;
       this.validateName();
       this.validateEmail();
@@ -343,6 +342,7 @@ export default {
       this.validateField("country");
 
       if (this.isFormValid) {
+        this.loading = true;
         try {
           let sendData = {
             name: this.name,

@@ -11,8 +11,8 @@ const serverRequestMixin = {
       try {
         const response = requireToken
           ? await axios.post(url, data, {
-            headers: { token: this.sessionToken },
-          })
+              headers: { token: this.sessionToken },
+            })
           : await axios.post(url, data);
         return response.data;
       } catch (error) {
@@ -25,8 +25,8 @@ const serverRequestMixin = {
       try {
         const response = requireToken
           ? await axios.get(url, {
-            headers: { token: this.sessionToken },
-          })
+              headers: { token: this.sessionToken },
+            })
           : await axios.get(url);
         return response.data;
       } catch (error) {
