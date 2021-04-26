@@ -189,6 +189,7 @@
         <v-btn
           color="primary"
           :disabled="!isFormValid || loading"
+          :loading="loading"
           @click="submit"
           >Guardar</v-btn
         >
@@ -328,6 +329,7 @@ export default {
     },
 
     async submit() {
+      this.loading = true;
       this.error = null;
       this.validateName();
       this.validateEmail();
@@ -360,8 +362,11 @@ export default {
 
           const response = await this.postRequest("/business/", sendData);
 
-          console.log(response);
+          this.loading = false;
+
+          this.$emit("businessUpdated", response.businessCreated);
         } catch (error) {
+          this.loading = false;
           error.status < 500
             ? (this.error = error.data.message)
             : console.error(error);

@@ -3,7 +3,10 @@
     <hasNoBusiness v-if="!user.businessId"></hasNoBusiness>
     <v-row dense class="my-5">
       <v-col cols="12" md="6">
-        <businessData :business="business"></businessData>
+        <businessData
+          :business="business"
+          @businessUpdated="businessUpdated"
+        ></businessData>
       </v-col>
     </v-row>
   </div>
@@ -30,5 +33,11 @@ export default {
   data: () => ({
     business: null,
   }),
+
+  methods: {
+    businessUpdated(business) {
+      this.business = business;
+    },
+  },
 };
 </script>

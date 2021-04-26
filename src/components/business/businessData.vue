@@ -36,6 +36,7 @@
       v-if="editBusiness"
       :show="editBusiness"
       @cancel="editBusiness = false"
+      @businessUpdated="businessUpdated"
     ></editBusinessDialog>
   </v-card>
 </template>
@@ -77,6 +78,12 @@ export default {
       },
     },
   }),
+
+  watch: {
+    business() {
+      this.setSections();
+    },
+  },
 
   mounted() {
     this.setSections();
@@ -150,6 +157,11 @@ export default {
             : noFieldString,
         },
       ];
+    },
+
+    businessUpdated(business) {
+      this.editBusiness = false;
+      this.$emit("businessUpdated", business);
     },
   },
 };
