@@ -1,6 +1,6 @@
 <template>
   <div>
-    <hasNoBusiness v-if="!business"></hasNoBusiness>
+    <hasNoBusiness v-if="!user.businessId && !business"></hasNoBusiness>
     <v-row dense class="my-5">
       <v-col cols="12">
         <v-alert v-if="error" type="error" dense outlined>{{ error }}</v-alert>
