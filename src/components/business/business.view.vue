@@ -1,7 +1,7 @@
 <template>
   <div>
     <hasNoBusiness v-if="!user.businessId && !business"></hasNoBusiness>
-    <v-row dense class="my-5">
+    <v-row :class="{ 'my-5' : !user.businessId && !business }">
       <v-col cols="12">
         <v-alert v-if="error" type="error" dense outlined>{{ error }}</v-alert>
       </v-col>
@@ -12,6 +12,9 @@
           @businessUpdated="businessUpdated"
         ></businessData>
       </v-col>
+      <v-col cols="12" md="6">
+        <businessLogo></businessLogo>
+      </v-col>
     </v-row>
   </div>
 </template>
@@ -21,6 +24,7 @@ import { mapGetters } from "vuex";
 
 import hasNoBusiness from "./hasNoBusiness";
 import businessData from "./businessData";
+import businessLogo from "./businessLogo";
 
 import serverRequestMixin from "@/mixins/serverRequest.mixin";
 
@@ -32,6 +36,7 @@ export default {
   components: {
     hasNoBusiness,
     businessData,
+    businessLogo,
   },
 
   computed: {
