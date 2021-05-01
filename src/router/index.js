@@ -19,7 +19,7 @@ const routes = [
     component: loginView,
   },
   {
-    path: "/panel",
+    path: "/panel/home",
     name: "Panel",
     component: homeView,
     meta: {
@@ -48,7 +48,7 @@ router.beforeEach((to, from, next) => {
   const autorization = to.matched.some((record) => record.meta.requiresAuth);
 
   if (autorization && !user) next("login");
-  else if (!autorization && user) next("panel");
+  else if (!autorization && user) next("panel/home");
   else next();
 });
 

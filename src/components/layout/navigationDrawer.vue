@@ -12,12 +12,13 @@
     </div>
     <div class="nav">
       <v-list nav dense>
-        <v-list-item-group color="primary">
+        <v-list-item-group v-model="routeSelected" color="primary">
           <v-list-item
             link
             v-for="(link, index) in links"
             :key="index"
             :disabled="!user || !user.businessId"
+            :to="link.route"
           >
             <v-list-item-icon>
               <v-icon>{{ link.icon }}</v-icon>
@@ -42,26 +43,17 @@ export default {
   },
 
   data: () => ({
+    routeSelected: 0,
     links: [
       {
         title: "Inicio",
         icon: "mdi-home",
-        route: "/panel",
-      },
-      {
-        title: "Reparaciones",
-        icon: "mdi-home",
-        route: "/panel",
-      },
-      {
-        title: "Usuarios",
-        icon: "mdi-home",
-        route: "/panel",
+        route: "/panel/home",
       },
       {
         title: "Negocio",
-        icon: "mdi-home",
-        route: "/panel",
+        icon: "mdi-domain",
+        route: "/panel/negocio",
       },
     ],
   }),

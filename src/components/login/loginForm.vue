@@ -125,7 +125,7 @@ export default {
           this.loading = false;
 
           this.user.businessId
-            ? this.$router.push("/panel")
+            ? this.$router.push("/panel/home")
             : this.$router.push("/panel/negocio");
         } catch (error) {
           this.loading = false;
