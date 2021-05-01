@@ -10,6 +10,10 @@ import businessView from "@/components/business/business.view";
 
 const routes = [
   {
+    path: "*",
+    redirect: "/login",
+  },
+  {
     path: "/login",
     name: "Login",
     component: loginView,
