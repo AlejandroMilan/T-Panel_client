@@ -1,7 +1,7 @@
 <template>
   <div>
     <hasNoBusiness v-if="!user.businessId && !business"></hasNoBusiness>
-    <v-row :class="{ 'my-5' : !user.businessId && !business }">
+    <v-row :class="{ 'my-5': !user.businessId && !business }">
       <v-col cols="12">
         <v-alert v-if="error" type="error" dense outlined>{{ error }}</v-alert>
       </v-col>
@@ -13,7 +13,10 @@
         ></businessData>
       </v-col>
       <v-col cols="12" md="6">
-        <businessLogo></businessLogo>
+        <businessLogo
+          v-if="business"
+          :logoUrl="business.logoUrl"
+        ></businessLogo>
       </v-col>
     </v-row>
   </div>
