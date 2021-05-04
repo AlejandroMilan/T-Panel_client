@@ -1,9 +1,9 @@
 <template>
   <v-card outlined>
     <v-card-title>
-      <a href="javascript:void(0)" class="text-decoration-none"
-        >Alejandro Milán</a
-      >
+      <a href="javascript:void(0)" class="text-decoration-none">{{
+        user.name
+      }}</a>
       <v-spacer></v-spacer>
       <v-menu bottom left>
         <template v-slot:activator="{ on, attrs }">
@@ -33,6 +33,13 @@
 <script>
 export default {
   name: "userCard",
+
+  props: {
+    user: {
+      type: Object,
+      required: true,
+    },
+  },
 
   data: () => ({
     options: [
