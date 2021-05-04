@@ -55,6 +55,11 @@ export default {
         icon: "mdi-domain",
         route: "/panel/negocio",
       },
+      {
+        title: "Usuarios",
+        icon: "mdi-account-multiple",
+        route: "/panel/usuarios",
+      },
     ],
   }),
 };
