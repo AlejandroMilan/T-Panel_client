@@ -7,6 +7,7 @@ Vue.use(VueRouter);
 import loginView from "@/components/login/login.view";
 import homeView from "@/components/home/home.view";
 import businessView from "@/components/business/business.view";
+import usersView from "@/components/users/users.view";
 
 const routes = [
   {
@@ -31,6 +32,14 @@ const routes = [
     path: "/panel/negocio",
     name: "Negocio",
     component: businessView,
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: "/panel/usuarios",
+    name: "Usuarios",
+    component: usersView,
     meta: {
       requiresAuth: true,
     },
