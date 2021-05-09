@@ -5,7 +5,7 @@
         user.name
       }}</a>
       <v-spacer></v-spacer>
-      <v-menu bottom left>
+      <v-menu bottom left v-if="user.role.role !== 0">
         <template v-slot:activator="{ on, attrs }">
           <v-btn icon v-bind="attrs" v-on="on">
             <v-icon>mdi-dots-vertical</v-icon>
