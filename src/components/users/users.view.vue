@@ -6,6 +6,15 @@
       v-if="loading"
     ></v-progress-linear>
     <v-row v-else dense>
+      <v-col cols="12">
+        <div class="d-flex justify-end">
+          <v-btn color="primary" @click="createUser = true">
+            <v-icon>mdi-plus</v-icon>
+            Añadir usuario</v-btn
+          >
+          <userDialog v-if="createUser" :show="createUser"></userDialog>
+        </div>
+      </v-col>
       <v-col cols="12" md="6" v-for="(user, index) in users" :key="index">
         <userCard class="mb-2" :user="user"></userCard>
       </v-col>
@@ -18,13 +27,14 @@ import { mapGetters } from "vuex";
 import serverRequestMixin from "@/mixins/serverRequest.mixin";
 
 import userCard from "./userCard";
+import userDialog from "./userDialog";
 
 export default {
   name: "usersView",
 
   mixins: [serverRequestMixin],
 
-  components: { userCard },
+  components: { userCard, userDialog },
 
   computed: {
     ...mapGetters(["user"]),
@@ -32,6 +42,7 @@ export default {
 
   data: () => ({
     loading: false,
+    createUser: false,
     users: null,
   }),
 
