@@ -118,7 +118,7 @@ export default {
     email: "",
     firstPassword: "",
     secondPassword: "",
-    role: 0,
+    role: 1,
     userPermissions: [],
     errors: {
       name: [],
