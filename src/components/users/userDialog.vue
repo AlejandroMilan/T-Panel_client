@@ -61,6 +61,37 @@
             >
             </v-text-field>
           </v-col>
+          <v-col cols="12">
+            <v-select
+              label="Tipo de usuario"
+              v-model="role"
+              :items="roles"
+              item-value="role"
+              item-text="name"
+              :hint="
+                roles.length > 0
+                  ? roles.filter((e) => e.role == role)[0].description
+                  : ''
+              "
+              persistent-hint
+              outlined
+              @change="updatePermissions"
+            ></v-select>
+          </v-col>
+          <v-col cols="12">
+            <v-select
+              label="Permisos a asignar"
+              v-model="userPermissions"
+              :items="permissions"
+              item-value="key"
+              item-text="description"
+              multiple
+              chips
+              outlined
+              hint="Al cambiar de tipo de usuario, se adaptarán los permissos correspondientes al tipo seleccionado. Sin embargo, puedes cambiarlos a tu gusto."
+              persistent-hint
+            ></v-select>
+          </v-col>
         </v-row>
       </v-card-text>
     </v-card>
@@ -70,11 +101,12 @@
 <script>
 import { validationMixin } from "vuelidate";
 import { required, email, minLength } from "vuelidate/lib/validators";
+import serverRequestMixin from "@/mixins/serverRequest.mixin";
 
 export default {
   name: "userDialog",
 
-  mixins: [validationMixin],
+  mixins: [validationMixin, serverRequestMixin],
 
   props: {
     show: { type: Boolean, required: true },
@@ -86,6 +118,8 @@ export default {
     email: "",
     firstPassword: "",
     secondPassword: "",
+    role: 0,
+    userPermissions: [],
     errors: {
       name: [],
       email: [],
@@ -93,6 +127,8 @@ export default {
       secondPassword: [],
     },
     signupError: "",
+    roles: [],
+    permissions: [],
   }),
 
   validations: {
@@ -100,6 +136,10 @@ export default {
     email: { required, email },
     firstPassword: { required, minLength: minLength(8) },
     secondPassword: { required },
+  },
+
+  mounted() {
+    this.getSignupData();
   },
 
   methods: {
@@ -139,6 +179,35 @@ export default {
       this.secondPassword !== this.firstPassword &&
         errors.push("Las contraseñas no coinciden");
       this.errors.secondPassword = errors;
+    },
+
+    async getSignupData() {
+      this.loading = true;
+      try {
+        const response = await this.getRequest("/signupData");
+        this.loading = false;
+        console.log(response);
+        this.roles = response.roles;
+        this.permissions = response.permissions;
+      } catch (error) {
+        this.loading = false;
+        this.signupError = error.response.data.message;
+        if (error.response.status >= 500) console.error(error.response);
+      }
+    },
+
+    updatePermissions() {
+      const permissionsToUse = this.roles.filter((e) => e.role == this.role)[0]
+        .defaultPermissions;
+
+      const permissionsKeys = [];
+      permissionsToUse.forEach((element) => {
+        permissionsKeys.push(
+          this.permissions.filter((e) => e._id == element)[0].key
+        );
+      });
+
+      this.userPermissions = permissionsKeys;
     },
   },
 };
