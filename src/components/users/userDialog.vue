@@ -186,7 +186,6 @@ export default {
       try {
         const response = await this.getRequest("/signupData");
         this.loading = false;
-        console.log(response);
         this.roles = response.roles;
         this.permissions = response.permissions;
       } catch (error) {
