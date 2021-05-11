@@ -12,7 +12,12 @@
             <v-icon>mdi-plus</v-icon>
             Añadir usuario</v-btn
           >
-          <userDialog v-if="createUser" :show="createUser"></userDialog>
+          <userDialog
+            v-if="createUser"
+            :show="createUser"
+            @cancel="createUser = false"
+            @userSaved="userSaved"
+          ></userDialog>
         </div>
       </v-col>
       <v-col cols="12" md="6" v-for="(user, index) in users" :key="index">
@@ -66,6 +71,11 @@ export default {
           ? (this.error = error.data.message)
           : console.error(error);
       }
+    },
+
+    userSaved(newUser) {
+      this.createUser = false;
+      this.users = [...this.users, newUser];
     },
   },
 };

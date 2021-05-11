@@ -1,9 +1,12 @@
 <template>
   <v-dialog width="600" v-model="show" persistent>
-    <v-card>
+    <v-card :loading="loading">
       <v-card-title>Nuevo usuario</v-card-title>
       <v-card-text>
         <v-row dense>
+          <v-col cols="12" v-if="signupError" class="my-5">
+            <v-alert type="error" dense outlined>{{ signupError }}</v-alert>
+          </v-col>
           <v-col cols="12">
             <v-text-field
               v-model="name"
@@ -76,6 +79,7 @@
               persistent-hint
               outlined
               @change="updatePermissions"
+              @focus="updatePermissions"
             ></v-select>
           </v-col>
           <v-col cols="12">
@@ -88,17 +92,31 @@
               multiple
               chips
               outlined
-              hint="Al cambiar de tipo de usuario, se adaptarán los permissos correspondientes al tipo seleccionado. Sin embargo, puedes cambiarlos a tu gusto."
+              hint="Al cambiar de tipo de usuario, se adaptarán los permisos correspondientes al tipo seleccionado. Sin embargo, puedes cambiarlos a tu gusto."
               persistent-hint
             ></v-select>
           </v-col>
         </v-row>
       </v-card-text>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn color="secondary" outlined @click="$emit('cancel')"
+          >Cancelar</v-btn
+        >
+        <v-btn
+          color="primary"
+          :disabled="loading || !isFormValid"
+          :loading="loading"
+          @click="submit"
+          >Guardar</v-btn
+        >
+      </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import { validationMixin } from "vuelidate";
 import { required, email, minLength } from "vuelidate/lib/validators";
 import serverRequestMixin from "@/mixins/serverRequest.mixin";
@@ -110,6 +128,17 @@ export default {
 
   props: {
     show: { type: Boolean, required: true },
+  },
+
+  computed: {
+    ...mapGetters(["user"]),
+    isFormValid() {
+      if (this.errors.name.length) return false;
+      if (this.errors.email.length) return false;
+      if (this.errors.firstPassword.length) return false;
+      if (this.errors.secondPassword.length) return false;
+      return true;
+    },
   },
 
   data: () => ({
@@ -207,6 +236,36 @@ export default {
       });
 
       this.userPermissions = permissionsKeys;
+    },
+
+    async submit() {
+      this.signupError = "";
+      this.validateName();
+      this.validateEmail();
+      this.validateFirstPassword();
+      this.validateSecondPassword();
+      if (!this.isFormValid) return;
+      this.loading = true;
+      try {
+        const sendData = {
+          name: this.name,
+          email: this.email,
+          password: this.firstPassword,
+          role: this.role,
+          permissions: this.userPermissions,
+        };
+
+        const response = await this.postRequest(
+          `users/signup/${this.user.businessId}`,
+          sendData
+        );
+        this.loading = false;
+        this.$emit('userSaved', response.user)
+      } catch (error) {
+        this.loading = false;
+        this.signupError = error.data.message;
+        if (error.status >= 500) console.error(error);
+      }
     },
   },
 };
