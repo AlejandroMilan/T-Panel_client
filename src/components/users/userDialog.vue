@@ -1,7 +1,9 @@
 <template>
   <v-dialog width="600" v-model="show" persistent>
     <v-card :loading="loading">
-      <v-card-title>Nuevo usuario</v-card-title>
+      <v-card-title>{{
+        currentUser ? currentUser.name : "Nuevo usuario"
+      }}</v-card-title>
       <v-card-text>
         <v-row dense>
           <v-col cols="12" v-if="signupError" class="my-5">
@@ -34,7 +36,7 @@
             >
             </v-text-field>
           </v-col>
-          <v-col cols="12" md="6">
+          <v-col v-if="!currentUser" cols="12" md="6">
             <v-text-field
               v-model="firstPassword"
               label="Contraseña asignada"
@@ -49,7 +51,7 @@
             >
             </v-text-field>
           </v-col>
-          <v-col cols="12" md="6">
+          <v-col v-if="!currentUser" cols="12" md="6">
             <v-text-field
               v-model="secondPassword"
               label="Confirmar contraseña"
@@ -128,6 +130,7 @@ export default {
 
   props: {
     show: { type: Boolean, required: true },
+    currentUser: { type: Object, default: null },
   },
 
   computed: {
@@ -167,8 +170,18 @@ export default {
     secondPassword: { required },
   },
 
-  mounted() {
-    this.getSignupData();
+  async mounted() {
+    await this.getSignupData();
+    if (this.currentUser) {
+      this.name = this.currentUser.name;
+      this.email = this.currentUser.email;
+      this.role = this.currentUser.role.role;
+      let userPermissions = [];
+      this.currentUser.permissions.forEach((e) => {
+        userPermissions = [...userPermissions, e.key];
+      });
+      this.userPermissions = userPermissions;
+    }
   },
 
   methods: {
@@ -242,25 +255,40 @@ export default {
       this.signupError = "";
       this.validateName();
       this.validateEmail();
-      this.validateFirstPassword();
-      this.validateSecondPassword();
+      if (!this.currentUser) this.validateFirstPassword();
+      if (!this.currentUser) this.validateSecondPassword();
       if (!this.isFormValid) return;
       this.loading = true;
       try {
-        const sendData = {
-          name: this.name,
-          email: this.email,
-          password: this.firstPassword,
-          role: this.role,
-          permissions: this.userPermissions,
-        };
+        const sendData = this.currentUser
+          ? {
+              name: this.name,
+              email: this.email,
+              role: this.role,
+              permissions: this.userPermissions,
+            }
+          : {
+              name: this.name,
+              email: this.email,
+              password: this.firstPassword,
+              role: this.role,
+              permissions: this.userPermissions,
+            };
 
-        const response = await this.postRequest(
-          `users/signup/${this.user.businessId}`,
-          sendData
-        );
+        const response = this.currentUser
+          ? await this.putRequest(
+              `users/${this.user.businessId}/${this.currentUser._id}`,
+              sendData
+            )
+          : await this.postRequest(
+              `users/signup/${this.user.businessId}`,
+              sendData
+            );
         this.loading = false;
-        this.$emit("userSaved", response.user);
+        const emitData = this.currentUser
+          ? response.userUpdated
+          : response.user;
+        this.$emit("userSaved", emitData);
       } catch (error) {
         this.loading = false;
         this.signupError = error.data.message;
