@@ -21,7 +21,7 @@
         </div>
       </v-col>
       <v-col cols="12" md="6" v-for="(user, index) in users" :key="index">
-        <userCard class="mb-2" :user="user"></userCard>
+        <userCard class="mb-2" :userData="user"></userCard>
       </v-col>
     </v-row>
   </div>

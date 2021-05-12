@@ -1,11 +1,13 @@
 <template>
   <v-card outlined>
-    <v-card-title>
-      <a href="javascript:void(0)" class="text-decoration-none">{{
-        user.name
-      }}</a>
+    <v-card-title
+      >{{ userData.name }}
       <v-spacer></v-spacer>
-      <v-menu bottom left v-if="user.role.role !== 0">
+      <v-menu
+        bottom
+        left
+        v-if="userData.role.role !== 0 || userData._id !== user._id"
+      >
         <template v-slot:activator="{ on, attrs }">
           <v-btn icon v-bind="attrs" v-on="on">
             <v-icon>mdi-dots-vertical</v-icon>
@@ -26,19 +28,25 @@
         </v-list>
       </v-menu>
     </v-card-title>
-    <v-card-subtitle> Administrador </v-card-subtitle>
+    <v-card-subtitle> {{ userData.role.name }} </v-card-subtitle>
   </v-card>
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 export default {
   name: "userCard",
 
   props: {
-    user: {
+    userData: {
       type: Object,
       required: true,
     },
+  },
+
+  computed: {
+    ...mapGetters(["user"]),
   },
 
   data: () => ({
