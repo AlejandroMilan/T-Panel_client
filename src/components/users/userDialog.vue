@@ -260,7 +260,7 @@ export default {
           sendData
         );
         this.loading = false;
-        this.$emit('userSaved', response.user)
+        this.$emit("userSaved", response.user);
       } catch (error) {
         this.loading = false;
         this.signupError = error.data.message;
