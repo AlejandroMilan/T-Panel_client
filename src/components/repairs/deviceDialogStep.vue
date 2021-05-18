@@ -119,7 +119,7 @@
         v-if="blocking.hasBlocking && blocking.blockingType === 'patreon'"
         cols="12"
       >
-        <patreonCreator></patreonCreator>
+        <patreonCreator @change="updatePatreon"></patreonCreator>
       </v-col>
     </v-row>
   </div>
@@ -140,6 +140,7 @@ export default {
     blocking: {
       hasBlocking: false,
       blockingType: "pin",
+      patreon: [],
     },
     errors: {
       trademark: [],
@@ -163,6 +164,10 @@ export default {
   methods: {
     validateTrademark() {
       console.log(this.trademark);
+    },
+
+    updatePatreon(patreon) {
+      this.blocking.patreon = patreon;
     },
   },
 };
