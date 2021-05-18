@@ -56,6 +56,11 @@ export default {
         route: "/panel/negocio",
       },
       {
+        title: "Reparaciones",
+        icon: "mdi-tablet-cellphone",
+        route: "/panel/reparaciones",
+      },
+      {
         title: "Usuarios",
         icon: "mdi-account-multiple",
         route: "/panel/usuarios",

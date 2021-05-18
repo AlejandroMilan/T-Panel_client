@@ -8,6 +8,7 @@ import loginView from "@/components/login/login.view";
 import homeView from "@/components/home/home.view";
 import businessView from "@/components/business/business.view";
 import usersView from "@/components/users/users.view";
+import repairsView from "@/components/repairs/repairs.view"
 
 const routes = [
   {
@@ -40,6 +41,14 @@ const routes = [
     path: "/panel/usuarios",
     name: "Usuarios",
     component: usersView,
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: "/panel/reparaciones",
+    name: "Reparaciones",
+    component: repairsView,
     meta: {
       requiresAuth: true,
     },
