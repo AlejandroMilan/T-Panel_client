@@ -19,12 +19,12 @@
       </v-col>
       <v-col cols="12" md="6">
         <v-text-field
-          v-model="trademark"
+          v-model="model"
           label="Modelo del dispositivo"
           outlined
           dense
           color="primary"
-          :error-messages="errors.trademark"
+          :error-messages="errors.model"
           @input="validateTrademark()"
           @blur="validateTrademark()"
         >
@@ -32,12 +32,12 @@
       </v-col>
       <v-col cols="12" md="6">
         <v-text-field
-          v-model="trademark"
+          v-model="color"
           label="Color del dispositivo"
           outlined
           dense
           color="primary"
-          :error-messages="errors.trademark"
+          :error-messages="errors.color"
           @input="validateTrademark()"
           @blur="validateTrademark()"
         >
@@ -45,14 +45,12 @@
       </v-col>
       <v-col cols="12" md="6">
         <v-text-field
-          v-model="trademark"
+          v-model="imei"
           label="IMEI/ESN (opcional)"
           outlined
           dense
           color="primary"
-          :error-messages="errors.trademark"
-          @input="validateTrademark()"
-          @blur="validateTrademark()"
+          pin
         >
         </v-text-field>
       </v-col>
@@ -72,7 +70,7 @@
         <v-checkbox
           v-model="blocking.hasBlocking"
           :label="`¿Tiene algún método de desbloqueo?: ${
-            beforeRepaired ? 'Sí' : 'No'
+            blocking.hasBlocking ? 'Sí' : 'No'
           }`"
         ></v-checkbox>
       </v-col>
@@ -93,12 +91,12 @@
         md="6"
       >
         <v-text-field
-          v-model="trademark"
+          v-model="blocking.pin"
           label="PIN de desbloqueo"
           outlined
           dense
           color="primary"
-          :error-messages="errors.trademark"
+          :error-messages="errors.pin"
           @input="validateTrademark()"
           @blur="validateTrademark()"
         >
@@ -110,12 +108,11 @@
         md="6"
       >
         <v-text-field
-          v-model="trademark"
+          v-model="blocking.password"
           label="Contraseña de desbloqueo"
           outlined
           dense
           color="primary"
-          :error-messages="errors.trademark"
           @input="validateTrademark()"
           @blur="validateTrademark()"
         >
@@ -135,14 +132,21 @@
 
 <script>
 import patreonCreator from "./patreonCreator";
+import { validationMixin } from "vuelidate";
+import { required, minLength, maxLength } from "vuelidate/lib/validators";
 
 export default {
   name: "deviceDialogStep",
+
+  mixins: [validationMixin],
 
   components: { patreonCreator },
 
   data: () => ({
     trademark: "",
+    model: "",
+    color: "",
+    imei: "",
     canStart: true,
     beforeRepaired: false,
     blocking: {
@@ -154,6 +158,10 @@ export default {
     },
     errors: {
       trademark: [],
+      model: [],
+      color: [],
+      pin: "",
+      password: "",
     },
     blockingTypes: [
       {
@@ -170,6 +178,13 @@ export default {
       },
     ],
   }),
+
+  validations: {
+    trademark: { required },
+    model: { required },
+    color: { required },
+    pin: { minLength: minLength(4), maxLength: maxLength(4) },
+  },
 
   methods: {
     validateTrademark() {
