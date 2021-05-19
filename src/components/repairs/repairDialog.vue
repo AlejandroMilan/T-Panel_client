@@ -19,9 +19,12 @@
                 @stepValid="deviceStepValid"
               ></deviceDialogStep>
             </v-stepper-content>
-            <v-stepper-step step="2">Datos del cliente</v-stepper-step>
+            <v-stepper-step step="2" :complete="formStep > 2">Datos del cliente</v-stepper-step>
             <v-stepper-content step="2">
-              <customerDialogStep></customerDialogStep>
+              <customerDialogStep
+                @cancel="formStep = 1"
+                @stepValid="customerStepValid"
+              ></customerDialogStep>
             </v-stepper-content>
             <v-stepper-step step="3">
               Otros datos
@@ -48,14 +51,20 @@ export default {
   components: { deviceDialogStep, customerDialogStep },
 
   data: () => ({
-    formStep: 2,
+    formStep: 1,
     device: {},
+    customer: {},
   }),
 
   methods: {
     deviceStepValid(deviceInfo) {
       this.device = deviceInfo;
       this.formStep = 2;
+    },
+
+    customerStepValid(customerInfo) {
+      this.customer = customerInfo;
+      this.formStep = 3;
     },
   },
 };
