@@ -149,6 +149,8 @@ export default {
       hasBlocking: false,
       blockingType: "pin",
       patreon: [],
+      pin: "",
+      password: "",
     },
     errors: {
       trademark: [],

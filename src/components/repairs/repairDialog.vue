@@ -12,12 +12,12 @@
           <v-stepper v-model="formStep" vertical class="elevation-0">
             <v-stepper-step step="1">Datos del dispositivo</v-stepper-step>
             <v-stepper-content step="1">
-                <deviceDialogStep></deviceDialogStep>
+              <deviceDialogStep></deviceDialogStep>
             </v-stepper-content>
             <v-stepper-step step="2">Datos del cliente</v-stepper-step>
             <v-stepper-step step="3">
-                Otros datos
-                <small>Folio del servicio, costos</small>
+              Otros datos
+              <small>Folio del servicio, costos</small>
             </v-stepper-step>
           </v-stepper>
         </v-card-text>
@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import deviceDialogStep from "./deviceDialogStep"
+import deviceDialogStep from "./deviceDialogStep";
 
 export default {
   name: "repairDialog",

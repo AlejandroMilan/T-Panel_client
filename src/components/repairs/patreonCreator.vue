@@ -10,7 +10,10 @@
         small
         outlined
         v-if="patreon.length > 0"
-        @click="patreon = []; emitPatreon()"
+        @click="
+          patreon = [];
+          emitPatreon();
+        "
         >Volver a empezar</v-btn
       >
     </div>

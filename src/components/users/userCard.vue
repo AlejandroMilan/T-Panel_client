@@ -36,7 +36,9 @@
           </v-list>
         </v-menu>
       </v-card-title>
-      <v-card-subtitle> {{ currentUser ? currentUser.role.name : '' }} </v-card-subtitle>
+      <v-card-subtitle>
+        {{ currentUser ? currentUser.role.name : "" }}
+      </v-card-subtitle>
     </v-card>
     <userDialog
       v-if="editUser"
