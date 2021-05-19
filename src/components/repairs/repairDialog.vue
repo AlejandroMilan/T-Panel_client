@@ -20,6 +20,9 @@
               ></deviceDialogStep>
             </v-stepper-content>
             <v-stepper-step step="2">Datos del cliente</v-stepper-step>
+            <v-stepper-content step="2">
+              <customerDialogStep></customerDialogStep>
+            </v-stepper-content>
             <v-stepper-step step="3">
               Otros datos
               <small>Folio del servicio, costos</small>
@@ -33,6 +36,7 @@
 
 <script>
 import deviceDialogStep from "./deviceDialogStep";
+import customerDialogStep from "./customerDialogStep";
 
 export default {
   name: "repairDialog",
@@ -41,7 +45,7 @@ export default {
     show: { type: Boolean, defualt: false },
   },
 
-  components: { deviceDialogStep },
+  components: { deviceDialogStep, customerDialogStep },
 
   data: () => ({
     formStep: 1,
