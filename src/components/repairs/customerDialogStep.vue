@@ -60,7 +60,7 @@
             outlined
             @click="$emit('cancel')"
             class="mr-2"
-            >Cancelar</v-btn
+            >Paso anterior</v-btn
           >
           <v-btn color="primary" :disabled="!isFormValid" @click="validateStep"
             >Siguiente</v-btn
