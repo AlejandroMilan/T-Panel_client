@@ -12,6 +12,7 @@
           dense
           color="primary"
           :error-messages="errors.invoiceId"
+          :disabled="loading"
           @input="validateInvoiceId()"
           @blur="validateInvoiceId()"
         >
@@ -21,7 +22,13 @@
         <div class="d-flex justify-center">
           <v-tooltip top>
             <template v-slot:activator="{ on, attrs }">
-              <v-btn icon color="primary" v-bind="attrs" v-on="on"
+              <v-btn
+                icon
+                color="primary"
+                v-bind="attrs"
+                v-on="on"
+                :loading="loading"
+                @click="getInvoiceId"
                 ><v-icon>mdi-autorenew</v-icon></v-btn
               >
             </template>
@@ -37,6 +44,7 @@
           dense
           color="primary"
           :error-messages="errors.estimatedCost"
+          :disabled="loading"
           @input="validateEstimatedCost()"
           @blur="validateEstimatedCost()"
         >
@@ -50,6 +58,7 @@
           dense
           color="primary"
           :error-messages="errors.prePayment"
+          :disabled="loading"
           @input="validatePrepayment()"
           @blur="validatePrepayment()"
         >
@@ -64,7 +73,7 @@
             class="mr-2"
             >Paso anterior</v-btn
           >
-          <v-btn color="primary" :disabled="!isFormValid"
+          <v-btn color="primary" :disabled="!isFormValid || loading"
             >Guardar reparación</v-btn
           >
         </div>
@@ -76,11 +85,12 @@
 <script>
 import { validationMixin } from "vuelidate";
 import { required, numeric } from "vuelidate/lib/validators";
+import serverRequestMixin from "@/mixins/serverRequest.mixin";
 
 export default {
   name: "generalDataDialogStep",
 
-  mixins: [validationMixin],
+  mixins: [validationMixin, serverRequestMixin],
 
   computed: {
     isFormValid() {
@@ -92,6 +102,7 @@ export default {
   },
 
   data: () => ({
+    loading: false,
     invoiceId: "",
     payment: {
       estimatedCost: "",
@@ -135,6 +146,19 @@ export default {
       !this.$v.payment.prePayment.numeric &&
         errors.push("Ingresa una cantidad válida");
       this.errors.prePayment = errors;
+    },
+
+    async getInvoiceId() {
+      this.loading = true;
+      try {
+        const response = await this.getRequest("/repairs/generateInvoiceId");
+        this.loading = false;
+        this.invoiceId = response.invoiceId;
+      } catch (error) {
+        this.loading = false;
+        this.signupError = error.response.data.message;
+        if (error.response.status >= 500) console.error(error.response);
+      }
     },
   },
 };
