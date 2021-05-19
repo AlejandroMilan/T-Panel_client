@@ -25,8 +25,8 @@
           dense
           color="primary"
           :error-messages="errors.model"
-          @input="validateTrademark()"
-          @blur="validateTrademark()"
+          @input="validateModel()"
+          @blur="validateModel()"
         >
         </v-text-field>
       </v-col>
@@ -38,8 +38,8 @@
           dense
           color="primary"
           :error-messages="errors.color"
-          @input="validateTrademark()"
-          @blur="validateTrademark()"
+          @input="validateColor()"
+          @blur="validateColor()"
         >
         </v-text-field>
       </v-col>
@@ -97,8 +97,8 @@
           dense
           color="primary"
           :error-messages="errors.pin"
-          @input="validateTrademark()"
-          @blur="validateTrademark()"
+          @input="validatePin()"
+          @blur="validatePin()"
         >
         </v-text-field>
       </v-col>
@@ -113,8 +113,9 @@
           outlined
           dense
           color="primary"
-          @input="validateTrademark()"
-          @blur="validateTrademark()"
+          :error-messages="errors.password"
+          @input="validatePassword()"
+          @blur="validatePassword()"
         >
         </v-text-field>
       </v-col>
@@ -125,6 +126,20 @@
         md="6"
       >
         <patreonCreator @change="updatePatreon"></patreonCreator>
+      </v-col>
+      <v-col cols="12">
+        <div class="d-flex">
+          <v-btn
+            color="secondary"
+            outlined
+            @click="$emit('cancel')"
+            class="mr-2"
+            >Cancelar</v-btn
+          >
+          <v-btn color="primary" :disabled="!isFormValid" @click="validateStep"
+            >Siguiente</v-btn
+          >
+        </div>
       </v-col>
     </v-row>
   </div>
@@ -141,6 +156,29 @@ export default {
   mixins: [validationMixin],
 
   components: { patreonCreator },
+
+  computed: {
+    isFormValid() {
+      if (this.errors.trademark.length) return false;
+      if (this.errors.model.length) return false;
+      if (this.errors.color.length) return false;
+      if (this.blocking.hasBlocking) {
+        if (this.blocking.blockingType === "pin" && this.errors.pin.length)
+          return false;
+        if (
+          this.blocking.blockingType === "password" &&
+          this.errors.password.length
+        )
+          return false;
+        if (
+          this.blocking.blockingType === "patreon" &&
+          !this.blocking.patreon.length
+        )
+          return false;
+      }
+      return true;
+    },
+  },
 
   data: () => ({
     trademark: "",
@@ -160,8 +198,8 @@ export default {
       trademark: [],
       model: [],
       color: [],
-      pin: "",
-      password: "",
+      pin: [],
+      password: [],
     },
     blockingTypes: [
       {
@@ -183,16 +221,71 @@ export default {
     trademark: { required },
     model: { required },
     color: { required },
-    pin: { minLength: minLength(4), maxLength: maxLength(4) },
+    blocking: {
+      pin: { required, minLength: minLength(4), maxLength: maxLength(4) },
+      password: { required },
+    },
   },
 
   methods: {
     validateTrademark() {
-      console.log(this.trademark);
+      const errors = [];
+      this.$v.trademark.$touch();
+      !this.$v.trademark.required &&
+        errors.push("La marca del dispositivo es requerida");
+      this.errors.trademark = errors;
+    },
+
+    validateModel() {
+      const errors = [];
+      this.$v.model.$touch();
+      !this.$v.model.required &&
+        errors.push("El modelo del dispositivo es requerido");
+      this.errors.model = errors;
+    },
+
+    validateColor() {
+      const errors = [];
+      this.$v.color.$touch();
+      !this.$v.color.required &&
+        errors.push("El color del dispositivo es requerido");
+      this.errors.color = errors;
+    },
+
+    validatePin() {
+      const errors = [];
+      this.$v.blocking.pin.$touch();
+      if (this.blocking.blockingType === "pin") {
+        !this.$v.blocking.pin.required &&
+          errors.push("El PIN de desbloqueo es requerido");
+        !this.$v.blocking.pin.minLength &&
+          errors.push("El PIN debe contener 4 dígitos");
+      }
+      this.errors.pin = errors;
+    },
+
+    validatePassword() {
+      const errors = [];
+      this.$v.blocking.password.$touch();
+      if (this.blocking.blockingType === "password") {
+        !this.$v.blocking.password.required &&
+          errors.push("La contraseña de desbloqueo es requerida");
+      }
+      this.errors.password = errors;
     },
 
     updatePatreon(patreon) {
       this.blocking.patreon = patreon;
+    },
+
+    validateStep() {
+      this.validateTrademark();
+      this.validateModel();
+      this.validateColor();
+      this.validatePin();
+      this.validatePassword();
+      if (!this.isFormValid) return;
+      console.log("Valido");
     },
   },
 };
