@@ -78,7 +78,15 @@
           :label="`¿Ya ha sido reparado?: ${beforeRepaired ? 'Sí' : 'No'}`"
         ></v-checkbox>
       </v-col>
-      <v-col cols="12">
+      <v-col cols="12" md="6">
+        <v-checkbox
+          v-model="presentsMoisture"
+          :label="`¿Presenta humedad (está mojado)?: ${
+            presentsMoisture ? 'Sí' : 'No'
+          }`"
+        ></v-checkbox>
+      </v-col>
+      <v-col cols="12" md="6">
         <v-checkbox
           v-model="blocking.hasBlocking"
           :label="`¿Tiene algún método de desbloqueo?: ${
@@ -201,6 +209,7 @@ export default {
     reasonForAdmission: "",
     canStart: true,
     beforeRepaired: false,
+    presentsMoisture: false,
     blocking: {
       hasBlocking: false,
       blockingType: "pin",
@@ -308,6 +317,7 @@ export default {
       this.validateColor();
       this.validatePin();
       this.validatePassword();
+      this.validateReasonForAdmission();
       if (!this.isFormValid) return;
       console.log("Valido");
       const emitData = {
@@ -317,6 +327,7 @@ export default {
         reasonForAdmission: this.reasonForAdmission,
         canStart: this.canStart,
         beforeRepaired: this.beforeRepaired,
+        presentsMoisture: this.presentsMoisture,
       };
       if (this.blocking.hasBlocking) {
         emitData.blocking = {
