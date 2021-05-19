@@ -48,7 +48,7 @@ export default {
   components: { deviceDialogStep, customerDialogStep },
 
   data: () => ({
-    formStep: 1,
+    formStep: 2,
     device: {},
   }),
 
