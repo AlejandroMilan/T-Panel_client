@@ -19,40 +19,37 @@
       </v-col>
       <v-col cols="12" md="6">
         <v-text-field
-          v-model="name"
+          v-model="phoneNumber"
           label="Número telefónico (opcional)"
           outlined
           dense
           color="primary"
-          :error-messages="errors.name"
-          @input="validateName()"
-          @blur="validateName()"
+          :error-messages="errors.phoneNumber"
+          @input="validatePhoneNumber()"
+          @blur="validatePhoneNumber()"
         >
         </v-text-field>
       </v-col>
       <v-col cols="12">
         <v-text-field
-          v-model="name"
+          v-model="email"
           label="Correo electrónico (opcional)"
           outlined
           dense
           color="primary"
-          :error-messages="errors.name"
-          @input="validateName()"
-          @blur="validateName()"
+          :error-messages="errors.email"
+          @input="validateEmail()"
+          @blur="validateEmail()"
         >
         </v-text-field>
       </v-col>
       <v-col cols="12">
         <v-text-field
-          v-model="name"
+          v-model="adress"
           label="Dirección (opcional)"
           outlined
           dense
           color="primary"
-          :error-messages="errors.name"
-          @input="validateName()"
-          @blur="validateName()"
         >
         </v-text-field>
       </v-col>
@@ -75,29 +72,92 @@
 </template>
 
 <script>
+import { validationMixin } from "vuelidate";
+import {
+  required,
+  email,
+  minLength,
+  maxLength,
+  numeric,
+} from "vuelidate/lib/validators";
+
 export default {
   name: "customerDialogStep",
 
+  mixins: [validationMixin],
+
   computed: {
     isFormValid() {
+      if (this.errors.name.length) return false;
+      if (this.errors.phoneNumber.length) return false;
+      if (this.errors.email.length) return false;
       return true;
     },
   },
 
   data: () => ({
     name: "",
+    phoneNumber: "",
+    email: "",
+    adress: "",
     errors: {
       name: [],
+      phoneNumber: [],
+      email: [],
     },
   }),
 
+  validations: {
+    name: { required },
+    phoneNumber: {
+      numeric,
+      minLength: minLength(10),
+      maxLength: maxLength(10),
+    },
+    email: { email },
+  },
+
   methods: {
     validateName() {
-      console.log("nombre");
+      const errors = [];
+      this.$v.name.$touch();
+      !this.$v.name.required && errors.push("El nombre es requerido");
+      this.errors.name = errors;
+    },
+
+    validatePhoneNumber() {
+      const errors = [];
+      this.$v.phoneNumber.$touch();
+      !this.$v.phoneNumber.numeric &&
+        errors.push("Número telefónico no válido");
+      !this.$v.phoneNumber.minLength &&
+        errors.push("El número telefónico debe tener 10 dígitos");
+      !this.$v.phoneNumber.maxLength &&
+        errors.push("El número telefónico debe tener 10 dígitos");
+      this.errors.phoneNumber = errors;
+    },
+
+    validateEmail() {
+      const errors = [];
+      this.$v.email.$touch();
+      !this.$v.email.email && errors.push("Correo electrónico no válido");
+      this.errors.email = errors;
     },
 
     validateStep() {
-      console.log("Valido");
+      this.validateName();
+      this.validatePhoneNumber();
+      this.validateEmail();
+      if (!this.isFormValid) return;
+
+      const emitData = {
+        name: this.name,
+      };
+      if (this.phoneNumber) emitData.phoneNumber = this.phoneNumber;
+      if (this.email) emitData.email = this.email;
+      if (this.adress) emitData.adress = this.adress;
+
+      this.$emit("stepValid", emitData);
     },
   },
 };

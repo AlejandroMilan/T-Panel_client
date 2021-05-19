@@ -293,6 +293,8 @@ export default {
           errors.push("El PIN de desbloqueo es requerido");
         !this.$v.blocking.pin.minLength &&
           errors.push("El PIN debe contener 4 dígitos");
+        !this.$v.blocking.pin.maxLength &&
+          errors.push("El PIN debe contener 4 dígitos");
       }
       this.errors.pin = errors;
     },
