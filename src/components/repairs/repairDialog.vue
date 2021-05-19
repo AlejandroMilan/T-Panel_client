@@ -33,7 +33,10 @@
               <small>Folio del servicio, costos</small>
             </v-stepper-step>
             <v-stepper-content step="3">
-              <generalDataDialogStep></generalDataDialogStep>
+              <generalDataDialogStep
+                @cancel="formStep = 2"
+                @stepValid="generalDataStepValid"
+              ></generalDataDialogStep>
             </v-stepper-content>
           </v-stepper>
         </v-card-text>
@@ -60,6 +63,8 @@ export default {
     formStep: 1,
     device: {},
     customer: {},
+    payment: {},
+    invoiceId: "",
   }),
 
   methods: {
@@ -71,6 +76,29 @@ export default {
     customerStepValid(customerInfo) {
       this.customer = customerInfo;
       this.formStep = 3;
+    },
+
+    generalDataStepValid(generalData) {
+      this.payment = generalData.payment;
+      this.invoiceId = generalData.invoiceId;
+      this.submit();
+    },
+
+    submit() {
+      const submitData = {
+        device: this.device,
+        customer: this.customer,
+        invoiceId: this.invoiceId,
+      };
+      if (this.payment.estimatedCost || this.payment.prePayment) {
+        submitData.payment = {};
+        if (this.payment.estimatedCost)
+          submitData.payment.estimatedCost = this.payment.estimatedCost;
+        if (this.payment.prePayment)
+          submitData.payment.prePayment = this.payment.prePayment;
+      }
+
+      console.log(submitData);
     },
   },
 };

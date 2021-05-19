@@ -73,7 +73,10 @@
             class="mr-2"
             >Paso anterior</v-btn
           >
-          <v-btn color="primary" :disabled="!isFormValid || loading"
+          <v-btn
+            color="primary"
+            :disabled="!isFormValid || loading"
+            @click="validateStep"
             >Guardar reparación</v-btn
           >
         </div>
@@ -154,11 +157,31 @@ export default {
         const response = await this.getRequest("/repairs/generateInvoiceId");
         this.loading = false;
         this.invoiceId = response.invoiceId;
+        this.errors.invoiceId = [];
       } catch (error) {
         this.loading = false;
         this.signupError = error.response.data.message;
         if (error.response.status >= 500) console.error(error.response);
       }
+    },
+
+    validateStep() {
+      this.validateInvoiceId();
+      this.validateEstimatedCost();
+      this.validatePrepayment();
+      if (!this.isFormValid) return;
+
+      const emitData = {
+        invoiceId: this.invoiceId,
+        payment: {
+          estimatedCost: this.payment.estimatedCost,
+          prePayment: this.payment.prePayment,
+        },
+      };
+
+      console.log(emitData);
+
+      this.$emit("stepValid", emitData);
     },
   },
 };
