@@ -19,7 +19,9 @@
                 @stepValid="deviceStepValid"
               ></deviceDialogStep>
             </v-stepper-content>
-            <v-stepper-step step="2" :complete="formStep > 2">Datos del cliente</v-stepper-step>
+            <v-stepper-step step="2" :complete="formStep > 2"
+              >Datos del cliente</v-stepper-step
+            >
             <v-stepper-content step="2">
               <customerDialogStep
                 @cancel="formStep = 1"
@@ -30,6 +32,9 @@
               Otros datos
               <small>Folio del servicio, costos</small>
             </v-stepper-step>
+            <v-stepper-content step="3">
+              <generalDataDialogStep></generalDataDialogStep>
+            </v-stepper-content>
           </v-stepper>
         </v-card-text>
       </v-card>
@@ -40,6 +45,7 @@
 <script>
 import deviceDialogStep from "./deviceDialogStep";
 import customerDialogStep from "./customerDialogStep";
+import generalDataDialogStep from "./generalDataDialogStep";
 
 export default {
   name: "repairDialog",
@@ -48,7 +54,7 @@ export default {
     show: { type: Boolean, defualt: false },
   },
 
-  components: { deviceDialogStep, customerDialogStep },
+  components: { deviceDialogStep, customerDialogStep, generalDataDialogStep },
 
   data: () => ({
     formStep: 1,
