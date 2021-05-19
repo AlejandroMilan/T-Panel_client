@@ -12,7 +12,11 @@
             <v-icon>mdi-plus</v-icon>
             Nueva reparación</v-btn
           >
-          <repairDialog :show="showRepairDialog"></repairDialog>
+          <repairDialog
+            v-if="showRepairDialog"
+            :show="showRepairDialog"
+            @cancel="showRepairDialog = false"
+          ></repairDialog>
         </div>
       </v-col>
     </v-row>
