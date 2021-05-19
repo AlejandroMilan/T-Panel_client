@@ -50,7 +50,19 @@
           outlined
           dense
           color="primary"
-          pin
+        >
+        </v-text-field>
+      </v-col>
+      <v-col cols="12">
+        <v-text-field
+          v-model="reasonForAdmission"
+          label="Motivo de ingreso (falla)"
+          outlined
+          dense
+          color="primary"
+          :error-messages="errors.reasonForAdmission"
+          @input="validateReasonForAdmission()"
+          @blur="validateReasonForAdmission()"
         >
         </v-text-field>
       </v-col>
@@ -162,6 +174,7 @@ export default {
       if (this.errors.trademark.length) return false;
       if (this.errors.model.length) return false;
       if (this.errors.color.length) return false;
+      if (this.errors.reasonForAdmission.length) return false;
       if (this.blocking.hasBlocking) {
         if (this.blocking.blockingType === "pin" && this.errors.pin.length)
           return false;
@@ -185,6 +198,7 @@ export default {
     model: "",
     color: "",
     imei: "",
+    reasonForAdmission: "",
     canStart: true,
     beforeRepaired: false,
     blocking: {
@@ -198,6 +212,7 @@ export default {
       trademark: [],
       model: [],
       color: [],
+      reasonForAdmission: [],
       pin: [],
       password: [],
     },
@@ -221,6 +236,7 @@ export default {
     trademark: { required },
     model: { required },
     color: { required },
+    reasonForAdmission: { required },
     blocking: {
       pin: { required, minLength: minLength(4), maxLength: maxLength(4) },
       password: { required },
@@ -250,6 +266,14 @@ export default {
       !this.$v.color.required &&
         errors.push("El color del dispositivo es requerido");
       this.errors.color = errors;
+    },
+
+    validateReasonForAdmission() {
+      const errors = [];
+      this.$v.reasonForAdmission.$touch();
+      !this.$v.reasonForAdmission.required &&
+        errors.push("El motivo de ingreso del dispositivo es requerido");
+      this.errors.reasonForAdmission = errors;
     },
 
     validatePin() {
@@ -290,6 +314,7 @@ export default {
         trademark: this.trademark,
         model: this.model,
         color: this.color,
+        reasonForAdmission: this.reasonForAdmission,
         canStart: this.canStart,
         beforeRepaired: this.beforeRepaired,
       };
