@@ -319,7 +319,6 @@ export default {
       this.validatePassword();
       this.validateReasonForAdmission();
       if (!this.isFormValid) return;
-      console.log("Valido");
       const emitData = {
         trademark: this.trademark,
         model: this.model,
@@ -342,7 +341,7 @@ export default {
           emitData.blocking.patreon = this.blocking.patreon;
       }
 
-      console.log(emitData);
+      this.$emit("stepValid", emitData);
     },
   },
 };

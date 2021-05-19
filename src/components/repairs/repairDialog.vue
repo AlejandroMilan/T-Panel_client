@@ -10,9 +10,14 @@
         <v-card-title>Agregar reparación</v-card-title>
         <v-card-text>
           <v-stepper v-model="formStep" vertical class="elevation-0">
-            <v-stepper-step step="1">Datos del dispositivo</v-stepper-step>
+            <v-stepper-step step="1" :complete="formStep > 1"
+              >Datos del dispositivo</v-stepper-step
+            >
             <v-stepper-content step="1">
-              <deviceDialogStep></deviceDialogStep>
+              <deviceDialogStep
+                @cancel="$emit('cancel')"
+                @stepValid="deviceStepValid"
+              ></deviceDialogStep>
             </v-stepper-content>
             <v-stepper-step step="2">Datos del cliente</v-stepper-step>
             <v-stepper-step step="3">
@@ -40,6 +45,14 @@ export default {
 
   data: () => ({
     formStep: 1,
+    device: {},
   }),
+
+  methods: {
+    deviceStepValid(deviceInfo) {
+      this.device = deviceInfo;
+      this.formStep = 2;
+    },
+  },
 };
 </script>
