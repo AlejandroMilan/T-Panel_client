@@ -286,6 +286,27 @@ export default {
       this.validatePassword();
       if (!this.isFormValid) return;
       console.log("Valido");
+      const emitData = {
+        trademark: this.trademark,
+        model: this.model,
+        color: this.color,
+        canStart: this.canStart,
+        beforeRepaired: this.beforeRepaired,
+      };
+      if (this.blocking.hasBlocking) {
+        emitData.blocking = {
+          hasBlocking: true,
+          blockingType: this.blocking.blockingType,
+        };
+        if (this.blocking.blockingType === "pin")
+          emitData.blocking.pin = this.blocking.pin;
+        if (this.blocking.blockingType === "password")
+          emitData.blocking.password = this.blocking.password;
+        if (this.blocking.blockingType === "patreon")
+          emitData.blocking.patreon = this.blocking.patreon;
+      }
+
+      console.log(emitData);
     },
   },
 };
