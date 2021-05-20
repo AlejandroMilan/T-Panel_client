@@ -18,6 +18,8 @@
           :items="repairs"
           :search="search"
           multi-sort
+          no-data-text="No hay reparaciones para mostrar"
+          no-results-text="No se encontraron reparaciones"
           :footer-props="{
             itemsPerPageText: 'Elementos por página:',
             itemsPerPageAllText: 'Todos',
@@ -35,6 +37,9 @@
               {{ item.status.title }}
             </v-chip>
           </template>
+          <template v-slot:[`item.admissionDate`]="{ item }">
+            <span>{{ getShortDateLocal(item.admissionDate) }}</span>
+          </template>
         </v-data-table>
       </v-card-text>
     </v-card>
@@ -42,6 +47,8 @@
 </template>
 
 <script>
+import { getShortDate } from "@/helpers/date.helper";
+
 export default {
   name: "repairList",
 
@@ -56,6 +63,11 @@ export default {
     search: "",
     headers: [
       { text: "Folio", value: "invoiceId" },
+      {
+        text: "Fecha de igreso (dd/mm/aaaa)",
+        value: "admissionDate",
+        filterable: false,
+      },
       {
         text: "marca",
         value: "device.trademark",
@@ -97,6 +109,10 @@ export default {
           break;
       }
       return color;
+    },
+
+    getShortDateLocal(ISODate) {
+      return getShortDate(ISODate);
     },
   },
 };
