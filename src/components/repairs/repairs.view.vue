@@ -20,18 +20,23 @@
           ></repairDialog>
         </div>
       </v-col>
+      <v-col cols="12">
+        <repairList></repairList>
+      </v-col>
     </v-row>
   </div>
 </template>
 
 <script>
 import repairDialog from "./repairDialog";
+import repairList from "./repairList";
 
 export default {
   name: "repairsView",
 
   components: {
     repairDialog,
+    repairList,
   },
 
   data: () => ({
