@@ -4,6 +4,9 @@
       :no-gutters="!$vuetify.breakpoint.mdAndUp"
       :dense="$vuetify.breakpoint.mdAndUp"
     >
+      <v-col cols="12" v-if="getterError" class="my-5">
+        <v-alert type="error" dense outlined>{{ getterError }}</v-alert>
+      </v-col>
       <v-col cols="10" md="11">
         <v-text-field
           v-model="invoiceId"
@@ -106,6 +109,7 @@ export default {
 
   data: () => ({
     loading: false,
+    getterError: null,
     invoiceId: "",
     payment: {
       estimatedCost: "",
@@ -160,7 +164,7 @@ export default {
         this.errors.invoiceId = [];
       } catch (error) {
         this.loading = false;
-        this.signupError = error.response.data.message;
+        this.getterError = error.response.data.message;
         if (error.response.status >= 500) console.error(error.response);
       }
     },
@@ -178,8 +182,6 @@ export default {
           prePayment: this.payment.prePayment,
         },
       };
-
-      console.log(emitData);
 
       this.$emit("stepValid", emitData);
     },

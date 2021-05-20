@@ -16,6 +16,7 @@
             v-if="showRepairDialog"
             :show="showRepairDialog"
             @cancel="showRepairDialog = false"
+            @repairSaved="repairSaved"
           ></repairDialog>
         </div>
       </v-col>
@@ -37,5 +38,12 @@ export default {
     loading: false,
     showRepairDialog: false,
   }),
+
+  methods: {
+    repairSaved(newRepair) {
+      this.showRepairDialog = false;
+      console.log(newRepair);
+    },
+  },
 };
 </script>

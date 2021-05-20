@@ -6,9 +6,12 @@
       :fullscreen="!$vuetify.breakpoint.mdAndUp"
       :width="$vuetify.breakpoint.mdAndUp ? '750' : null"
     >
-      <v-card>
+      <v-card :loading="loading">
         <v-card-title>Agregar reparación</v-card-title>
         <v-card-text>
+          <v-alert v-if="submitError" type="error" dense outlined>{{
+            submitError
+          }}</v-alert>
           <v-stepper v-model="formStep" vertical class="elevation-0">
             <v-stepper-step step="1" :complete="formStep > 1"
               >Datos del dispositivo</v-stepper-step
@@ -50,8 +53,12 @@ import deviceDialogStep from "./deviceDialogStep";
 import customerDialogStep from "./customerDialogStep";
 import generalDataDialogStep from "./generalDataDialogStep";
 
+import serverRequestMixin from "@/mixins/serverRequest.mixin";
+
 export default {
   name: "repairDialog",
+
+  mixins: [serverRequestMixin],
 
   props: {
     show: { type: Boolean, defualt: false },
@@ -61,6 +68,8 @@ export default {
 
   data: () => ({
     formStep: 1,
+    loading: false,
+    submitError: null,
     device: {},
     customer: {},
     payment: {},
@@ -84,21 +93,32 @@ export default {
       this.submit();
     },
 
-    submit() {
-      const submitData = {
-        device: this.device,
-        customer: this.customer,
-        invoiceId: this.invoiceId,
-      };
-      if (this.payment.estimatedCost || this.payment.prePayment) {
-        submitData.payment = {};
-        if (this.payment.estimatedCost)
-          submitData.payment.estimatedCost = this.payment.estimatedCost;
-        if (this.payment.prePayment)
-          submitData.payment.prePayment = this.payment.prePayment;
-      }
+    async submit() {
+      this.loading = true;
+      try {
+        const submitData = {
+          device: this.device,
+          customer: this.customer,
+          invoiceId: this.invoiceId,
+          status: 100,
+        };
+        if (this.payment.estimatedCost || this.payment.prePayment) {
+          submitData.payment = {};
+          if (this.payment.estimatedCost)
+            submitData.payment.estimatedCost = this.payment.estimatedCost;
+          if (this.payment.prePayment)
+            submitData.payment.prePayment = this.payment.prePayment;
+        }
 
-      console.log(submitData);
+        const response = await this.postRequest("/repairs", submitData);
+        this.loading = false;
+
+        this.$emit("repairSaved", response.repair);
+      } catch (error) {
+        this.loading = false;
+        this.submitError = error.data.message;
+        if (error.status >= 500) console.error(error.data);
+      }
     },
   },
 };
