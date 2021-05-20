@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card outlined>
+    <v-card outlined :loading="loading">
       <v-card-title
         >{{ currentUser ? currentUser.name : "" }}
         <v-spacer></v-spacer>
@@ -13,7 +13,7 @@
           "
         >
           <template v-slot:activator="{ on, attrs }">
-            <v-btn icon v-bind="attrs" v-on="on">
+            <v-btn icon v-bind="attrs" v-on="on" :disabled="loading">
               <v-icon>mdi-dots-vertical</v-icon>
             </v-btn>
           </template>
@@ -39,6 +39,9 @@
       <v-card-subtitle>
         {{ currentUser ? currentUser.role.name : "" }}
       </v-card-subtitle>
+      <v-card-text v-if="deleteError">
+        <v-alert type="error" dense outlined>{{ deleteError }}</v-alert>
+      </v-card-text>
     </v-card>
     <userDialog
       v-if="editUser"
@@ -47,15 +50,39 @@
       @cancel="editUser = false"
       @userSaved="userSaved"
     ></userDialog>
+    <v-dialog
+      v-if="showDeleteDialog"
+      v-model="showDeleteDialog"
+      persistent
+      width="400"
+    >
+      <v-card :loading="loading">
+        <v-card-title>Continuar</v-card-title>
+        <v-card-text>{{
+          `¿Está seguro de eliminar a ${currentUser.name}?`
+        }}</v-card-text>
+        <v-card-actions>
+          <v-btn color="secondary" outlined @click="showDeleteDialog = false"
+            >No, cancelar</v-btn
+          >
+          <v-btn color="error" dark @click="deleteUser"
+            ><v-icon>mdi-delete-outline</v-icon> Sí, eliminar</v-btn
+          >
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
 import userDialog from "./userDialog";
+import serverRequestMixin from "@/mixins/serverRequest.mixin";
 
 export default {
   name: "userCard",
+
+  mixins: [serverRequestMixin],
 
   components: { userDialog },
 
@@ -78,8 +105,11 @@ export default {
   },
 
   data: () => ({
+    loading: false,
+    showDeleteDialog: false,
     currentUser: null,
     editUser: false,
+    deleteError: null,
     options: [
       {
         title: "Modificar",
@@ -91,6 +121,7 @@ export default {
         title: "Eliminar",
         color: "error",
         icon: "mdi-delete",
+        method: "activateDeleteDialog",
       },
     ],
     methodLaunched: null,
@@ -108,6 +139,27 @@ export default {
     userSaved(userUpdated) {
       this.editUser = false;
       this.currentUser = userUpdated;
+    },
+
+    activateDeleteDialog() {
+      this.showDeleteDialog = true;
+    },
+
+    async deleteUser() {
+      this.showDeleteDialog = false;
+      this.loading = true;
+      try {
+        const response = await this.deleteRequest(
+          `/users/${this.user.businessId}/${this.currentUser._id}`
+        );
+        this.loading = false;
+
+        this.$emit("userDeleted", response.userDeleted);
+      } catch (error) {
+        this.loading = false;
+        this.deleteError = error.data.message;
+        if (error.status >= 500) console.error(error.data);
+      }
     },
   },
 };

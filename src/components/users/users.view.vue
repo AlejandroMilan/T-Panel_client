@@ -21,7 +21,11 @@
         </div>
       </v-col>
       <v-col cols="12" md="6" v-for="(user, index) in users" :key="index">
-        <userCard class="mb-2" :userData="user"></userCard>
+        <userCard
+          class="mb-2"
+          :userData="user"
+          @userDeleted="userDeleted"
+        ></userCard>
       </v-col>
     </v-row>
   </div>
@@ -76,6 +80,11 @@ export default {
     userSaved(newUser) {
       this.createUser = false;
       this.users = [...this.users, newUser];
+    },
+
+    userDeleted({ _id }) {
+      const userFound = this.users.filter((user) => user._id === _id)[0];
+      this.users.splice(this.users.indexOf(userFound), 1);
     },
   },
 };

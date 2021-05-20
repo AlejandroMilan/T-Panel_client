@@ -49,6 +49,20 @@ const serverRequestMixin = {
       }
     },
 
+    async deleteRequest(url, requireToken = true) {
+      try {
+        const response = requireToken
+          ? await axios.delete(url, {
+              headers: { token: this.sessionToken },
+            })
+          : await axios.delete(url);
+        return response.data;
+      } catch (error) {
+        if (error.response.data.tokenExpired) this.expiredSession();
+        else throw error.response;
+      }
+    },
+
     expiredSession() {
       this.setGlobalError({
         title: "Sesión caducada",
