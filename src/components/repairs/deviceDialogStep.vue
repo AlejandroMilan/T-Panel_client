@@ -154,10 +154,13 @@
             outlined
             @click="$emit('cancel')"
             class="mr-2"
-            >Cancelar</v-btn
           >
-          <v-btn color="primary" :disabled="!isFormValid" @click="validateStep"
-            >Siguiente</v-btn
+            <v-icon small>mdi-close</v-icon>
+            {{ $vuetify.breakpoint.mdAndUp ? "Cancelar" : null }}</v-btn
+          >
+          <v-btn color="primary" :disabled="!isFormValid" @click="validateStep">
+            {{ $vuetify.breakpoint.mdAndUp ? "Siguiente" : null
+            }}<v-icon small>mdi-arrow-right</v-icon></v-btn
           >
         </div>
       </v-col>

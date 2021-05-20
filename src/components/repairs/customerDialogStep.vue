@@ -60,11 +60,14 @@
             outlined
             @click="$emit('cancel')"
             class="mr-2"
-            >Paso anterior</v-btn
+          >
+            <v-icon small>mdi-arrow-left</v-icon>
+            {{ $vuetify.breakpoint.mdAndUp ? "Paso anterior" : null }}</v-btn
           >
           <v-btn color="primary" :disabled="!isFormValid" @click="validateStep"
-            >Siguiente</v-btn
-          >
+            >{{ $vuetify.breakpoint.mdAndUp ? "Siguiente" : null }}
+            <v-icon small>mdi-arrow-right</v-icon>
+          </v-btn>
         </div>
       </v-col>
     </v-row>
