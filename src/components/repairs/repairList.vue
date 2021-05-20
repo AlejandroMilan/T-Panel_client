@@ -26,7 +26,12 @@
           }"
         >
           <template v-slot:[`item.status.title`]="{ item }">
-            <v-chip :color="getStatusColor(item.status.key)" dark>
+            <v-chip
+              :color="getStatusColor(item.status.key)"
+              dark
+              link
+              @click="search = item.status.title"
+            >
               {{ item.status.title }}
             </v-chip>
           </template>
