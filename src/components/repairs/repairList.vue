@@ -2,7 +2,7 @@
   <div class="py-3">
     <v-card outlined>
       <v-card-title>
-        <span>Todas las reparaciones</span>
+        <span>{{ `Todas las reparaciones (${repairs.length})` }}</span>
         <v-spacer> </v-spacer>
         <v-text-field
           v-model="search"
@@ -17,6 +17,8 @@
           :headers="headers"
           :items="repairs"
           :search="search"
+          :loading="loading"
+          loading-text="Cargando..."
           multi-sort
           no-data-text="No hay reparaciones para mostrar"
           no-results-text="No se encontraron reparaciones"
@@ -57,6 +59,8 @@ export default {
       type: Array,
       required: true,
     },
+
+    loading: { type: Boolean, default: false },
   },
 
   data: () => ({

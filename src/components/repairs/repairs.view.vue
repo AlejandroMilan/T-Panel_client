@@ -1,14 +1,25 @@
 <template>
   <div>
-    <v-progress-linear
-      indeterminate
-      color="primary"
-      v-if="loading"
-    ></v-progress-linear>
-    <v-row v-else dense>
+    <v-row dense>
       <v-col cols="12">
         <div class="d-flex justify-end">
-          <v-btn color="primary" @click="showRepairDialog = true">
+          <v-btn
+            :disabled="loading"
+            :loading="loading"
+            color="primary"
+            outlined
+            @click="getRepairs"
+            class="mr-2"
+          >
+            <v-icon>mdi-autorenew</v-icon>
+            Actualizar</v-btn
+          >
+          <v-btn
+            :disabled="loading"
+            :loading="loading"
+            color="primary"
+            @click="showRepairDialog = true"
+          >
             <v-icon>mdi-plus</v-icon>
             Nueva reparación</v-btn
           >
@@ -21,7 +32,7 @@
         </div>
       </v-col>
       <v-col cols="12">
-        <repairList :repairs="repairs"></repairList>
+        <repairList :repairs="repairs" :loading="loading"></repairList>
       </v-col>
     </v-row>
   </div>
