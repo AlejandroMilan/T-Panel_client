@@ -12,7 +12,7 @@
             class="mr-2"
           >
             <v-icon>mdi-autorenew</v-icon>
-            Actualizar</v-btn
+            {{ $vuetify.breakpoint.mdAndUp ? "Actualizar" : null }}</v-btn
           >
           <v-btn
             :disabled="loading"
@@ -79,7 +79,7 @@ export default {
 
     repairSaved(newRepair) {
       this.showRepairDialog = false;
-      console.log(newRepair);
+      this.repairs = [newRepair, ...this.repairs];
     },
   },
 };
