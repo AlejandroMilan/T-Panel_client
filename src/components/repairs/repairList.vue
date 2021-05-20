@@ -2,7 +2,7 @@
   <div class="py-3">
     <v-card outlined>
       <v-card-title>
-        <span>Últimas reparaciones</span>
+        <span>Todas las reparaciones</span>
         <v-spacer> </v-spacer>
         <v-text-field
           v-model="search"
@@ -17,7 +17,20 @@
           :headers="headers"
           :items="repairs"
           :search="search"
-        ></v-data-table>
+          multi-sort
+          :footer-props="{
+            itemsPerPageText: 'Elementos por página:',
+            itemsPerPageAllText: 'Todos',
+            pageText: getPageText(),
+            showFirstLastPage: true,
+          }"
+        >
+          <template v-slot:[`item.status.title`]="{ item }">
+            <v-chip :color="getStatusColor(item.status.key)" dark>
+              {{ item.status.title }}
+            </v-chip>
+          </template>
+        </v-data-table>
       </v-card-text>
     </v-card>
   </div>
@@ -56,5 +69,30 @@ export default {
       },
     ],
   }),
+
+  methods: {
+    getPageText() {
+      return "";
+    },
+
+    getStatusColor(statusKey) {
+      let color = "red darken-4";
+      switch (statusKey) {
+        case 400:
+          color = "indigo";
+          break;
+        case 300:
+          color = "green darken-3";
+          break;
+        case 200:
+          color = "amber darken-4";
+          break;
+        case 100:
+          color = "red darken-4";
+          break;
+      }
+      return color;
+    },
+  },
 };
 </script>
