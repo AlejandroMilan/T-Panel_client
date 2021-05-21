@@ -55,10 +55,20 @@
               }}</span>
             </td>
           </template>
-          <template v-slot:[`item.actions`]="{}">
+          <template v-slot:[`item.actions`]="{ item }">
             <v-tooltip left>
               <template v-slot:activator="{ on, attrs }">
-                <v-icon small class="mr-2" v-bind="attrs" v-on="on">
+                <v-icon
+                  small
+                  class="mr-2"
+                  v-bind="attrs"
+                  v-on="on"
+                  @click="
+                    $router.push({
+                      path: `/panel/reparaciones/${item.invoiceId}`,
+                    })
+                  "
+                >
                   mdi-more
                 </v-icon>
               </template>

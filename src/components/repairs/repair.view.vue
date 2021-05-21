@@ -9,7 +9,10 @@
       <v-row align="center">
         <v-col class="grow"> {{ error }} </v-col>
         <v-col class="shrink">
-          <v-btn color="white" outlined
+          <v-btn
+            color="white"
+            outlined
+            @click="$router.push({ path: '/panel/reparaciones' })"
             >Volver a "Todas las reparaciones"</v-btn
           >
         </v-col>
