@@ -50,7 +50,9 @@
             <td :colspan="headers.length" class="elevation-0">
               <span class="text-body-2 font-weight-medium"
                 >Motivo de ingreso o falla: </span
-              ><span class="text-body-2">{{ item.device.reasonForAdmission }}</span>
+              ><span class="text-body-2">{{
+                item.device.reasonForAdmission
+              }}</span>
             </td>
           </template>
         </v-data-table>
