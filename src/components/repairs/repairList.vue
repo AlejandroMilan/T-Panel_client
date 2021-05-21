@@ -55,6 +55,16 @@
               }}</span>
             </td>
           </template>
+          <template v-slot:[`item.actions`]="{}">
+            <v-tooltip left>
+              <template v-slot:activator="{ on, attrs }">
+                <v-icon small class="mr-2" v-bind="attrs" v-on="on">
+                  mdi-more
+                </v-icon>
+              </template>
+              <span>Ver más</span>
+            </v-tooltip>
+          </template>
         </v-data-table>
       </v-card-text>
     </v-card>
@@ -101,6 +111,7 @@ export default {
         text: "Estado",
         value: "status.title",
       },
+      { text: "Acciones", value: "actions", sortable: false },
       { text: "", value: "data-table-expand" },
     ],
   }),
