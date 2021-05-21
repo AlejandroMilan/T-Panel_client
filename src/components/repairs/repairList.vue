@@ -16,7 +16,9 @@
         <v-data-table
           :headers="headers"
           :items="repairs"
+          :expanded.sync="expanded"
           :search="search"
+          single-expand
           :loading="loading"
           loading-text="Cargando..."
           multi-sort
@@ -28,6 +30,8 @@
             pageText: getPageText(),
             showFirstLastPage: true,
           }"
+          item-key="_id"
+          show-expand
         >
           <template v-slot:[`item.status.title`]="{ item }">
             <v-chip
@@ -41,6 +45,13 @@
           </template>
           <template v-slot:[`item.admissionDate`]="{ item }">
             <span>{{ getShortDateLocal(item.admissionDate) }}</span>
+          </template>
+          <template v-slot:expanded-item="{ headers, item }">
+            <td :colspan="headers.length" class="elevation-0">
+              <span class="text-body-2 font-weight-medium"
+                >Motivo de ingreso o falla: </span
+              ><span class="text-body-2">{{ item.device.reasonForAdmission }}</span>
+            </td>
           </template>
         </v-data-table>
       </v-card-text>
@@ -59,12 +70,12 @@ export default {
       type: Array,
       required: true,
     },
-
     loading: { type: Boolean, default: false },
   },
 
   data: () => ({
     search: "",
+    expanded: [],
     headers: [
       { text: "Folio", value: "invoiceId" },
       {
@@ -88,6 +99,7 @@ export default {
         text: "Estado",
         value: "status.title",
       },
+      { text: "", value: "data-table-expand" },
     ],
   }),
 
