@@ -11,3 +11,10 @@ export const getShortDate = (ISODate) => {
   const shortDate = `${day}/${month}/${year}`;
   return shortDate;
 };
+
+export const getFullDate = (ISODate) => {
+  const date = DateTime.fromISO(ISODate);
+  date.setLocale("es");
+  const fullDate = date.toLocaleString(DateTime.DATE_FULL);
+  return fullDate;
+};
