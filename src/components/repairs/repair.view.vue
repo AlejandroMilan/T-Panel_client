@@ -18,16 +18,31 @@
         </v-col>
       </v-row>
     </v-alert>
+    <div v-if="!loading && !error && repair">
+      <v-row>
+        <v-col cols="12">
+          <div class="py-2">
+            <deviceData></deviceData>
+          </div>
+        </v-col>
+      </v-row>
+    </div>
   </div>
 </template>
 
 <script>
 import serverRequestMixin from "@/mixins/serverRequest.mixin";
 
+import deviceData from "./deviceData";
+
 export default {
   name: "RepairView",
 
   mixins: [serverRequestMixin],
+
+  components: {
+    deviceData,
+  },
 
   data: () => ({
     loading: false,
@@ -49,7 +64,7 @@ export default {
           `/repairs/repair/${this.repairId}`
         );
         this.loading = false;
-        console.log(response);
+        this.repair = response.repair;
       } catch (error) {
         this.loading = false;
         this.error = error.data.message;
