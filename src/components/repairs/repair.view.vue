@@ -22,7 +22,7 @@
       <v-row>
         <v-col cols="12">
           <div class="py-2">
-            <deviceData></deviceData>
+            <repairData :repairData="repair"></repairData>
           </div>
         </v-col>
       </v-row>
@@ -33,7 +33,7 @@
 <script>
 import serverRequestMixin from "@/mixins/serverRequest.mixin";
 
-import deviceData from "./deviceData";
+import repairData from "./repairData";
 
 export default {
   name: "RepairView",
@@ -41,7 +41,7 @@ export default {
   mixins: [serverRequestMixin],
 
   components: {
-    deviceData,
+    repairData,
   },
 
   data: () => ({
