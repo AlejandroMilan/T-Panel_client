@@ -4,7 +4,7 @@
       >Para agregar el patrón, da click en los círculos en el orden
       correspondiente.</span
     >
-    <div class="d-flex justify-end py-1">
+    <div class="d-flex justify-end py-1" v-if="!readOnly">
       <v-btn
         color="secondary"
         small
@@ -24,7 +24,9 @@
             fab
             :color="isInPatreon(i) ? 'primary' : 'grey'"
             small
-            @click="!isInPatreon(i) && patreon.push(i) && emitPatreon()"
+            @click="
+              !isInPatreon(i) && !readOnly && patreon.push(i) && emitPatreon()
+            "
           >
             {{ isInPatreon(i) ? patreon.indexOf(i) + 1 : null }}
           </v-btn>
@@ -38,9 +40,18 @@
 export default {
   name: "patreonCreator",
 
+  props: {
+    readOnly: { type: Boolean, default: false },
+    current: { type: Array, required: false },
+  },
+
   data: () => ({
     patreon: [],
   }),
+
+  mounted() {
+    if (this.current && this.current.length) this.patreon = this.current;
+  },
 
   methods: {
     isInPatreon(number) {
