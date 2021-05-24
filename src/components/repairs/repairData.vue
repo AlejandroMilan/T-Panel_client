@@ -25,6 +25,7 @@
       <v-card-text>
         <deviceSection :deviceData="getDeviceData()"></deviceSection>
         <customerSection :customerData="repairData.customer"></customerSection>
+        <paymentSection></paymentSection>
       </v-card-text>
     </v-card>
   </div>
@@ -34,11 +35,12 @@
 import { getFullDate } from "@/helpers/date.helper";
 import deviceSection from "./deviceSection";
 import customerSection from "./customerSection";
+import paymentSection from "./paymentSection";
 
 export default {
   name: "deviceData",
 
-  components: { deviceSection, customerSection },
+  components: { deviceSection, customerSection, paymentSection },
 
   props: {
     repairData: { type: Object, required: true },
