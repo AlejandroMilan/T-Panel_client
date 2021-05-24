@@ -19,9 +19,8 @@
               : null
           }}</span
         >
-        <v-spacer>
-          <span>{{ `Folio: ${repairData.invoiceId}` }}</span>
-        </v-spacer>
+        <v-spacer> </v-spacer>
+        <span>{{ `Folio: ${repairData.invoiceId}` }}</span>
       </v-card-subtitle>
       <v-card-text>
         <deviceSection :deviceData="getDeviceData()"></deviceSection>
