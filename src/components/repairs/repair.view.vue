@@ -20,10 +20,13 @@
     </v-alert>
     <div v-if="!loading && !error && repair">
       <v-row>
-        <v-col cols="12">
+        <v-col cols="12" md="8" lg="9">
           <div class="py-2">
             <repairData :repairData="repair"></repairData>
           </div>
+        </v-col>
+        <v-col cols="12" md="4" lg="3">
+          <actionsCard></actionsCard>
         </v-col>
       </v-row>
     </div>
@@ -34,6 +37,7 @@
 import serverRequestMixin from "@/mixins/serverRequest.mixin";
 
 import repairData from "./repairData";
+import actionsCard from "./actionsCard";
 
 export default {
   name: "RepairView",
@@ -42,6 +46,7 @@ export default {
 
   components: {
     repairData,
+    actionsCard,
   },
 
   data: () => ({
