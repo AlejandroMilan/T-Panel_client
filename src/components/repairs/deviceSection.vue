@@ -120,9 +120,9 @@
           md="5"
           v-if="deviceData.blocking.blockingType === 'patreon'"
         >
-          <v-card outlined>
+          <v-card color="grey lighten-4" elevation="0">
+            <v-subheader>Patrón de desbloqueo</v-subheader>
             <v-card-text>
-              <v-subheader>Patrón de desbloqueo</v-subheader>
               <patreonCreator
                 :readOnly="true"
                 :current="deviceData.blocking.patreon"
