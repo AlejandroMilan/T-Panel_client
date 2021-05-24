@@ -21,6 +21,8 @@
         >
         <v-spacer> </v-spacer>
         <span>{{ `Folio: ${repairData.invoiceId}` }}</span>
+        <v-spacer> </v-spacer>
+        <span>{{ `Agregada por: ${repairData.createdBy.name}` }}</span>
       </v-card-subtitle>
       <v-card-text>
         <deviceSection :deviceData="getDeviceData()"></deviceSection>
@@ -83,6 +85,7 @@ export default {
         canStart,
         presentsMoisture,
         beforeRepaired,
+        imei,
       } = this.repairData.device;
 
       return {
@@ -94,6 +97,7 @@ export default {
         canStart,
         presentsMoisture,
         beforeRepaired,
+        imei,
       };
     },
   },

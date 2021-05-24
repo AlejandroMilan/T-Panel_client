@@ -47,7 +47,7 @@
           </v-list-item-content>
         </v-list-item>
       </v-col>
-      <v-col cols="12">
+      <v-col cols="12" md="6">
         <v-list-item dense>
           <v-list-item-content>
             <v-list-item-subtitle>Presenta humedad</v-list-item-subtitle>
@@ -63,6 +63,16 @@
                 }}</span>
               </div>
             </v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-col>
+      <v-col cols="12" md="6">
+        <v-list-item>
+          <v-list-item-content>
+            <v-list-item-subtitle>IMEI</v-list-item-subtitle>
+            <v-list-item-title>{{
+              deviceData.imei || "Sin IMEI"
+            }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-col>
