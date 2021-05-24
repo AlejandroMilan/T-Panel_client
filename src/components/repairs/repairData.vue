@@ -24,8 +24,7 @@
       </v-card-subtitle>
       <v-card-text>
         <deviceSection :deviceData="getDeviceData()"></deviceSection>
-        <v-divider class="mt-3"></v-divider>
-        <customerSection></customerSection>
+        <customerSection :customerData="repairData.customer"></customerSection>
       </v-card-text>
     </v-card>
   </div>
