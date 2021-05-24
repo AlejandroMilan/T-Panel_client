@@ -30,7 +30,7 @@
         v-if="paymentData.prePayment < paymentData.estimatedCost"
       >
         <v-alert dense type="warning" text
-          >Al cliente aún le resta por pagar
+          >Al cliente aún le falta por pagar
           {{ paymentData.estimatedCost - paymentData.prePayment }}</v-alert
         >
       </v-col>

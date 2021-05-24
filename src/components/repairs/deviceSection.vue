@@ -12,11 +12,16 @@
               >Puede encender sin complicación</v-list-item-subtitle
             >
             <v-list-item-title>
-              <v-checkbox
-                readonly
-                v-model="deviceData.canStart"
-                class="ma-0"
-              ></v-checkbox>
+              <div class="d-flex">
+                <v-checkbox
+                  readonly
+                  v-model="deviceData.canStart"
+                  class="ma-0"
+                ></v-checkbox>
+                <span class="text-body-1 mt-1">{{
+                  deviceData.canStart ? "Sí" : "No"
+                }}</span>
+              </div>
             </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
@@ -28,11 +33,16 @@
               >Reparado con anterioridad</v-list-item-subtitle
             >
             <v-list-item-title>
-              <v-checkbox
-                readonly
-                v-model="deviceData.beforeRepaired"
-                class="ma-0"
-              ></v-checkbox>
+              <div class="d-flex">
+                <v-checkbox
+                  readonly
+                  v-model="deviceData.beforeRepaired"
+                  class="ma-0"
+                ></v-checkbox>
+                <span class="text-body-1 mt-1">{{
+                  deviceData.beforeRepaired ? "Sí" : "No"
+                }}</span>
+              </div>
             </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
@@ -42,11 +52,16 @@
           <v-list-item-content>
             <v-list-item-subtitle>Presenta humedad</v-list-item-subtitle>
             <v-list-item-title>
-              <v-checkbox
-                readonly
-                v-model="deviceData.presentsMoisture"
-                class="ma-0"
-              ></v-checkbox>
+              <div class="d-flex">
+                <v-checkbox
+                  readonly
+                  v-model="deviceData.presentsMoisture"
+                  class="ma-0"
+                ></v-checkbox>
+                <span class="text-body-1 mt-1">{{
+                  deviceData.presentsMoisture ? "Sí" : "No"
+                }}</span>
+              </div>
             </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
