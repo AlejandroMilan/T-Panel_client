@@ -24,6 +24,8 @@
       </v-card-subtitle>
       <v-card-text>
         <deviceSection :deviceData="getDeviceData()"></deviceSection>
+        <v-divider class="mt-3"></v-divider>
+        <customerSection></customerSection>
       </v-card-text>
     </v-card>
   </div>
@@ -32,11 +34,12 @@
 <script>
 import { getFullDate } from "@/helpers/date.helper";
 import deviceSection from "./deviceSection";
+import customerSection from "./customerSection";
 
 export default {
   name: "deviceData",
 
-  components: { deviceSection },
+  components: { deviceSection, customerSection },
 
   props: {
     repairData: { type: Object, required: true },
