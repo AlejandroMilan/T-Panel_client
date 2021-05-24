@@ -25,7 +25,10 @@
       <v-card-text>
         <deviceSection :deviceData="getDeviceData()"></deviceSection>
         <customerSection :customerData="repairData.customer"></customerSection>
-        <paymentSection></paymentSection>
+        <paymentSection
+          v-if="repairData.payment"
+          :paymentData="repairData.payment"
+        ></paymentSection>
       </v-card-text>
     </v-card>
   </div>

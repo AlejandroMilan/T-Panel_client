@@ -119,6 +119,7 @@
           cols="12"
           md="5"
           v-if="deviceData.blocking.blockingType === 'patreon'"
+          class="mb-2"
         >
           <v-card color="grey lighten-4" elevation="0">
             <v-subheader>Patrón de desbloqueo</v-subheader>

@@ -2,7 +2,7 @@
   <div>
     <v-row dense>
       <v-col cols="12">
-        <v-divider class="mt-3"></v-divider>
+        <v-divider></v-divider>
         <v-subheader>Cliente</v-subheader>
       </v-col>
       <v-col cols="12" md="6">
