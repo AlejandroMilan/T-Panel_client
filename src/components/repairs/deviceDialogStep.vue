@@ -172,11 +172,16 @@
 import patreonCreator from "./patreonCreator";
 import { validationMixin } from "vuelidate";
 import { required, minLength, maxLength } from "vuelidate/lib/validators";
+import { _ } from "vue-underscore";
 
 export default {
   name: "deviceDialogStep",
 
   mixins: [validationMixin],
+
+  props: {
+    currentDevice: { type: Object, default: null },
+  },
 
   components: { patreonCreator },
 
@@ -201,6 +206,12 @@ export default {
           return false;
       }
       return true;
+    },
+  },
+
+  watch: {
+    currentDevice() {
+      this.setCurrentDevice();
     },
   },
 
@@ -253,6 +264,12 @@ export default {
       pin: { required, minLength: minLength(4), maxLength: maxLength(4) },
       password: { required },
     },
+  },
+
+  created() {
+    if (this.currentDevice) {
+      this.setCurrentDevice();
+    }
   },
 
   methods: {
@@ -347,6 +364,21 @@ export default {
       }
 
       this.$emit("stepValid", emitData);
+    },
+
+    setCurrentDevice() {
+      if (this.currentDevice) {
+        const keys = _.keys(this.currentDevice);
+        keys.forEach((key) => {
+          if (
+            this[key] ||
+            this[key] === null ||
+            this[key] === "" ||
+            this[key] === false
+          )
+            this[key] = this.currentDevice[key];
+        });
+      }
     },
   },
 };

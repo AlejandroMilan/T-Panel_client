@@ -7,7 +7,9 @@
       :width="$vuetify.breakpoint.mdAndUp ? '750' : null"
     >
       <v-card :loading="loading">
-        <v-card-title>Agregar reparación</v-card-title>
+        <v-card-title>{{
+          repair ? "Editar reparación" : "Agregar reparación"
+        }}</v-card-title>
         <v-card-text>
           <v-alert v-if="submitError" type="error" dense outlined>{{
             submitError
@@ -20,6 +22,7 @@
               <deviceDialogStep
                 @cancel="$emit('cancel')"
                 @stepValid="deviceStepValid"
+                :currentDevice="repair ? device : null"
               ></deviceDialogStep>
             </v-stepper-content>
             <v-stepper-step step="2" :complete="formStep > 2"
@@ -62,6 +65,7 @@ export default {
 
   props: {
     show: { type: Boolean, defualt: false },
+    repair: { type: Object, defualt: null },
   },
 
   components: { deviceDialogStep, customerDialogStep, generalDataDialogStep },
@@ -75,6 +79,15 @@ export default {
     payment: {},
     invoiceId: "",
   }),
+
+  mounted() {
+    if (this.repair) {
+      this.device = this.repair.device;
+      this.customer = this.repair.customer;
+      this.payment = this.repair.payment;
+      this.invoiceId = this.repair.invoiceId;
+    }
+  },
 
   methods: {
     deviceStepValid(deviceInfo) {

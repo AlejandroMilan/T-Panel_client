@@ -5,7 +5,7 @@
       <v-card-text>
         <v-row dense>
           <v-col cols="12">
-            <v-btn block color="primary" small
+            <v-btn block color="primary" small @click="$emit('editRepairInfo')"
               ><v-icon small class="mr-2"> mdi-pencil</v-icon>Editar
               información</v-btn
             >

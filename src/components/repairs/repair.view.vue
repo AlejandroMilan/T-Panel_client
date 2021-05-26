@@ -26,16 +26,24 @@
           </div>
         </v-col>
         <v-col cols="12" md="4" lg="3">
-          <actionsCard></actionsCard>
+          <actionsCard @editRepairInfo="editRepairInfo"></actionsCard>
         </v-col>
       </v-row>
     </div>
+
+    <repairDialog
+      v-if="showEditRepairInfo"
+      :show="showEditRepairInfo"
+      :repair="repair"
+      @cancel="showEditRepairInfo = false"
+    ></repairDialog>
   </div>
 </template>
 
 <script>
 import serverRequestMixin from "@/mixins/serverRequest.mixin";
 
+import repairDialog from "./repairDialog";
 import repairData from "./repairData";
 import actionsCard from "./actionsCard";
 
@@ -45,12 +53,14 @@ export default {
   mixins: [serverRequestMixin],
 
   components: {
+    repairDialog,
     repairData,
     actionsCard,
   },
 
   data: () => ({
     loading: false,
+    showEditRepairInfo: false,
     error: null,
     repairId: "",
     repair: null,
@@ -75,6 +85,10 @@ export default {
         this.error = error.data.message;
         if (error.status >= 500) console.error(error);
       }
+    },
+
+    editRepairInfo() {
+      this.showEditRepairInfo = true;
     },
   },
 };
