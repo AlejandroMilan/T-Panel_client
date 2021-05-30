@@ -41,6 +41,7 @@
             </v-stepper-step>
             <v-stepper-content step="3">
               <generalDataDialogStep
+                :currentData="repair ? getGeneralData() : null"
                 @cancel="formStep = 2"
                 @stepValid="generalDataStepValid"
               ></generalDataDialogStep>
@@ -133,6 +134,18 @@ export default {
         this.submitError = error.data.message;
         if (error.status >= 500) console.error(error.data);
       }
+    },
+
+    getGeneralData() {
+      let data = { invoiceId: this.invoiceId };
+      if (this.payment) {
+        data.payment = {};
+        if (this.payment.estimatedCost)
+          data.payment.estimatedCost = this.payment.estimatedCost;
+        if (this.payment.prePayment)
+          data.payment.prePayment = this.payment.prePayment;
+      }
+      return data;
     },
   },
 };

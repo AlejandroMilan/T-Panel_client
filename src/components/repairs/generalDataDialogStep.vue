@@ -97,9 +97,14 @@
 import { validationMixin } from "vuelidate";
 import { required, numeric } from "vuelidate/lib/validators";
 import serverRequestMixin from "@/mixins/serverRequest.mixin";
+import { _ } from "vue-underscore";
 
 export default {
   name: "generalDataDialogStep",
+
+  props: {
+    currentData: { type: Object, default: null },
+  },
 
   mixins: [validationMixin, serverRequestMixin],
 
@@ -109,6 +114,12 @@ export default {
       if (this.errors.estimatedCost.length) return false;
       if (this.errors.prePayment.length) return false;
       return true;
+    },
+  },
+
+  watch: {
+    currentData() {
+      this.setCurrentData();
     },
   },
 
@@ -133,6 +144,10 @@ export default {
       estimatedCost: { numeric },
       prePayment: { numeric },
     },
+  },
+
+  mounted() {
+    if (this.currentData) this.setCurrentData();
   },
 
   methods: {
@@ -189,6 +204,21 @@ export default {
       };
 
       this.$emit("stepValid", emitData);
+    },
+
+    setCurrentData() {
+      if (this.currentData) {
+        const keys = _.keys(this.currentData);
+        keys.forEach((key) => {
+          if (
+            this[key] ||
+            this[key] === null ||
+            this[key] === "" ||
+            this[key] === false
+          )
+            this[key] = this.currentData[key];
+        });
+      }
     },
   },
 };
