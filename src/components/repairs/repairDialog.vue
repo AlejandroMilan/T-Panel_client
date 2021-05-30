@@ -30,6 +30,7 @@
             >
             <v-stepper-content step="2">
               <customerDialogStep
+                :currentCustomer="repair ? customer : null"
                 @cancel="formStep = 1"
                 @stepValid="customerStepValid"
               ></customerDialogStep>

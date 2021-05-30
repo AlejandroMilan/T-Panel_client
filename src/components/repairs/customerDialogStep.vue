@@ -83,9 +83,14 @@ import {
   maxLength,
   numeric,
 } from "vuelidate/lib/validators";
+import { _ } from "vue-underscore";
 
 export default {
   name: "customerDialogStep",
+
+  props: {
+    currentCustomer: { type: Object, default: null },
+  },
 
   mixins: [validationMixin],
 
@@ -95,6 +100,12 @@ export default {
       if (this.errors.phoneNumber.length) return false;
       if (this.errors.email.length) return false;
       return true;
+    },
+  },
+
+  watch: {
+    currentCustomer() {
+      this.setCurrentCustumer();
     },
   },
 
@@ -118,6 +129,12 @@ export default {
       maxLength: maxLength(10),
     },
     email: { email },
+  },
+
+  mounted() {
+    if (this.currentCustomer) {
+      this.setCurrentCustumer();
+    }
   },
 
   methods: {
@@ -161,6 +178,21 @@ export default {
       if (this.adress) emitData.adress = this.adress;
 
       this.$emit("stepValid", emitData);
+    },
+
+    setCurrentCustumer() {
+      if (this.currentCustomer) {
+        const keys = _.keys(this.currentCustomer);
+        keys.forEach((key) => {
+          if (
+            this[key] ||
+            this[key] === null ||
+            this[key] === "" ||
+            this[key] === false
+          )
+            this[key] = this.currentCustomer[key];
+        });
+      }
     },
   },
 };
