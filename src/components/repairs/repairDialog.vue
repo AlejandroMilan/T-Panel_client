@@ -7,9 +7,13 @@
       :width="$vuetify.breakpoint.mdAndUp ? '750' : null"
     >
       <v-card :loading="loading">
-        <v-card-title>{{
-          repair ? "Editar reparación" : "Agregar reparación"
-        }}</v-card-title>
+        <v-card-title
+          >{{ repair ? "Editar reparación" : "Agregar reparación" }}
+          <v-spacer></v-spacer>
+          <v-btn icon @click="$emit('cancel')">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+        </v-card-title>
         <v-card-text>
           <v-alert v-if="submitError" type="error" dense outlined>{{
             submitError
