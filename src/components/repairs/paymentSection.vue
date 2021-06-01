@@ -12,7 +12,7 @@
               >Costo estimado de la reparación</v-list-item-subtitle
             >
             <v-list-item-title>{{
-              paymentData.estimatedCost
+              toCurrency(paymentData.estimatedCost)
             }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
@@ -21,7 +21,9 @@
         <v-list-item>
           <v-list-item-content>
             <v-list-item-subtitle>Adelanto del cliente</v-list-item-subtitle>
-            <v-list-item-title>{{ paymentData.prePayment }}</v-list-item-title>
+            <v-list-item-title>{{
+              toCurrency(paymentData.prePayment)
+            }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-col>
@@ -31,7 +33,9 @@
       >
         <v-alert dense type="warning" text
           >Al cliente aún le falta por pagar
-          {{ paymentData.estimatedCost - paymentData.prePayment }}</v-alert
+          {{
+            toCurrency(paymentData.estimatedCost - paymentData.prePayment)
+          }}</v-alert
         >
       </v-col>
     </v-row>
@@ -39,11 +43,19 @@
 </template>
 
 <script>
+import { currencyFormat } from "@/helpers/numbers.helper";
+
 export default {
   name: "paymentSection",
 
   props: {
     paymentData: { type: Object, required: true },
+  },
+
+  methods: {
+    toCurrency(number) {
+      return currencyFormat(number);
+    },
   },
 };
 </script>

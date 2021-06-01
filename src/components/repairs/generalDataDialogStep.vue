@@ -46,6 +46,8 @@
           outlined
           dense
           color="primary"
+          :hint="convertToCurrency(payment.estimatedCost)"
+          persistent-hint
           :error-messages="errors.estimatedCost"
           :disabled="loading"
           @input="validateEstimatedCost()"
@@ -60,6 +62,8 @@
           outlined
           dense
           color="primary"
+          :hint="convertToCurrency(payment.prePayment)"
+          persistent-hint
           :error-messages="errors.prePayment"
           :disabled="loading"
           @input="validatePrepayment()"
@@ -98,6 +102,7 @@ import { validationMixin } from "vuelidate";
 import { required, numeric } from "vuelidate/lib/validators";
 import serverRequestMixin from "@/mixins/serverRequest.mixin";
 import { _ } from "vue-underscore";
+import { currencyFormat } from "@/helpers/numbers.helper";
 
 export default {
   name: "generalDataDialogStep",
@@ -219,6 +224,10 @@ export default {
             this[key] = this.currentData[key];
         });
       }
+    },
+
+    convertToCurrency(number) {
+      return currencyFormat(number);
     },
   },
 };
