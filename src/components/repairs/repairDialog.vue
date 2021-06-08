@@ -113,14 +113,21 @@ export default {
     },
 
     async submit() {
+      this.submitError = null;
       this.loading = true;
       try {
-        const submitData = {
-          device: this.device,
-          customer: this.customer,
-          invoiceId: this.invoiceId,
-          status: 100,
-        };
+        const submitData = this.repair
+          ? {
+              device: this.device,
+              customer: this.customer,
+              invoiceId: this.invoiceId,
+            }
+          : {
+              device: this.device,
+              customer: this.customer,
+              invoiceId: this.invoiceId,
+              status: 100,
+            };
         if (this.payment.estimatedCost || this.payment.prePayment) {
           submitData.payment = {};
           if (this.payment.estimatedCost)
@@ -129,7 +136,12 @@ export default {
             submitData.payment.prePayment = this.payment.prePayment;
         }
 
-        const response = await this.postRequest("/repairs", submitData);
+        const response = this.repair
+          ? await this.putRequest(
+              `/repairs/${this.repair.invoiceId}`,
+              submitData
+            )
+          : await this.postRequest("/repairs", submitData);
         this.loading = false;
 
         this.$emit("repairSaved", response.repair);

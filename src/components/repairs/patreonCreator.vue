@@ -45,6 +45,12 @@ export default {
     current: { type: Array, required: false },
   },
 
+  watch: {
+    current() {
+      if (this.current && this.current.length) this.patreon = this.current;
+    },
+  },
+
   data: () => ({
     patreon: [],
   }),

@@ -145,7 +145,12 @@
         cols="12"
         md="6"
       >
-        <patreonCreator @change="updatePatreon"></patreonCreator>
+        <patreonCreator
+          @change="updatePatreon"
+          :current="
+            currentDevice.blocking ? currentDevice.blocking.patreon : null
+          "
+        ></patreonCreator>
       </v-col>
       <v-col cols="12">
         <div class="d-flex">
@@ -226,7 +231,7 @@ export default {
     presentsMoisture: false,
     blocking: {
       hasBlocking: false,
-      blockingType: "pin",
+      blockingType: "",
       patreon: [],
       pin: "",
       password: "",
@@ -349,6 +354,9 @@ export default {
         canStart: this.canStart,
         beforeRepaired: this.beforeRepaired,
         presentsMoisture: this.presentsMoisture,
+        blocking: {
+          hasBlocking: false,
+        },
       };
       if (this.blocking.hasBlocking) {
         emitData.blocking = {

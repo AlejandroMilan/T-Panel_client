@@ -36,6 +36,7 @@
       :show="showEditRepairInfo"
       :repair="repair"
       @cancel="showEditRepairInfo = false"
+      @repairSaved="repairSaved"
     ></repairDialog>
   </div>
 </template>
@@ -89,6 +90,11 @@ export default {
 
     editRepairInfo() {
       this.showEditRepairInfo = true;
+    },
+
+    repairSaved(repairUpdated) {
+      this.showEditRepairInfo = false;
+      this.repair = repairUpdated;
     },
   },
 };
