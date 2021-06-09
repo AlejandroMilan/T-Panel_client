@@ -358,6 +358,7 @@ export default {
           hasBlocking: false,
         },
       };
+      if (this.imei) emitData.imei = this.imei;
       if (this.blocking.hasBlocking) {
         emitData.blocking = {
           hasBlocking: true,
