@@ -29,6 +29,7 @@
           <actionsCard
             @editRepairInfo="editRepairInfo"
             @editRepairStatus="editRepairStatus"
+            @deleteRepair="showDeleteRepairDialog"
           ></actionsCard>
         </v-col>
       </v-row>
@@ -49,6 +50,14 @@
       @cancel="showEditRepairStatus = false"
       @repairSaved="repairSaved"
     ></updateStatusDialog>
+
+    <deleteRepairDialog
+      v-if="showDeleteRepair"
+      :show="showDeleteRepair"
+      :invoiceId="repair.invoiceId"
+      @cancel="showDeleteRepair = false"
+      @repairDeleted="repairDeleted"
+    ></deleteRepairDialog>
   </div>
 </template>
 
@@ -58,7 +67,8 @@ import serverRequestMixin from "@/mixins/serverRequest.mixin";
 import repairDialog from "./repairDialog";
 import repairData from "./repairData";
 import actionsCard from "./actionsCard";
-import updateStatusDialog from "./updateStatusDialog.vue";
+import updateStatusDialog from "./updateStatusDialog";
+import deleteRepairDialog from "./deleteRepairDialog";
 
 export default {
   name: "RepairView",
@@ -70,12 +80,14 @@ export default {
     repairData,
     actionsCard,
     updateStatusDialog,
+    deleteRepairDialog,
   },
 
   data: () => ({
     loading: false,
     showEditRepairInfo: false,
     showEditRepairStatus: false,
+    showDeleteRepair: false,
     error: null,
     repairId: "",
     repair: null,
@@ -114,6 +126,15 @@ export default {
       this.showEditRepairInfo = false;
       this.showEditRepairStatus = false;
       this.repair = repairUpdated;
+    },
+
+    showDeleteRepairDialog() {
+      this.showDeleteRepair = true;
+    },
+
+    repairDeleted() {
+      this.showDeleteRepair = false;
+      this.$router.push({ path: "/panel/reparaciones" });
     },
   },
 };

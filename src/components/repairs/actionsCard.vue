@@ -23,7 +23,11 @@
             >
           </v-col>
           <v-col cols="12">
-            <v-btn color="error darken-2" small text
+            <v-btn
+              color="error darken-2"
+              small
+              text
+              @click="$emit('deleteRepair')"
               ><v-icon small class="mr-2"> mdi-delete</v-icon>Eliminar
               reparación</v-btn
             >
