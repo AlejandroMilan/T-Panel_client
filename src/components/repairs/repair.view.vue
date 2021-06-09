@@ -26,7 +26,10 @@
           </div>
         </v-col>
         <v-col cols="12" md="4" lg="3">
-          <actionsCard @editRepairInfo="editRepairInfo"></actionsCard>
+          <actionsCard
+            @editRepairInfo="editRepairInfo"
+            @editRepairStatus="editRepairStatus"
+          ></actionsCard>
         </v-col>
       </v-row>
     </div>
@@ -38,6 +41,14 @@
       @cancel="showEditRepairInfo = false"
       @repairSaved="repairSaved"
     ></repairDialog>
+
+    <updateStatusDialog
+      v-if="showEditRepairStatus"
+      :show="showEditRepairStatus"
+      :invoiceId="repair.invoiceId"
+      @cancel="showEditRepairStatus = false"
+      @repairSaved="repairSaved"
+    ></updateStatusDialog>
   </div>
 </template>
 
@@ -47,6 +58,7 @@ import serverRequestMixin from "@/mixins/serverRequest.mixin";
 import repairDialog from "./repairDialog";
 import repairData from "./repairData";
 import actionsCard from "./actionsCard";
+import updateStatusDialog from "./updateStatusDialog.vue";
 
 export default {
   name: "RepairView",
@@ -57,11 +69,13 @@ export default {
     repairDialog,
     repairData,
     actionsCard,
+    updateStatusDialog,
   },
 
   data: () => ({
     loading: false,
     showEditRepairInfo: false,
+    showEditRepairStatus: false,
     error: null,
     repairId: "",
     repair: null,
@@ -92,8 +106,13 @@ export default {
       this.showEditRepairInfo = true;
     },
 
+    editRepairStatus() {
+      this.showEditRepairStatus = true;
+    },
+
     repairSaved(repairUpdated) {
       this.showEditRepairInfo = false;
+      this.showEditRepairStatus = false;
       this.repair = repairUpdated;
     },
   },

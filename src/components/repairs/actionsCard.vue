@@ -11,7 +11,7 @@
             >
           </v-col>
           <v-col cols="12">
-            <v-btn color="accent" small text
+            <v-btn color="accent" small text @click="$emit('editRepairStatus')"
               ><v-icon small class="mr-2"> mdi-devices</v-icon>Cambiar
               estado</v-btn
             >
