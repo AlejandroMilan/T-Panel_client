@@ -128,13 +128,11 @@ export default {
               invoiceId: this.invoiceId,
               status: 100,
             };
-        if (this.payment.estimatedCost || this.payment.prePayment) {
-          submitData.payment = {};
-          if (this.payment.estimatedCost)
-            submitData.payment.estimatedCost = this.payment.estimatedCost;
-          if (this.payment.prePayment)
-            submitData.payment.prePayment = this.payment.prePayment;
-        }
+        submitData.payment = {};
+        if (this.payment.estimatedCost)
+          submitData.payment.estimatedCost = this.payment.estimatedCost;
+        if (this.payment.prePayment)
+          submitData.payment.prePayment = this.payment.prePayment;
 
         const response = this.repair
           ? await this.putRequest(
