@@ -113,7 +113,6 @@ export default {
           this.imageFile = null;
         }
       } catch (error) {
-        console.log(error);
         this.loading = false;
         error.status < 500
           ? (this.error = error.data.message)
