@@ -4,8 +4,8 @@
       <v-card tile color="secondary" dark class="pt-10">
         <v-list-item>
           <v-list-item-content>
-            <v-list-item-title> Alejandro Milán </v-list-item-title>
-            <v-list-item-subtitle>Administrador</v-list-item-subtitle>
+            <v-list-item-title> {{ user.name }} </v-list-item-title>
+            <v-list-item-subtitle>{{ user.role.name }}</v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
       </v-card>
