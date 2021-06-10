@@ -19,17 +19,20 @@
       </v-row>
     </v-alert>
     <div v-if="!loading && !error && repair">
+      <v-tabs v-model="tab" class="mb-2">
+        <v-tabs-slider color="primary"></v-tabs-slider>
+        <v-tab>Detalles de la reparación</v-tab>
+        <v-tab>Comentarios</v-tab>
+      </v-tabs>
       <v-row>
         <v-col cols="12" md="8" lg="9">
           <div class="py-2">
-            <v-tabs v-model="tab" class="mb-2">
-              <v-tabs-slider color="primary"></v-tabs-slider>
-              <v-tab>Detalles de la reparación</v-tab>
-              <v-tab>Comentarios</v-tab>
-            </v-tabs>
             <v-tabs-items v-model="tab">
               <v-tab-item>
                 <repairData :repairData="repair"></repairData>
+              </v-tab-item>
+              <v-tab-item>
+                <commentsList :comments="comments"></commentsList>
               </v-tab-item>
             </v-tabs-items>
           </div>
@@ -75,6 +78,7 @@ import serverRequestMixin from "@/mixins/serverRequest.mixin";
 
 import repairDialog from "./repairDialog";
 import repairData from "./repairData";
+import commentsList from "@/components/comments/commentsList";
 import actionsCard from "./actionsCard";
 import updateStatusDialog from "./updateStatusDialog";
 import deleteRepairDialog from "./deleteRepairDialog";
@@ -90,6 +94,7 @@ export default {
     actionsCard,
     updateStatusDialog,
     deleteRepairDialog,
+    commentsList,
   },
 
   data: () => ({
@@ -101,6 +106,7 @@ export default {
     error: null,
     repairId: "",
     repair: null,
+    comments: null,
   }),
 
   mounted() {
@@ -115,8 +121,13 @@ export default {
         const response = await this.getRequest(
           `/repairs/repair/${this.repairId}`
         );
+        const commentsResponse = await this.getRequest(
+          `/comments/${this.repairId}`
+        );
+
         this.loading = false;
         this.repair = response.repair;
+        this.comments = commentsResponse.comments.reverse();
       } catch (error) {
         this.loading = false;
         this.error = error.data.message;

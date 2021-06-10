@@ -18,3 +18,11 @@ export const getFullDate = (ISODate) => {
   const fullDate = date.toLocaleString(DateTime.DATE_FULL);
   return fullDate;
 };
+
+export const getFullDateWithHour = (ISODate) => {
+  const date = DateTime.fromISO(ISODate);
+  date.setLocale("es");
+  const fullDate = date.toLocaleString(DateTime.DATE_FULL);
+  const fullHour = date.toLocaleString(DateTime.TIME_24_SIMPLE);
+  return `${fullDate} a las ${fullHour}`;
+};
