@@ -43,6 +43,11 @@
             @editRepairStatus="editRepairStatus"
             @deleteRepair="showDeleteRepairDialog"
           ></actionsCard>
+
+          <commentCard
+            v-if="comments || comments.length"
+            :comment="comments[0]"
+          ></commentCard>
         </v-col>
       </v-row>
     </div>
@@ -82,6 +87,7 @@ import commentsList from "@/components/comments/commentsList";
 import actionsCard from "./actionsCard";
 import updateStatusDialog from "./updateStatusDialog";
 import deleteRepairDialog from "./deleteRepairDialog";
+import commentCard from "@/components/comments/commentCard";
 
 export default {
   name: "RepairView",
@@ -95,6 +101,7 @@ export default {
     updateStatusDialog,
     deleteRepairDialog,
     commentsList,
+    commentCard,
   },
 
   data: () => ({
