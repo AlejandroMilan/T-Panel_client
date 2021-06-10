@@ -206,7 +206,7 @@ export default {
           return false;
         if (
           this.blocking.blockingType === "patreon" &&
-          !this.blocking.patreon.length
+          !this.blocking.patreon?.length
         )
           return false;
       }
