@@ -1,5 +1,5 @@
 <template>
-  <v-card outlined class="mb-2">
+  <v-card v-if="comment" outlined class="mb-2">
     <div>
       <v-list-item>
         <v-list-item-content>
@@ -21,7 +21,7 @@ export default {
   name: "CommentCard",
 
   props: {
-    comment: { type: Object, required: true },
+    comment: { type: Object, defualt: null },
   },
 
   methods: {
