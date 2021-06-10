@@ -1,10 +1,12 @@
 <template>
   <div>
-    <span
-      v-if="!comments || !comments.length"
-      class="text-body-1 text--secondary"
-      >No se han agregado comentarios a esta reparación.</span
-    >
+    <v-card v-if="!comments || !comments.length" outlined>
+      <v-card-text>
+        <span class="text--secondary"
+          >No se han agregado comentarios a esta reparación.</span
+        >
+      </v-card-text>
+    </v-card>
     <div v-else>
       <v-card
         v-for="(comment, index) in comments"
