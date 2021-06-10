@@ -17,7 +17,7 @@
             >
           </v-col>
           <v-col cols="12">
-            <v-btn color="secondary" small text
+            <v-btn color="secondary" small text @click="$emit('addComment')"
               ><v-icon small class="mr-2"> mdi-message-reply-text</v-icon>Nuevo
               comentario</v-btn
             >

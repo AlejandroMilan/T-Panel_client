@@ -42,6 +42,7 @@
             @editRepairInfo="editRepairInfo"
             @editRepairStatus="editRepairStatus"
             @deleteRepair="showDeleteRepairDialog"
+            @addComment="addComment"
           ></actionsCard>
 
           <commentCard
@@ -75,6 +76,14 @@
       @cancel="showDeleteRepair = false"
       @repairDeleted="repairDeleted"
     ></deleteRepairDialog>
+
+    <commentDialog
+      v-if="showCommentDialog"
+      :show="showCommentDialog"
+      :invoiceId="repair.invoiceId"
+      @cancel="showCommentDialog = false"
+      @commentSaved="commentSaved"
+    ></commentDialog>
   </div>
 </template>
 
@@ -88,6 +97,7 @@ import actionsCard from "./actionsCard";
 import updateStatusDialog from "./updateStatusDialog";
 import deleteRepairDialog from "./deleteRepairDialog";
 import commentCard from "@/components/comments/commentCard";
+import commentDialog from "@/components/comments/commentDialog";
 
 export default {
   name: "RepairView",
@@ -102,6 +112,7 @@ export default {
     deleteRepairDialog,
     commentsList,
     commentCard,
+    commentDialog,
   },
 
   data: () => ({
@@ -109,6 +120,7 @@ export default {
     showEditRepairInfo: false,
     showEditRepairStatus: false,
     showDeleteRepair: false,
+    showCommentDialog: false,
     tab: null,
     error: null,
     repairId: "",
@@ -163,6 +175,15 @@ export default {
     repairDeleted() {
       this.showDeleteRepair = false;
       this.$router.push({ path: "/panel/reparaciones" });
+    },
+
+    addComment() {
+      this.showCommentDialog = true;
+    },
+
+    commentSaved(newComment) {
+      this.showCommentDialog = false;
+      this.comments = [newComment, ...this.comments];
     },
   },
 };
