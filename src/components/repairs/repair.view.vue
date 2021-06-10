@@ -22,7 +22,16 @@
       <v-row>
         <v-col cols="12" md="8" lg="9">
           <div class="py-2">
-            <repairData :repairData="repair"></repairData>
+            <v-tabs v-model="tab" class="mb-2">
+              <v-tabs-slider color="primary"></v-tabs-slider>
+              <v-tab>Detalles de la reparación</v-tab>
+              <v-tab>Comentarios</v-tab>
+            </v-tabs>
+            <v-tabs-items v-model="tab">
+              <v-tab-item>
+                <repairData :repairData="repair"></repairData>
+              </v-tab-item>
+            </v-tabs-items>
           </div>
         </v-col>
         <v-col cols="12" md="4" lg="3">
@@ -88,6 +97,7 @@ export default {
     showEditRepairInfo: false,
     showEditRepairStatus: false,
     showDeleteRepair: false,
+    tab: null,
     error: null,
     repairId: "",
     repair: null,
