@@ -6,7 +6,7 @@
       :error="globalError"
     ></globalError>
     <navigationDrawer v-if="user"></navigationDrawer>
-    <v-app-bar v-if="user" app></v-app-bar>
+    <appBar v-if="user"></appBar>
     <v-main>
       <v-container fluid>
         <router-view></router-view>
@@ -21,11 +21,12 @@ import { mapGetters, mapActions } from "vuex";
 
 import globalError from "./components/error/globalError";
 import navigationDrawer from "./components/layout/navigationDrawer";
+import appBar from "./components/layout/appBar.vue";
 
 export default {
   name: "App",
 
-  components: { navigationDrawer, globalError },
+  components: { navigationDrawer, globalError, appBar },
 
   computed: {
     ...mapGetters(["user", "sessionToken", "globalError"]),
