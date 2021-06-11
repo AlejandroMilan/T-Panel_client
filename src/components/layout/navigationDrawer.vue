@@ -17,7 +17,7 @@
             link
             v-for="(link, index) in links"
             :key="index"
-            :disabled="!user || !user.businessId"
+            :disabled="!canView(link.permission)"
             :to="link.route"
           >
             <v-list-item-icon>
@@ -67,13 +67,30 @@ export default {
         title: "Reparaciones",
         icon: "mdi-tablet-cellphone",
         route: "/panel/reparaciones",
+        permission: 310,
       },
       {
         title: "Usuarios",
         icon: "mdi-account-multiple",
         route: "/panel/usuarios",
+        permission: 110,
       },
     ],
   }),
+
+  methods: {
+    canView(permission) {
+      if (!this.user || !this.user.businessId) return false;
+      if (!permission) return true;
+      if (this.user.role.role === 0) return true;
+      if (
+        this.user.permissions.filter(
+          (permissionItem) => permissionItem.key === permission
+        ).length > 0
+      )
+        return true;
+      return false;
+    },
+  },
 };
 </script>
