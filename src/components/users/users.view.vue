@@ -6,7 +6,14 @@
       v-if="loading"
     ></v-progress-linear>
     <v-row v-else dense>
-      <v-col cols="12">
+      <v-col
+        cols="12"
+        v-if="
+          user.role.role === 0 ||
+          user.permissions.filter((permission) => permission.key === 120)
+            .length > 0
+        "
+      >
         <div class="d-flex justify-end">
           <v-btn color="primary" @click="createUser = true">
             <v-icon>mdi-plus</v-icon>
