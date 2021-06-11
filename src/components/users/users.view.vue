@@ -35,6 +35,9 @@
         ></userCard>
       </v-col>
     </v-row>
+    <v-alert v-if="error" type="error" outlined class="mt-2">{{
+      error
+    }}</v-alert>
   </div>
 </template>
 
@@ -57,6 +60,7 @@ export default {
   },
 
   data: () => ({
+    error: "",
     loading: false,
     createUser: false,
     users: null,
