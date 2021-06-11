@@ -15,6 +15,11 @@
             {{ $vuetify.breakpoint.mdAndUp ? "Actualizar" : null }}</v-btn
           >
           <v-btn
+            v-if="
+              user.role.role === 0 ||
+              user.permissions.filter((permission) => permission.key === 320)
+                .length > 0
+            "
             :disabled="loading"
             :loading="loading"
             color="primary"
@@ -34,11 +39,15 @@
       <v-col cols="12">
         <repairList :repairs="repairs" :loading="loading"></repairList>
       </v-col>
+      <v-col v-if="error" cols="12">
+        <v-alert type="error" outlined>{{ error }}</v-alert>
+      </v-col>
     </v-row>
   </div>
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import serverRequestMixin from "@/mixins/serverRequest.mixin";
 import repairDialog from "./repairDialog";
 import repairList from "./repairList";
@@ -53,10 +62,15 @@ export default {
     repairList,
   },
 
+  computed: {
+    ...mapGetters(["user"]),
+  },
+
   data: () => ({
     loading: false,
     showRepairDialog: false,
     repairs: [],
+    error: "",
   }),
 
   mounted() {
@@ -65,6 +79,7 @@ export default {
 
   methods: {
     async getRepairs() {
+      this.error = "";
       this.loading = true;
       try {
         const response = await this.getRequest("/repairs");
@@ -72,7 +87,7 @@ export default {
         this.repairs = response.repairs;
       } catch (error) {
         this.loading = false;
-        this.deleteError = error.data.message;
+        this.error = error.data.message;
         if (error.status >= 500) console.error(error.data);
       }
     },
