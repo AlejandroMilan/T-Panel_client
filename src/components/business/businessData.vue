@@ -3,7 +3,13 @@
     <v-card-title>
       <span>Datos del negocio</span>
       <v-spacer></v-spacer>
-      <v-btn icon>
+      <v-btn
+        icon
+        v-if="
+          user.role.role === 0 ||
+          user.permissions.filter((e) => e.key === 230).length > 0
+        "
+      >
         <v-icon @click="editBusiness = true">mdi-pencil</v-icon>
       </v-btn>
     </v-card-title>
@@ -43,6 +49,7 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import editBusinessDialog from "./editBusinessDialog";
 
 export default {
@@ -62,6 +69,10 @@ export default {
       type: Boolean,
       default: false,
     },
+  },
+
+  computed: {
+    ...mapGetters(["user"]),
   },
 
   data: () => ({

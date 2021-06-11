@@ -9,7 +9,13 @@
       </v-card-text>
       <v-card-actions>
         <v-row dense>
-          <v-col cols="12">
+          <v-col
+            cols="12"
+            v-if="
+              user.role.role === 0 ||
+              user.permissions.filter((e) => e.key === 230).length > 0
+            "
+          >
             <v-form v-model="isImageValid" ref="imageForm" lazy-validation>
               <v-file-input
                 v-model="imageFile"
