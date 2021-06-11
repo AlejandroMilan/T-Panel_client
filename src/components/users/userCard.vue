@@ -17,6 +17,7 @@
                 v-for="(option, index) in options"
                 :key="index"
                 @click="methodLaunched = option.method"
+                :disabled="!canUse(option.permission)"
               >
                 <v-list-item-icon
                   ><v-icon :color="option.color">{{
@@ -115,12 +116,14 @@ export default {
         color: "primary",
         icon: "mdi-pencil",
         method: "activateEditUser",
+        permission: 130,
       },
       {
         title: "Eliminar",
         color: "error",
         icon: "mdi-delete",
         method: "activateDeleteDialog",
+        permission: 140,
       },
     ],
     methodLaunched: null,
@@ -159,6 +162,17 @@ export default {
         this.deleteError = error.data.message;
         if (error.status >= 500) console.error(error.data);
       }
+    },
+
+    canUse(permission) {
+      if (this.user.role.role === 0) return true;
+      if (
+        this.user.permissions.filter(
+          (permissionItem) => permissionItem.key === permission
+        ).length > 0
+      )
+        return true;
+      return false;
     },
   },
 };
