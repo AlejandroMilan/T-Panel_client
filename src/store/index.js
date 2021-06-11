@@ -10,6 +10,7 @@ const initialState = {
   enviroment: process.env.VUE_APP_ENVIROMENT,
   masterToken: process.env.VUE_APP_MASTER_TOKEN,
   globalError: null,
+  isNavigating: false,
 };
 
 export default new Vuex.Store({
@@ -21,10 +22,16 @@ export default new Vuex.Store({
     globalError: (state) => {
       return state.globalError;
     },
+    isNavigating: (state) => {
+      return state.isNavigating;
+    },
   },
   mutations: {
     setGlobalErrorHandler: (state, payload) => {
       state.globalError = payload;
+    },
+    setIsNavigating: (state, payload) => {
+      state.isNavigating = payload;
     },
   },
   actions: {
@@ -37,6 +44,9 @@ export default new Vuex.Store({
     },
     clearGlobalError: ({ commit }) => {
       commit("setGlobalErrorHandler", null);
+    },
+    changeNav: ({ commit }, payload) => {
+      commit("setIsNavigating", payload);
     },
   },
   modules: { auth },

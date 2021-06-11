@@ -1,5 +1,5 @@
 <template>
-  <v-navigation-drawer app>
+  <v-navigation-drawer app v-model="isNavigating">
     <div class="user-details">
       <v-card tile color="secondary" dark class="pt-10">
         <v-list-item>
@@ -40,6 +40,14 @@ export default {
 
   computed: {
     ...mapGetters(["user"]),
+    isNavigating: {
+      get: function () {
+        return this.$store.state.isNavigating;
+      },
+      set: function (v) {
+        this.$store.commit("setIsNavigating", v);
+      },
+    },
   },
 
   data: () => ({

@@ -1,6 +1,8 @@
 <template>
   <v-app-bar app>
-    <v-app-bar-nav-icon></v-app-bar-nav-icon>
+    <v-app-bar-nav-icon
+      @click="isNavigating = !isNavigating"
+    ></v-app-bar-nav-icon>
     <v-toolbar-title>{{ $route.name }}</v-toolbar-title>
     <v-spacer></v-spacer>
     <v-btn icon @click="exit">
@@ -14,6 +16,17 @@ import { mapActions } from "vuex";
 
 export default {
   name: "appBar",
+
+  computed: {
+    isNavigating: {
+      get() {
+        return this.$store.getters.isNavigating;
+      },
+      set(v) {
+        return this.$store.commit("setIsNavigating", v);
+      },
+    },
+  },
 
   methods: {
     ...mapActions(["logOut"]),
