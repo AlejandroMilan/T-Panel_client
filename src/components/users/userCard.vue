@@ -4,14 +4,7 @@
       <v-card-title
         >{{ currentUser ? currentUser.name : "" }}
         <v-spacer></v-spacer>
-        <v-menu
-          bottom
-          left
-          v-if="
-            (currentUser && currentUser.role.role !== 0) ||
-            (currentUser && currentUser._id !== user._id)
-          "
-        >
+        <v-menu bottom left v-if="canChange">
           <template v-slot:activator="{ on, attrs }">
             <v-btn icon v-bind="attrs" v-on="on" :disabled="loading">
               <v-icon>mdi-dots-vertical</v-icon>
@@ -95,6 +88,12 @@ export default {
 
   computed: {
     ...mapGetters(["user"]),
+
+    canChange() {
+      if (this.userData.role.role === 0) return false;
+      if (this.userData._id === this.user._id) return false;
+      return true;
+    },
   },
 
   watch: {
