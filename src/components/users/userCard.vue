@@ -102,6 +102,10 @@ export default {
       if (this.methodLaunched !== null) this[this.methodLaunched]();
       this.methodLaunched = null;
     },
+
+    userData() {
+      this.currentUser = this.userData;
+    },
   },
 
   data: () => ({

@@ -94,8 +94,7 @@ export default {
     },
 
     userDeleted({ _id }) {
-      const userFound = this.users.filter((user) => user._id === _id)[0];
-      this.users.splice(this.users.indexOf(userFound), 1);
+      this.users = this.users.filter((user) => user._id !== _id);
     },
   },
 };
