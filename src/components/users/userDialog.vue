@@ -86,6 +86,18 @@
           </v-col>
           <v-col cols="12">
             <v-select
+              label="Sucursal asignada"
+              v-model="branchOffice"
+              :items="branchOffices"
+              item-value="_id"
+              item-text="name"
+              hint="La sucursal limitará las reparaciones a las que el usuario tendrá accesso"
+              persistent-hint
+              outlined
+            ></v-select>
+          </v-col>
+          <v-col cols="12">
+            <v-select
               label="Permisos a asignar"
               v-model="userPermissions"
               :items="permissions"
@@ -152,6 +164,7 @@ export default {
     secondPassword: "",
     role: 1,
     userPermissions: [],
+    branchOffice: "",
     errors: {
       name: [],
       email: [],
@@ -161,6 +174,7 @@ export default {
     signupError: "",
     roles: [],
     permissions: [],
+    branchOffices: [],
   }),
 
   validations: {
@@ -172,6 +186,7 @@ export default {
 
   async mounted() {
     await this.getSignupData();
+    await this.getBranchOffices();
     if (this.currentUser) {
       this.name = this.currentUser.name;
       this.email = this.currentUser.email;
@@ -237,6 +252,22 @@ export default {
       }
     },
 
+    async getBranchOffices() {
+      this.loading = true;
+      try {
+        const serverResponse = await this.getRequest("/branchOffices");
+        this.loading = false;
+        this.branchOffices = serverResponse.branchOffices;
+        this.branchOffice = this.currentUser
+          ? this.currentUser.branchOffice._id
+          : serverResponse.branchOffices[0]._id;
+      } catch (error) {
+        this.loading = false;
+        this.signupError = error.response.data.message;
+        if (error.response.status >= 500) console.error(error.response);
+      }
+    },
+
     updatePermissions() {
       const permissionsToUse = this.roles.filter((e) => e.role == this.role)[0]
         .defaultPermissions;
@@ -266,6 +297,7 @@ export default {
               email: this.email,
               role: this.role,
               permissions: this.userPermissions,
+              branchOffice: this.branchOffice,
             }
           : {
               name: this.name,
@@ -273,6 +305,7 @@ export default {
               password: this.firstPassword,
               role: this.role,
               permissions: this.userPermissions,
+              branchOffice: this.branchOffice,
             };
 
         const response = this.currentUser
