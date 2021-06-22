@@ -79,6 +79,7 @@
                   : ''
               "
               persistent-hint
+              :disabled="loading"
               outlined
               @change="updatePermissions"
               @focus="updatePermissions"
@@ -92,6 +93,7 @@
               item-value="_id"
               item-text="name"
               hint="La sucursal limitará las reparaciones a las que el usuario tendrá accesso"
+              :disabled="loading"
               persistent-hint
               outlined
             ></v-select>
