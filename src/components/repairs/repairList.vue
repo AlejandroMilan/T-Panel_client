@@ -43,6 +43,16 @@
               {{ item.status.title }}
             </v-chip>
           </template>
+          <template v-slot:[`item.branchOffice.name`]="{ item }">
+            <v-chip
+              color="grey"
+              dark
+              link
+              @click="search = item.branchOffice.name"
+            >
+              {{ item.branchOffice.name }}
+            </v-chip>
+          </template>
           <template v-slot:[`item.admissionDate`]="{ item }">
             <span>{{ getShortDateLocal(item.admissionDate) }}</span>
           </template>
@@ -101,7 +111,7 @@ export default {
     headers: [
       { text: "Folio", value: "invoiceId" },
       {
-        text: "Fecha de igreso (dd/mm/aaaa)",
+        text: "Fecha de ingreso",
         value: "admissionDate",
         filterable: false,
       },
@@ -120,6 +130,10 @@ export default {
       {
         text: "Estado",
         value: "status.title",
+      },
+      {
+        text: "Sucursal",
+        value: "branchOffice.name",
       },
       { text: "Acciones", value: "actions", sortable: false },
       { text: "", value: "data-table-expand" },
