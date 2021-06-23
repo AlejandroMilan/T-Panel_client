@@ -1,45 +1,52 @@
 <template>
-  <v-card color="secondary" dark height="100%">
-    <v-card-title>
-      <span>{{ branchOffice.name }}</span>
-      <v-spacer></v-spacer>
-      <v-menu bottom left v-if="canChange">
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn icon v-bind="attrs" v-on="on" :disabled="loading">
-            <v-icon>mdi-dots-vertical</v-icon>
-          </v-btn>
-        </template>
+  <div style="height: 100%">
+    <v-card color="secondary" dark height="100%">
+      <v-card-title>
+        <span>{{ branchOffice.name }}</span>
+        <v-spacer></v-spacer>
+        <v-menu bottom left v-if="canChange">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn icon v-bind="attrs" v-on="on" :disabled="loading">
+              <v-icon>mdi-dots-vertical</v-icon>
+            </v-btn>
+          </template>
 
-        <v-list dense>
-          <v-list-item-group>
-            <v-list-item
-              v-for="(option, index) in options"
-              :key="index"
-              @click="methodLaunched = option.method"
-              :disabled="!canUse(option.permission)"
-            >
-              <v-list-item-icon
-                ><v-icon :color="option.color">{{
-                  option.icon
-                }}</v-icon></v-list-item-icon
+          <v-list dense>
+            <v-list-item-group>
+              <v-list-item
+                v-for="(option, index) in options"
+                :key="index"
+                @click="methodLaunched = option.method"
+                :disabled="!canUse(option.permission)"
               >
-              <v-list-item-title>{{ option.title }}</v-list-item-title>
-            </v-list-item>
-          </v-list-item-group>
-        </v-list>
-      </v-menu>
-    </v-card-title>
-    <v-card-subtitle v-if="branchOffice.adress">{{
-      branchOffice.adress
-    }}</v-card-subtitle>
-    <v-card-text>
-      <span>Creada por: {{ branchOffice.createdBy.name }}</span>
-    </v-card-text>
-  </v-card>
+                <v-list-item-icon
+                  ><v-icon :color="option.color">{{
+                    option.icon
+                  }}</v-icon></v-list-item-icon
+                >
+                <v-list-item-title>{{ option.title }}</v-list-item-title>
+              </v-list-item>
+            </v-list-item-group>
+          </v-list>
+        </v-menu>
+      </v-card-title>
+      <v-card-subtitle v-if="branchOffice.adress">{{
+        branchOffice.adress
+      }}</v-card-subtitle>
+      <v-card-text>
+        <span>Creada por: {{ branchOffice.createdBy.name }}</span>
+      </v-card-text>
+    </v-card>
+    <branchOfficeDialog
+      v-if="showBranchDialog"
+      :show="showBranchDialog"
+    ></branchOfficeDialog>
+  </div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
+import branchOfficeDialog from "./branchOfficeDialog";
 
 export default {
   name: "branchOfficeCard",
@@ -47,6 +54,8 @@ export default {
   props: {
     branchOffice: { type: Object, required: true },
   },
+
+  components: { branchOfficeDialog },
 
   computed: {
     ...mapGetters(["user"]),
@@ -86,6 +95,7 @@ export default {
       },
     ],
     methodLaunched: null,
+    showBranchDialog: false,
   }),
 
   methods: {
@@ -97,7 +107,7 @@ export default {
     },
 
     activateEditBranch() {
-      console.log("edit");
+      this.showBranchDialog = true;
     },
 
     activateDeleteDialog() {

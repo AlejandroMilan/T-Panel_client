@@ -18,7 +18,7 @@
             <v-icon small>mdi-autorenew</v-icon>
             <span v-if="$vuetify.breakpoint.mdAndUp">Actualizar</span>
           </v-btn>
-          <v-btn color="primary" class="ml-2">
+          <v-btn color="primary" class="ml-2" @click="showBranchDialog = true">
             <v-icon>mdi-plus</v-icon>
             <span>Agregar sucursal</span>
           </v-btn>
@@ -28,24 +28,33 @@
         <branchOfficeCard :branchOffice="branch"></branchOfficeCard>
       </v-col>
     </v-row>
+
+    <branchOfficeDialog
+      v-if="showBranchDialog"
+      :show="showBranchDialog"
+      @cancel="showBranchDialog = false"
+      @branchSaved="branchSaved"
+    ></branchOfficeDialog>
   </div>
 </template>
 
 <script>
 import serverRequestMixin from "@/mixins/serverRequest.mixin";
 import branchOfficeCard from "./branchOfficeCard";
+import branchOfficeDialog from "./branchOfficeDialog";
 
 export default {
   name: "branchOfficesView",
 
   mixins: [serverRequestMixin],
 
-  components: { branchOfficeCard },
+  components: { branchOfficeCard, branchOfficeDialog },
 
   data: () => ({
     loading: false,
     error: null,
     branches: [],
+    showBranchDialog: false,
   }),
 
   mounted() {
@@ -67,6 +76,11 @@ export default {
           ? (this.error = error.data.message)
           : console.error(error);
       }
+    },
+
+    branchSaved(newBranch) {
+      this.showBranchDialog = false;
+      this.branches = [...this.branches, newBranch];
     },
   },
 };

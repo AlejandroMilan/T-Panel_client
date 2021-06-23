@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="height: 100%">
     <v-card outlined :loading="loading" height="100%">
       <v-card-title
         >{{ currentUser ? currentUser.name : "" }}
