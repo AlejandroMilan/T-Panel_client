@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card outlined :loading="loading">
+    <v-card outlined :loading="loading" height="100%">
       <v-card-title
         >{{ currentUser ? currentUser.name : "" }}
         <v-spacer></v-spacer>
