@@ -75,6 +75,11 @@ export default {
         route: "/panel/usuarios",
         permission: 110,
       },
+      {
+        title: "Sucursales",
+        icon: "mdi-store",
+        route: "/panel/sucursales",
+      },
     ],
   }),
 
