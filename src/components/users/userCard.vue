@@ -93,6 +93,11 @@ export default {
     canChange() {
       if (this.userData.role.role === 0) return false;
       if (this.userData._id === this.user._id) return false;
+      if (
+        this.user.permissions.filter((e) => e.key === 130).length === 0 &&
+        this.user.permissions.filter((e) => e.key === 140).length === 0
+      )
+        return false;
       return true;
     },
   },
