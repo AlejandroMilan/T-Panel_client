@@ -2,7 +2,7 @@
   <div style="height: 100%">
     <v-card color="secondary" dark height="100%">
       <v-card-title>
-        <span>{{ branchOffice.name }}</span>
+        <span>{{ currentBranch.name }}</span>
         <v-spacer></v-spacer>
         <v-menu bottom left v-if="canChange">
           <template v-slot:activator="{ on, attrs }">
@@ -30,16 +30,19 @@
           </v-list>
         </v-menu>
       </v-card-title>
-      <v-card-subtitle v-if="branchOffice.adress">{{
-        branchOffice.adress
+      <v-card-subtitle v-if="currentBranch.adress">{{
+        currentBranch.adress
       }}</v-card-subtitle>
       <v-card-text>
-        <span>Creada por: {{ branchOffice.createdBy.name }}</span>
+        <span>Creada por: {{ currentBranch.createdBy.name }}</span>
       </v-card-text>
     </v-card>
     <branchOfficeDialog
       v-if="showBranchDialog"
       :show="showBranchDialog"
+      :current="currentBranch"
+      @cancel="showBranchDialog = false"
+      @branchSaved="branchSaved"
     ></branchOfficeDialog>
   </div>
 </template>
@@ -74,10 +77,15 @@ export default {
       if (this.methodLaunched !== null) this[this.methodLaunched]();
       this.methodLaunched = null;
     },
+
+    branchOffice() {
+      this.currentBranch = this.branchOffice;
+    },
   },
 
   data: () => ({
     loading: false,
+    currentBranch: null,
     options: [
       {
         title: "Modificar",
@@ -98,6 +106,10 @@ export default {
     showBranchDialog: false,
   }),
 
+  created() {
+    this.currentBranch = this.branchOffice;
+  },
+
   methods: {
     canUse(permission) {
       if (this.user.role.role === 0) return true;
@@ -112,6 +124,11 @@ export default {
 
     activateDeleteDialog() {
       console.log("delete");
+    },
+
+    branchSaved(newData) {
+      this.showBranchDialog = false;
+      this.currentBranch = newData;
     },
   },
 };

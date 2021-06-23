@@ -18,7 +18,12 @@
             <v-icon small>mdi-autorenew</v-icon>
             <span v-if="$vuetify.breakpoint.mdAndUp">Actualizar</span>
           </v-btn>
-          <v-btn color="primary" class="ml-2" @click="showBranchDialog = true">
+          <v-btn
+            v-if="canAddBranches"
+            color="primary"
+            class="ml-2"
+            @click="showBranchDialog = true"
+          >
             <v-icon>mdi-plus</v-icon>
             <span>Agregar sucursal</span>
           </v-btn>
@@ -39,6 +44,7 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import serverRequestMixin from "@/mixins/serverRequest.mixin";
 import branchOfficeCard from "./branchOfficeCard";
 import branchOfficeDialog from "./branchOfficeDialog";
@@ -49,6 +55,16 @@ export default {
   mixins: [serverRequestMixin],
 
   components: { branchOfficeCard, branchOfficeDialog },
+
+  computed: {
+    ...mapGetters(["user"]),
+    canAddBranches() {
+      if (this.user.role.role === 0) return true;
+      if (this.user.permissions.filter((e) => e.key === 420).length > 0)
+        return true;
+      return false;
+    },
+  },
 
   data: () => ({
     loading: false,

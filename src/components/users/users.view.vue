@@ -27,7 +27,7 @@
           ></userDialog>
         </div>
       </v-col>
-      <v-col cols="12" md="6" v-for="(user, index) in users" :key="index">
+      <v-col cols="12" md="4" v-for="(user, index) in users" :key="index">
         <userCard
           class="mb-2"
           :userData="user"

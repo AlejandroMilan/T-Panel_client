@@ -61,6 +61,7 @@ export default {
 
   props: {
     show: { type: Boolean, default: false },
+    current: { type: Object, default: null },
   },
 
   computed: {
@@ -84,6 +85,13 @@ export default {
     name: { required },
   },
 
+  mounted() {
+    if (this.current) {
+      this.name = this.current.name;
+      if (this.current.adress) this.adress = this.current.adress;
+    }
+  },
+
   methods: {
     validateName() {
       const errors = [];
@@ -105,10 +113,12 @@ export default {
         };
         if (this.adress) requestData.adress = this.adress;
 
-        const serverResponse = await this.postRequest(
-          "/branchOffices",
-          requestData
-        );
+        const serverResponse = this.current
+          ? await this.putRequest(
+              `/branchOffices/${this.current._id}`,
+              requestData
+            )
+          : await this.postRequest("/branchOffices", requestData);
 
         this.$emit("branchSaved", serverResponse.branchOffice);
       } catch (error) {
