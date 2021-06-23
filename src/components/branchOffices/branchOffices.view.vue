@@ -30,7 +30,10 @@
         </div>
       </v-col>
       <v-col cols="12" md="6" v-for="(branch, index) in branches" :key="index">
-        <branchOfficeCard :branchOffice="branch"></branchOfficeCard>
+        <branchOfficeCard
+          :branchOffice="branch"
+          @branchDeleted="branchDeleted"
+        ></branchOfficeCard>
       </v-col>
     </v-row>
 
@@ -97,6 +100,10 @@ export default {
     branchSaved(newBranch) {
       this.showBranchDialog = false;
       this.branches = [...this.branches, newBranch];
+    },
+
+    branchDeleted(branchId) {
+      this.branches = this.branches.filter((e) => e._id != branchId);
     },
   },
 };

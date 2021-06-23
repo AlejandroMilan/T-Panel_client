@@ -44,12 +44,20 @@
       @cancel="showBranchDialog = false"
       @branchSaved="branchSaved"
     ></branchOfficeDialog>
+    <deleteBranchOfficeDialog
+      v-if="showDeleteDialog"
+      :show="showDeleteDialog"
+      :branchId="currentBranch._id"
+      @cancel="showDeleteDialog = false"
+      @branchDeleted="branchDeleted"
+    ></deleteBranchOfficeDialog>
   </div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
 import branchOfficeDialog from "./branchOfficeDialog";
+import deleteBranchOfficeDialog from "./deleteBranchOfficeDialog";
 
 export default {
   name: "branchOfficeCard",
@@ -58,7 +66,7 @@ export default {
     branchOffice: { type: Object, required: true },
   },
 
-  components: { branchOfficeDialog },
+  components: { branchOfficeDialog, deleteBranchOfficeDialog },
 
   computed: {
     ...mapGetters(["user"]),
@@ -104,6 +112,7 @@ export default {
     ],
     methodLaunched: null,
     showBranchDialog: false,
+    showDeleteDialog: false,
   }),
 
   created() {
@@ -123,12 +132,17 @@ export default {
     },
 
     activateDeleteDialog() {
-      console.log("delete");
+      this.showDeleteDialog = true;
     },
 
     branchSaved(newData) {
       this.showBranchDialog = false;
       this.currentBranch = newData;
+    },
+
+    branchDeleted(branchId) {
+      this.showDeleteDialog = false;
+      this.$emit("branchDeleted", branchId);
     },
   },
 };
