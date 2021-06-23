@@ -84,6 +84,7 @@ export default {
     customer: {},
     payment: {},
     invoiceId: "",
+    branchOffice: "",
   }),
 
   mounted() {
@@ -92,6 +93,7 @@ export default {
       this.customer = this.repair.customer;
       this.payment = this.repair.payment;
       this.invoiceId = this.repair.invoiceId;
+      this.branchOffice = this.repair.branchOffice;
     }
   },
 
@@ -109,6 +111,7 @@ export default {
     generalDataStepValid(generalData) {
       this.payment = generalData.payment;
       this.invoiceId = generalData.invoiceId;
+      this.branchOffice = generalData.branchOffice;
       this.submit();
     },
 
@@ -121,12 +124,14 @@ export default {
               device: this.device,
               customer: this.customer,
               invoiceId: this.invoiceId,
+              branchOffice: this.branchOffice,
             }
           : {
               device: this.device,
               customer: this.customer,
               invoiceId: this.invoiceId,
               status: 100,
+              branchOffice: this.branchOffice,
             };
         submitData.payment = {};
         if (this.payment.estimatedCost)
@@ -151,7 +156,7 @@ export default {
     },
 
     getGeneralData() {
-      let data = { invoiceId: this.invoiceId };
+      let data = { invoiceId: this.invoiceId, branchOffice: this.branchOffice };
       if (this.payment) {
         data.payment = {};
         if (this.payment.estimatedCost)

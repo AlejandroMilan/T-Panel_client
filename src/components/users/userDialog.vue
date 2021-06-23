@@ -276,6 +276,8 @@ export default {
 
       const permissionsKeys = [];
       permissionsToUse.forEach((element) => {
+        console.log("Elemento", element);
+        console.log(this.permissions.filter((e) => e._id == element));
         permissionsKeys.push(
           this.permissions.filter((e) => e._id == element)[0].key
         );
