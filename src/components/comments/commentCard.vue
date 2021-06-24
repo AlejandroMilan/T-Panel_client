@@ -1,5 +1,5 @@
 <template>
-  <v-card v-if="comment" outlined class="mb-2">
+  <v-card v-if="comment" outlined class="mb-2" color="secondary" dark>
     <div>
       <v-list-item>
         <v-list-item-content>
