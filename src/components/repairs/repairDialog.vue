@@ -156,7 +156,10 @@ export default {
     },
 
     getGeneralData() {
-      let data = { invoiceId: this.invoiceId, branchOffice: this.branchOffice._id };
+      let data = {
+        invoiceId: this.invoiceId,
+        branchOffice: this.branchOffice._id,
+      };
       if (this.payment) {
         data.payment = {};
         if (this.payment.estimatedCost)

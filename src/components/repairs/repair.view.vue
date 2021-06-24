@@ -65,6 +65,7 @@
       v-if="showEditRepairStatus"
       :show="showEditRepairStatus"
       :invoiceId="repair.invoiceId"
+      :currentStatus="repair.status.key"
       @cancel="showEditRepairStatus = false"
       @repairSaved="repairSaved"
     ></updateStatusDialog>
