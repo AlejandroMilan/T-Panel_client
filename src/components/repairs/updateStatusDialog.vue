@@ -83,7 +83,7 @@ export default {
         };
 
         const serverResponse = await this.putRequest(
-          `/repairs/${this.invoiceId}`,
+          `/repairs/${this.invoiceId}/status`,
           requestData
         );
 
