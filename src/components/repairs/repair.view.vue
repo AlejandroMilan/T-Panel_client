@@ -12,6 +12,7 @@
           <v-btn
             color="white"
             outlined
+            small
             @click="$router.push({ path: '/panel/reparaciones' })"
             >Volver a "Todas las reparaciones"</v-btn
           >
