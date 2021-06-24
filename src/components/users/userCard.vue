@@ -32,6 +32,11 @@
       </v-card-title>
       <v-card-subtitle>
         {{ currentUser ? currentUser.role.name : "" }}
+        {{
+          currentUser && currentUser.branchOffice
+            ? `, sucursal ${currentUser.branchOffice.name}`
+            : ""
+        }}
       </v-card-subtitle>
       <v-card-text v-if="deleteError">
         <v-alert type="error" dense outlined>{{ deleteError }}</v-alert>
