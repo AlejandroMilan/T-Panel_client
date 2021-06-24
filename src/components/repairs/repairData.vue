@@ -22,7 +22,13 @@
         <v-spacer> </v-spacer>
         <span>{{ `Folio: ${repairData.invoiceId}` }}</span>
         <v-spacer> </v-spacer>
-        <span>{{ `Agregada por: ${repairData.createdBy.name}` }}</span>
+        <span>{{
+          `Agregada por: ${
+            repairData.createdBy
+              ? repairData.createdBy.name
+              : "Usuario eliminado"
+          }`
+        }}</span>
         <v-spacer> </v-spacer>
         <span>{{ `Sucursal: ${repairData.branchOffice.name}` }}</span>
       </v-card-subtitle>
