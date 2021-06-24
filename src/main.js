@@ -25,7 +25,7 @@ const vuetify = new Vuetify({
 const isDev = process.env.VUE_APP_ENVIROMENT == "dev";
 axios.defaults.baseURL = isDev
   ? process.env.VUE_APP_HTTP_URL_DEV
-  : "https://gabbyblog.herokuapp.com/";
+  : process.env.VUE_APP_HTTP_URL_PROD;
 
 Vue.config.productionTip = false;
 
