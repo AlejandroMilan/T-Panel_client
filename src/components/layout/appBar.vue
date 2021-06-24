@@ -5,9 +5,14 @@
     ></v-app-bar-nav-icon>
     <v-toolbar-title>{{ $route.name }}</v-toolbar-title>
     <v-spacer></v-spacer>
-    <v-btn icon @click="exit">
-      <v-icon>mdi-exit-to-app</v-icon>
-    </v-btn>
+    <v-tooltip left color="primary">
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn icon @click="exit" v-bind="attrs" v-on="on">
+          <v-icon>mdi-exit-to-app</v-icon>
+        </v-btn>
+      </template>
+      <span>Cerrar sesión</span>
+    </v-tooltip>
   </v-app-bar>
 </template>
 
