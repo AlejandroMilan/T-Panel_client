@@ -71,6 +71,19 @@
         >
         </v-text-field>
       </v-col>
+      <v-col cols="12" v-if="canAddBranchOffice">
+        <v-select
+          label="Sucursal de ingreso"
+          v-model="branchOffice"
+          :items="branchOffices"
+          item-value="_id"
+          item-text="name"
+          hint="Solo los usuarios con la misma sucursal que la reparación podrán tener acceso a ella"
+          :disabled="loading"
+          outlined
+          dense
+        ></v-select>
+      </v-col>
       <v-col cols="12">
         <div class="d-flex">
           <v-btn
@@ -98,6 +111,7 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import { validationMixin } from "vuelidate";
 import { required, numeric } from "vuelidate/lib/validators";
 import serverRequestMixin from "@/mixins/serverRequest.mixin";
@@ -114,11 +128,18 @@ export default {
   mixins: [validationMixin, serverRequestMixin],
 
   computed: {
+    ...mapGetters(["user"]),
     isFormValid() {
       if (this.errors.invoiceId.length) return false;
       if (this.errors.estimatedCost.length) return false;
       if (this.errors.prePayment.length) return false;
       return true;
+    },
+    canAddBranchOffice() {
+      if (this.user.role.role === 0) return true;
+      if (this.user.permissions.filter((e) => e.key === 321).length > 0)
+        return true;
+      return false;
     },
   },
 
@@ -136,6 +157,8 @@ export default {
       estimatedCost: "",
       prePayment: "",
     },
+    branchOffices: [],
+    branchOffice: "",
     errors: {
       invoiceId: [],
       estimatedCost: [],
@@ -153,6 +176,7 @@ export default {
 
   mounted() {
     if (this.currentData) this.setCurrentData();
+    this.getBranchOffices();
   },
 
   methods: {
@@ -189,6 +213,20 @@ export default {
         this.errors.invoiceId = [];
       } catch (error) {
         this.loading = false;
+        this.getterError = error.data.message;
+        if (error.status >= 500) console.error(error);
+      }
+    },
+
+    async getBranchOffices() {
+      this.loading = true;
+      try {
+        const serverResponse = await this.getRequest("/branchOffices");
+        this.loading = false;
+        this.branchOffices = serverResponse.branchOffices;
+        this.branchOffice = serverResponse.branchOffices[0]._id;
+      } catch (error) {
+        this.loading = false;
         this.getterError = error.response.data.message;
         if (error.response.status >= 500) console.error(error.response);
       }
@@ -206,6 +244,9 @@ export default {
           estimatedCost: this.payment.estimatedCost,
           prePayment: this.payment.prePayment,
         },
+        branchOffice: this.canAddBranchOffice
+          ? this.branchOffice
+          : this.user.branchOffice._id,
       };
 
       this.$emit("stepValid", emitData);

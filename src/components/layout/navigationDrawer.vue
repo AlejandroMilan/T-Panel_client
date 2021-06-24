@@ -6,6 +6,11 @@
           <v-list-item-content>
             <v-list-item-title> {{ user.name }} </v-list-item-title>
             <v-list-item-subtitle>{{ user.role.name }}</v-list-item-subtitle>
+            <v-list-item-subtitle v-if="user.branchOffice">
+              <v-chip color="primary">{{
+                user.branchOffice.name
+              }}</v-chip></v-list-item-subtitle
+            >
           </v-list-item-content>
         </v-list-item>
       </v-card>
@@ -14,6 +19,7 @@
       <v-list nav dense>
         <v-list-item-group v-model="routeSelected" color="primary">
           <v-list-item
+            color="secondary"
             link
             v-for="(link, index) in links"
             :key="index"
@@ -74,6 +80,11 @@ export default {
         icon: "mdi-account-multiple",
         route: "/panel/usuarios",
         permission: 110,
+      },
+      {
+        title: "Sucursales",
+        icon: "mdi-store",
+        route: "/panel/sucursales",
       },
     ],
   }),

@@ -11,18 +11,23 @@
         }}</v-chip>
       </v-card-title>
       <v-card-subtitle class="mt-1">
-        <span
-          >Recibido el {{ getDateString(repairData.admissionDate) }}
-          {{
-            repairData.deliveryDate
-              ? `y entregado el ${getDateString(repairData.deliveryDate)}`
-              : null
-          }}</span
+        <span>Recibido: {{ getDateString(repairData.admissionDate) }}</span>
+        <v-spacer></v-spacer>
+        <span v-if="repairData.deliveryDate"
+          >Entregado: {{ getDateString(repairData.deliveryDate) }}</span
         >
         <v-spacer> </v-spacer>
         <span>{{ `Folio: ${repairData.invoiceId}` }}</span>
         <v-spacer> </v-spacer>
-        <span>{{ `Agregada por: ${repairData.createdBy.name}` }}</span>
+        <span>{{
+          `Agregada por: ${
+            repairData.createdBy
+              ? repairData.createdBy.name
+              : "Usuario eliminado"
+          }`
+        }}</span>
+        <v-spacer> </v-spacer>
+        <span>{{ `Sucursal: ${repairData.branchOffice.name}` }}</span>
       </v-card-subtitle>
       <v-card-text>
         <deviceSection :deviceData="getDeviceData()"></deviceSection>
@@ -37,7 +42,7 @@
 </template>
 
 <script>
-import { getFullDate } from "@/helpers/date.helper";
+import { getFullDateWithHour } from "@/helpers/date.helper";
 import deviceSection from "./deviceSection";
 import customerSection from "./customerSection";
 import paymentSection from "./paymentSection";
@@ -53,7 +58,7 @@ export default {
 
   methods: {
     getDateString(ISODate) {
-      return getFullDate(ISODate);
+      return getFullDateWithHour(ISODate);
     },
 
     getStatusColor(statusKey) {

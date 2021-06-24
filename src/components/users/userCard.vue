@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <v-card outlined :loading="loading">
+  <div style="height: 100%">
+    <v-card outlined :loading="loading" height="100%">
       <v-card-title
         >{{ currentUser ? currentUser.name : "" }}
         <v-spacer></v-spacer>
@@ -32,6 +32,11 @@
       </v-card-title>
       <v-card-subtitle>
         {{ currentUser ? currentUser.role.name : "" }}
+        {{
+          currentUser && currentUser.branchOffice
+            ? `, sucursal ${currentUser.branchOffice.name}`
+            : ""
+        }}
       </v-card-subtitle>
       <v-card-text v-if="deleteError">
         <v-alert type="error" dense outlined>{{ deleteError }}</v-alert>
@@ -92,7 +97,13 @@ export default {
 
     canChange() {
       if (this.userData.role.role === 0) return false;
+      if (this.user.role.role === 0) return true;
       if (this.userData._id === this.user._id) return false;
+      if (
+        this.user.permissions.filter((e) => e.key === 130).length === 0 &&
+        this.user.permissions.filter((e) => e.key === 140).length === 0
+      )
+        return false;
       return true;
     },
   },

@@ -1,9 +1,11 @@
 <template>
-  <v-card v-if="comment" outlined class="mb-2">
+  <v-card v-if="comment" outlined class="mb-2" color="secondary" dark>
     <div>
       <v-list-item>
         <v-list-item-content>
-          <v-list-item-title>{{ comment.author.name }}</v-list-item-title>
+          <v-list-item-title>{{
+            comment.author ? comment.author.name : "Usuario eliminado"
+          }}</v-list-item-title>
           <v-list-item-subtitle>{{
             fullDate(comment.date)
           }}</v-list-item-subtitle>

@@ -12,6 +12,7 @@
           <v-btn
             color="white"
             outlined
+            small
             @click="$router.push({ path: '/panel/reparaciones' })"
             >Volver a "Todas las reparaciones"</v-btn
           >
@@ -65,6 +66,7 @@
       v-if="showEditRepairStatus"
       :show="showEditRepairStatus"
       :invoiceId="repair.invoiceId"
+      :currentStatus="repair.status.key"
       @cancel="showEditRepairStatus = false"
       @repairSaved="repairSaved"
     ></updateStatusDialog>

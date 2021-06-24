@@ -11,7 +11,7 @@
               user.permissions.filter((e) => e.key === 330).length > 0
             "
           >
-            <v-btn color="primary" small @click="$emit('editRepairInfo')" text
+            <v-btn color="secondary" small @click="$emit('editRepairInfo')" text
               ><v-icon small class="mr-2"> mdi-pencil</v-icon>Editar
               información</v-btn
             >
@@ -23,7 +23,11 @@
               user.permissions.filter((e) => e.key === 331).length > 0
             "
           >
-            <v-btn color="accent" small text @click="$emit('editRepairStatus')"
+            <v-btn
+              color="secondary"
+              small
+              text
+              @click="$emit('editRepairStatus')"
               ><v-icon small class="mr-2"> mdi-devices</v-icon>Cambiar
               estado</v-btn
             >

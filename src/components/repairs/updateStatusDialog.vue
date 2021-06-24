@@ -46,6 +46,13 @@ export default {
   props: {
     show: { type: Boolean, default: true },
     invoiceId: { type: Number, required: true },
+    currentStatus: { type: Number, required: true },
+  },
+
+  watch: {
+    currentStatus() {
+      this.status = this.currentStatus;
+    },
   },
 
   data: () => ({
@@ -56,6 +63,7 @@ export default {
   }),
 
   mounted() {
+    this.status = this.currentStatus;
     this.getStatusList();
   },
 
@@ -67,7 +75,6 @@ export default {
         this.loading = false;
 
         this.statusItems = serverResponse.status;
-        this.status = this.statusItems[0].key;
       } catch (error) {
         this.loading = false;
         this.error = error.data.message;
@@ -83,7 +90,7 @@ export default {
         };
 
         const serverResponse = await this.putRequest(
-          `/repairs/${this.invoiceId}`,
+          `/repairs/${this.invoiceId}/status`,
           requestData
         );
 
