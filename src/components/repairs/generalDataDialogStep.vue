@@ -137,6 +137,8 @@ export default {
     },
     canAddBranchOffice() {
       if (this.user.role.role === 0) return true;
+      if (this.user.permissions.filter((e) => e.key === 321).length > 0)
+        return true;
       return false;
     },
   },
