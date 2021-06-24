@@ -1,19 +1,13 @@
 <template>
   <div>
-    <h1 class="header">
-      <font :color="$vuetify.theme.themes.light.secondary"
-        >Bienvenido a T-Panel, {{ user.name }}</font
+    <v-card color="secondary" dark>
+      <v-card-title>Bienvenido a T-Panel {{ user.name }}</v-card-title>
+      <v-card-subtitle
+        >Esta aplicación te ayudará a gestionar todas las reparaciones de tu
+        negocio en la nube.</v-card-subtitle
       >
-    </h1>
-    <v-row dense>
-      <v-col cols="12">
-        <span class="text-body-1 text--secondary"
-          >Esta es una nueva aplicación que te permitirá gestionar todas las
-          reparaciones de dispositivos que lleves a cabo en tu negocio.</span
-        >
-      </v-col>
-      <v-col cols="12">
-        <v-list>
+      <v-card-text>
+        <v-list light>
           <v-list-item v-for="(item, index) in items" :key="index">
             <v-list-item-icon>
               <v-icon color="primary"> mdi-check </v-icon>
@@ -26,8 +20,8 @@
             </v-list-item-content>
           </v-list-item>
         </v-list>
-      </v-col>
-    </v-row>
+      </v-card-text>
+    </v-card>
   </div>
 </template>
 
