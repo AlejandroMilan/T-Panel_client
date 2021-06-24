@@ -148,7 +148,7 @@
         <patreonCreator
           @change="updatePatreon"
           :current="
-            currentDevice.blocking ? currentDevice.blocking.patreon : null
+            currentDevice ? currentDevice.blocking.patreon : null
           "
         ></patreonCreator>
       </v-col>
