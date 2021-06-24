@@ -61,9 +61,8 @@ export default {
 
         this.$emit("branchDeleted", serverResponse.branchOfficeDeleted._id);
       } catch (error) {
-        console.error(error);
         this.loading = false;
-        this.signupError = error.data.message;
+        this.error = error.data.message;
         if (error.status >= 500) console.error(error);
       }
     },
