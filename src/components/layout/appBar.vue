@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar app>
+  <v-app-bar app color="primary" dark>
     <v-app-bar-nav-icon
       @click="isNavigating = !isNavigating"
     ></v-app-bar-nav-icon>
