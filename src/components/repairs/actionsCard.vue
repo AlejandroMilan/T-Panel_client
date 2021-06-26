@@ -38,7 +38,13 @@
               comentario</v-btn
             >
           </v-col>
-          <v-col cols="12">
+          <v-col
+            cols="12"
+            v-if="
+              user.role.role === 0 ||
+              user.permissions.filter((e) => e.key === 322).length > 0
+            "
+          >
             <v-tooltip left>
               <template v-slot:activator="{ on, attrs }">
                 <v-btn
@@ -55,7 +61,13 @@
               <span>No compatible con Mozilla Firefox</span>
             </v-tooltip>
           </v-col>
-          <v-col cols="12">
+          <v-col
+            cols="12"
+            v-if="
+              user.role.role === 0 ||
+              user.permissions.filter((e) => e.key === 322).length > 0
+            "
+          >
             <v-btn
               color="secondary"
               small

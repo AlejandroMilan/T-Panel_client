@@ -49,7 +49,9 @@ const serverRequestMixin = {
         };
       } catch (error) {
         if (error.response.data.tokenExpired) this.expiredSession();
-        else throw error.response;
+        else {
+          throw JSON.parse(Buffer.from(error.response.data).toString("utf8"));
+        }
       }
     },
 

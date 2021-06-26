@@ -218,9 +218,8 @@ export default {
         window.open(fileURL);
       } catch (error) {
         this.loadingPrint = false;
-        if (error.status === 400)
-          this.errorPrint =
-            "Para crear una nota, el negocio debe tener un logo";
+        if (error.data) this.errorPrint = error.data.message;
+        else this.errorPrint = error.message;
         if (error.status >= 500) console.error(error);
       }
     },
@@ -242,9 +241,8 @@ export default {
         );
       } catch (error) {
         this.loadingPrint = false;
-        if (error.status === 400)
-          this.errorPrint =
-            "Para crear una nota, el negocio debe tener un logo";
+        if (error.data) this.errorPrint = error.data.message;
+        else this.errorPrint = error.message;
         if (error.status >= 500) console.error(error);
       }
     },
