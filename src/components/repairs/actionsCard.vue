@@ -38,6 +38,33 @@
               comentario</v-btn
             >
           </v-col>
+          <v-col cols="12">
+            <v-tooltip left>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                  v-bind="attrs"
+                  v-on="on"
+                  color="secondary"
+                  small
+                  text
+                  @click="$emit('printRepair')"
+                  ><v-icon small class="mr-2"> mdi-printer</v-icon>Imprimir
+                  nota</v-btn
+                >
+              </template>
+              <span>No compatible con Mozilla Firefox</span>
+            </v-tooltip>
+          </v-col>
+          <v-col cols="12">
+            <v-btn
+              color="secondary"
+              small
+              text
+              @click="$emit('downloadRepairPdf')"
+              ><v-icon small class="mr-2"> mdi-download</v-icon>Descargar
+              nota</v-btn
+            >
+          </v-col>
           <v-col
             cols="12"
             v-if="

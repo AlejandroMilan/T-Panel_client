@@ -35,6 +35,24 @@ const serverRequestMixin = {
       }
     },
 
+    async getFileRequest(url, requireToken = true) {
+      try {
+        const response = requireToken
+          ? await axios.get(url, {
+              headers: { token: this.sessionToken },
+              responseType: "arraybuffer",
+            })
+          : await axios.get(url);
+        return {
+          file: response.data,
+          responseHeaderType: response.headers["content-type"],
+        };
+      } catch (error) {
+        if (error.response.data.tokenExpired) this.expiredSession();
+        else throw error.response;
+      }
+    },
+
     async putRequest(url, data, requireToken = true) {
       try {
         const response = requireToken

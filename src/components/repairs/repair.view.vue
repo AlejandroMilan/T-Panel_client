@@ -44,6 +44,8 @@
             @editRepairStatus="editRepairStatus"
             @deleteRepair="showDeleteRepairDialog"
             @addComment="addComment"
+            @printRepair="printRepair"
+            @downloadRepairPdf="downloadRepairPdf"
           ></actionsCard>
 
           <commentCard
@@ -90,6 +92,7 @@
 </template>
 
 <script>
+import download from "downloadjs";
 import serverRequestMixin from "@/mixins/serverRequest.mixin";
 
 import repairDialog from "./repairDialog";
@@ -119,6 +122,7 @@ export default {
 
   data: () => ({
     loading: false,
+    loadingPrint: false,
     showEditRepairInfo: false,
     showEditRepairStatus: false,
     showDeleteRepair: false,
@@ -186,6 +190,48 @@ export default {
     commentSaved(newComment) {
       this.showCommentDialog = false;
       this.comments = [newComment, ...this.comments];
+    },
+
+    async printRepair() {
+      this.loadingPrint = true;
+
+      try {
+        const serverResponse = await this.getFileRequest(
+          `/repairs/repair/${this.repairId}/pdf`
+        );
+        this.loading = false;
+
+        var file = new Blob([serverResponse.file], { type: "application/pdf" });
+        let fileURL = URL.createObjectURL(file);
+        window.open(fileURL);
+      } catch (error) {
+        console.error(error);
+        this.loading = false;
+        this.error = error.data.message;
+        if (error.status >= 500) console.error(error);
+      }
+    },
+
+    async downloadRepairPdf() {
+      this.loadingPrint = true;
+
+      try {
+        const serverResponse = await this.getFileRequest(
+          `/repairs/repair/${this.repairId}/pdf`
+        );
+        this.loading = false;
+
+        download(
+          serverResponse.file,
+          `${this.repairId}.pdf`,
+          serverResponse.responseHeaderType
+        );
+      } catch (error) {
+        console.error(error);
+        this.loading = false;
+        this.error = error.data.message;
+        if (error.status >= 500) console.error(error);
+      }
     },
   },
 };
