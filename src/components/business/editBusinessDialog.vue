@@ -39,6 +39,7 @@
                 label="Zona horaria"
                 hint="La zona horaria está definida por tu país, y zona en la mayoría de casos."
                 persistent-hint
+                :disabled="loading"
                 :error-messages="errors.timezone"
                 @input="validateField('timezone')"
                 @blur="validateField('timezone')"
