@@ -115,6 +115,10 @@ export default {
           fieldName: "Nombre del negocio",
           fieldValue: this.business ? this.business.name : noFieldString,
         },
+        {
+          fieldName: "Zona horaria",
+          fieldValue: this.business ? this.business.timezone : noFieldString,
+        },
       ];
 
       this.sections.contactData.fields = [
