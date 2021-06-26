@@ -29,6 +29,21 @@
               >
               </v-text-field>
             </v-col>
+            <v-col cols="12" md="6">
+              <v-autocomplete
+                v-model="timezone"
+                :items="validTimezones"
+                outlined
+                dense
+                :item-text="`${timezone} (HH:MM)`"
+                label="Zona horaria"
+                hint="La zona horaria está definida por tu país, y zona en la mayoría de casos."
+                persistent-hint
+                :error-messages="errors.timezone"
+                @input="validateField('timezone')"
+                @blur="validateField('timezone')"
+              ></v-autocomplete>
+            </v-col>
           </v-row>
           <div class="d-flex">
             <v-icon small class="mr-2">mdi-message</v-icon>
@@ -211,6 +226,8 @@ import {
   numeric,
   url,
 } from "vuelidate/lib/validators";
+import { DateTime } from "luxon";
+import { zones } from "tzdata";
 
 export default {
   name: "editBusinessDialog",
@@ -235,7 +252,15 @@ export default {
       if (this.errors.city.length) return false;
       if (this.errors.state.length) return false;
       if (this.errors.country.length) return false;
+      if (this.errors.timezone.length) return false;
       return true;
+    },
+    validTimezones() {
+      const luxonValidTimezones = Object.entries(zones)
+        .filter(([, v]) => Array.isArray(v))
+        .map(([zoneName]) => zoneName)
+        .filter((tz) => DateTime.local().setZone(tz).isValid);
+      return luxonValidTimezones;
     },
   },
 
@@ -253,6 +278,7 @@ export default {
     city: "",
     state: "",
     country: "",
+    timezone: "",
     errors: {
       name: [],
       email: [],
@@ -264,6 +290,7 @@ export default {
       city: [],
       state: [],
       country: [],
+      timezone: [],
     },
   }),
 
@@ -283,6 +310,7 @@ export default {
     city: { required },
     state: { required },
     country: { required },
+    timezone: { required },
   },
 
   mounted() {
@@ -360,6 +388,7 @@ export default {
       this.validateField("city");
       this.validateField("state");
       this.validateField("country");
+      this.validateField("timezone");
 
       if (this.isFormValid) {
         this.loading = true;
@@ -376,6 +405,7 @@ export default {
               state: this.state,
               country: this.country,
             },
+            timezone: this.timezone,
           };
           if (this.website) sendData.website = this.website;
           if (this.intNumber) sendData.adress.intNumber = this.intNumber;

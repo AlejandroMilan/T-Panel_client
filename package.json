@@ -20,6 +20,7 @@
     "numeral": "^2.0.6",
     "register-service-worker": "^1.7.1",
     "serve-static": "^1.14.1",
+    "tzdata": "^1.0.25",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0",
     "vue-underscore": "^0.1.4",
