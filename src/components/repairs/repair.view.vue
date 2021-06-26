@@ -208,8 +208,9 @@ export default {
       this.errorPrint = null;
 
       try {
+        const localTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
         const serverResponse = await this.getFileRequest(
-          `/repairs/repair/${this.repairId}/pdf`
+          `/repairs/repair/${this.repairId}/pdf?timezone=${localTimezone}`
         );
         this.loadingPrint = false;
 
@@ -229,8 +230,9 @@ export default {
       this.errorPrint = null;
 
       try {
+        const localTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
         const serverResponse = await this.getFileRequest(
-          `/repairs/repair/${this.repairId}/pdf`
+          `/repairs/repair/${this.repairId}/pdf?timezone=${localTimezone}`
         );
         this.loadingPrint = false;
 
