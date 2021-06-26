@@ -1,6 +1,16 @@
 <template>
   <div>
     <v-progress-linear
+      v-if="loadingPrint"
+      indeterminate
+      color="primary"
+    ></v-progress-linear>
+    <v-alert type="error" outlined v-if="!loadingPrint && errorPrint">
+      <v-row align="center">
+        <v-col class="grow"> {{ errorPrint }} </v-col>
+      </v-row>
+    </v-alert>
+    <v-progress-linear
       v-if="loading"
       indeterminate
       color="primary"
@@ -129,6 +139,7 @@ export default {
     showCommentDialog: false,
     tab: null,
     error: null,
+    errorPrint: null,
     repairId: "",
     repair: null,
     comments: null,
@@ -194,32 +205,35 @@ export default {
 
     async printRepair() {
       this.loadingPrint = true;
+      this.errorPrint = null;
 
       try {
         const serverResponse = await this.getFileRequest(
           `/repairs/repair/${this.repairId}/pdf`
         );
-        this.loading = false;
+        this.loadingPrint = false;
 
         var file = new Blob([serverResponse.file], { type: "application/pdf" });
         let fileURL = URL.createObjectURL(file);
         window.open(fileURL);
       } catch (error) {
-        console.error(error);
-        this.loading = false;
-        this.error = error.data.message;
+        this.loadingPrint = false;
+        if (error.status === 400)
+          this.errorPrint =
+            "Para crear una nota, el negocio debe tener un logo";
         if (error.status >= 500) console.error(error);
       }
     },
 
     async downloadRepairPdf() {
       this.loadingPrint = true;
+      this.errorPrint = null;
 
       try {
         const serverResponse = await this.getFileRequest(
           `/repairs/repair/${this.repairId}/pdf`
         );
-        this.loading = false;
+        this.loadingPrint = false;
 
         download(
           serverResponse.file,
@@ -227,9 +241,10 @@ export default {
           serverResponse.responseHeaderType
         );
       } catch (error) {
-        console.error(error);
-        this.loading = false;
-        this.error = error.data.message;
+        this.loadingPrint = false;
+        if (error.status === 400)
+          this.errorPrint =
+            "Para crear una nota, el negocio debe tener un logo";
         if (error.status >= 500) console.error(error);
       }
     },
