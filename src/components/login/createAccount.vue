@@ -56,7 +56,7 @@ export default {
   methods: {
     userLogged() {
       this.showRegister = false;
-      this.$router.push("/panel/negocio");
+      location.reload();
     },
   },
 };

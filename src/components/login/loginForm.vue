@@ -124,9 +124,7 @@ export default {
           await this.logIn(user);
           this.loading = false;
 
-          this.user.businessId
-            ? this.$router.push("/panel/home")
-            : this.$router.push("/panel/negocio");
+          location.reload();
         } catch (error) {
           this.loading = false;
           this.loginError = error.response.data.message;
