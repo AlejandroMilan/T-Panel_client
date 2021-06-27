@@ -29,7 +29,7 @@
             @input="validatePassword()"
             @blur="validatePassword()"
           ></v-text-field>
-          <forgottenPassword />
+          <!-- <forgottenPassword /> -->
         </v-col>
         <v-col cols="12" class="mt-5">
           <v-btn
@@ -53,16 +53,16 @@ import { mapActions, mapGetters } from "vuex";
 import { validationMixin } from "vuelidate";
 import { required, email } from "vuelidate/lib/validators";
 
-import forgottenPassword from "./forgottenPassword";
+// import forgottenPassword from "./forgottenPassword";
 
 export default {
   name: "loginForm",
 
   mixins: [validationMixin],
 
-  components: {
-    forgottenPassword,
-  },
+  // components: {
+  //   forgottenPassword,
+  // },
 
   computed: {
     ...mapGetters(["user"]),
