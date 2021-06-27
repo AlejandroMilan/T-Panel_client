@@ -60,6 +60,16 @@
           >
           </v-text-field>
         </v-col>
+        <v-col cols="12" class="mt-2">
+          <span
+            >Al crear tu cuenta estás aceptando nuestra
+            <a
+              href="https://www.privacypolicies.com/live/6952b9f1-3a74-409a-b76c-5a9f0da22934"
+              target="_blank"
+              >política de privacidad.</a
+            ></span
+          >
+        </v-col>
         <v-col cols="12">
           <v-btn
             color="secondary"
