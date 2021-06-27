@@ -6,8 +6,16 @@
           elevation="0"
           class="banner-card"
           :height="$vuetify.breakpoint.mdAndUp ? '96vh' : '30vh'"
-          color="primary"
-        ></v-card>
+        >
+          <v-img
+            src="https://images.pexels.com/photos/1476321/pexels-photo-1476321.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+            width="100%"
+            height="95%"
+          ></v-img>
+          <v-card-text v-if="$vuetify.breakpoint.mdAndUp"
+            >Desarrollado por: devtek.com.mx</v-card-text
+          >
+        </v-card>
       </div>
     </v-col>
     <v-col cols="12" md="6">
