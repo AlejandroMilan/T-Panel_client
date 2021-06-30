@@ -111,6 +111,10 @@ export default {
     headers: [
       { text: "Folio", value: "invoiceId" },
       {
+        text: "IMEI",
+        value: "device.imei",
+      },
+      {
         text: "Fecha de ingreso",
         value: "admissionDate",
         filterable: false,
