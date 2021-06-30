@@ -1,5 +1,8 @@
 # t-panel_client
 
+##
+API repository: https://github.com/AlejandroMilan/T-Panel_api
+
 ## Project setup
 ```
 yarn install
