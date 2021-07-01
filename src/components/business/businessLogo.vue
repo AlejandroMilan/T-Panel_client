@@ -87,7 +87,7 @@ export default {
         "El archivo de imagen no puede exceder 1Mb",
       (image) =>
         !image ||
-        ["image/png"].indexOf(image.type) != -1 ||
+        ["image/png", "image/jpeg", "image/jpg"].indexOf(image.type) != -1 ||
         "Tipo de archivo inválido, tipos aceptados: jpeg, jpg, png",
     ],
     accept: [".png", ".jpg", ".jpeg"],
