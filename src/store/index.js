@@ -11,6 +11,7 @@ const initialState = {
   masterToken: process.env.VUE_APP_MASTER_TOKEN,
   globalError: null,
   isNavigating: false,
+  countryCode: "+52",
 };
 
 export default new Vuex.Store({
@@ -25,6 +26,9 @@ export default new Vuex.Store({
     isNavigating: (state) => {
       return state.isNavigating;
     },
+    countryCode: (state) => {
+      return state.countryCode;
+    },
   },
   mutations: {
     setGlobalErrorHandler: (state, payload) => {
@@ -32,6 +36,9 @@ export default new Vuex.Store({
     },
     setIsNavigating: (state, payload) => {
       state.isNavigating = payload;
+    },
+    setCountryCode: (state, payload) => {
+      state.countryCode = payload;
     },
   },
   actions: {

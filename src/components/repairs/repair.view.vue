@@ -56,6 +56,7 @@
             @addComment="addComment"
             @printRepair="printRepair"
             @downloadRepairPdf="downloadRepairPdf"
+            @sendWhatsApp="sendWhatsappDialog = true"
           ></actionsCard>
 
           <commentCard
@@ -98,6 +99,13 @@
       @cancel="showCommentDialog = false"
       @commentSaved="commentSaved"
     ></commentDialog>
+
+    <sendWhatsApp
+      v-if="sendWhatsappDialog"
+      :show="sendWhatsappDialog"
+      :currentNumber="repair.customer.phoneNumber || ''"
+      @cancel="sendWhatsappDialog = false"
+    ></sendWhatsApp>
   </div>
 </template>
 
@@ -113,6 +121,7 @@ import updateStatusDialog from "./updateStatusDialog";
 import deleteRepairDialog from "./deleteRepairDialog";
 import commentCard from "@/components/comments/commentCard";
 import commentDialog from "@/components/comments/commentDialog";
+import sendWhatsApp from "./sendWhatsapp";
 
 export default {
   name: "RepairView",
@@ -128,6 +137,7 @@ export default {
     commentsList,
     commentCard,
     commentDialog,
+    sendWhatsApp,
   },
 
   data: () => ({
@@ -137,6 +147,7 @@ export default {
     showEditRepairStatus: false,
     showDeleteRepair: false,
     showCommentDialog: false,
+    sendWhatsappDialog: false,
     tab: null,
     error: null,
     errorPrint: null,
