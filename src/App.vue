@@ -16,7 +16,9 @@
       <v-row dense>
         <v-col cols="12">
           <div class="d-flex justify-center">
-            <span class="text-caption">T-Panel V1.0.0 - Dev Tek 2021</span>
+            <span class="text-caption"
+              >T-Panel V{{ version }} - Dev Tek 2021</span
+            >
           </div>
         </v-col>
       </v-row>
@@ -25,6 +27,7 @@
 </template>
 
 <script>
+import { version } from "../package";
 import { mapGetters, mapActions } from "vuex";
 
 import globalError from "./components/error/globalError";
@@ -39,6 +42,10 @@ export default {
   computed: {
     ...mapGetters(["user", "sessionToken", "globalError"]),
   },
+
+  data: () => ({
+    version: version,
+  }),
 
   async mounted() {
     if (this.user) {
