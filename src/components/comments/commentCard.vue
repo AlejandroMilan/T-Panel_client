@@ -12,7 +12,9 @@
         </v-list-item-content>
       </v-list-item>
     </div>
-    <v-card-text>{{ comment.content }}</v-card-text>
+    <v-card-text style="white-space: pre-wrap">{{
+      comment.content
+    }}</v-card-text>
   </v-card>
 </template>
 
