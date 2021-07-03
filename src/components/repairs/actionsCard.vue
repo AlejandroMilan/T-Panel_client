@@ -77,7 +77,7 @@
               nota</v-btn
             >
           </v-col>
-          <v-col cols="12">
+          <v-col cols="12" v-if="[0, 1, 2].indexOf(user.role.role) !== -1">
             <v-btn color="#075e54" small text @click="$emit('sendWhatsApp')">
               <v-icon small class="mr-2">mdi-whatsapp</v-icon> Enviar Whatsapp
             </v-btn>
