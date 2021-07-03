@@ -1,5 +1,5 @@
 <template>
-  <v-card outlined :loading="loading">
+  <v-card outlined :loading="loading" height="100%">
     <v-card-title>
       <span>Datos del negocio</span>
       <v-spacer></v-spacer>
