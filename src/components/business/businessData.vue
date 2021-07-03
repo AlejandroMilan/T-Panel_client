@@ -29,10 +29,8 @@
         >
           <v-list-item>
             <v-list-item-content>
-              <v-list-item-title>{{ field.fieldName }}</v-list-item-title>
-              <v-list-item-subtitle>{{
-                field.fieldValue
-              }}</v-list-item-subtitle>
+              <v-list-item-subtitle>{{ field.fieldName }}</v-list-item-subtitle>
+              <v-list-item-title>{{ field.fieldValue }}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </v-col>
