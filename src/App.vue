@@ -12,7 +12,15 @@
         <router-view></router-view>
       </v-container>
     </v-main>
-    <v-footer v-if="user" app> </v-footer>
+    <v-footer v-if="user" app color="#e3e3e3">
+      <v-row dense>
+        <v-col cols="12">
+          <div class="d-flex justify-center">
+            <span class="text-caption">T-Panel V1.0.0 - Dev Tek 2021</span>
+          </div>
+        </v-col>
+      </v-row>
+    </v-footer>
   </v-app>
 </template>
 
