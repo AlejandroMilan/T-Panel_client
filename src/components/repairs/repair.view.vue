@@ -219,9 +219,8 @@ export default {
       this.errorPrint = null;
 
       try {
-        const localTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
         const serverResponse = await this.getFileRequest(
-          `/repairs/repair/${this.repairId}/pdf?timezone=${localTimezone}`
+          `/repairs/repair/${this.repairId}/pdf`
         );
         this.loadingPrint = false;
 
