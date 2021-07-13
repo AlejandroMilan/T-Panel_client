@@ -110,6 +110,14 @@
           </v-list-item-content>
         </v-list-item>
       </v-col>
+      <v-col v-if="deviceData.state" cols="12">
+        <v-list-item>
+          <v-list-item-content>
+            <v-list-item-subtitle>Estado del dispositivo</v-list-item-subtitle>
+            <v-list-item-title>{{ deviceData.state }}</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-col>
       <v-row v-if="deviceData.blocking.hasBlocking" dense>
         <v-col
           cols="12"

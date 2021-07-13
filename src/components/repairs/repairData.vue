@@ -91,6 +91,7 @@ export default {
         presentsMoisture,
         beforeRepaired,
         imei,
+        state,
       } = this.repairData.device;
 
       return {
@@ -103,6 +104,7 @@ export default {
         presentsMoisture,
         beforeRepaired,
         imei,
+        state,
       };
     },
   },
