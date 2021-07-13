@@ -66,6 +66,17 @@
         >
         </v-text-field>
       </v-col>
+      <v-col cols="12">
+        <v-text-field
+          v-model="state"
+          label="Estado del dispositivo (opcional)"
+          hint="Aquí puedes dar más detalles acerca de cómo es que se encuentra el dispositivo al momento de recibido"
+          outlined
+          dense
+          color="primary"
+        >
+        </v-text-field>
+      </v-col>
       <v-col cols="12" md="6">
         <v-checkbox
           v-model="canStart"
@@ -224,6 +235,7 @@ export default {
     color: "",
     imei: "",
     reasonForAdmission: "",
+    state: "",
     canStart: true,
     beforeRepaired: false,
     presentsMoisture: false,
@@ -241,6 +253,7 @@ export default {
       reasonForAdmission: [],
       pin: [],
       password: [],
+      state: [],
     },
     blockingTypes: [
       {
@@ -263,6 +276,7 @@ export default {
     model: { required },
     color: { required },
     reasonForAdmission: { required },
+    state: { required },
     blocking: {
       pin: { required, minLength: minLength(4), maxLength: maxLength(4) },
       password: { required },
@@ -352,6 +366,7 @@ export default {
         canStart: this.canStart,
         beforeRepaired: this.beforeRepaired,
         presentsMoisture: this.presentsMoisture,
+        state: this.state,
         blocking: {
           hasBlocking: false,
         },
