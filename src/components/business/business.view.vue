@@ -18,6 +18,12 @@
           :logoUrl="business.logoUrl"
         ></businessLogo>
       </v-col>
+      <v-col cols="12">
+        <businessTerms
+          :terms="business ? business.termsAndConditions : []"
+          :loading="loading"
+        ></businessTerms>
+      </v-col>
     </v-row>
   </div>
 </template>
@@ -28,6 +34,7 @@ import { mapGetters } from "vuex";
 import hasNoBusiness from "./hasNoBusiness";
 import businessData from "./businessData";
 import businessLogo from "./businessLogo";
+import businessTerms from "./businessTerms";
 
 import serverRequestMixin from "@/mixins/serverRequest.mixin";
 
@@ -40,6 +47,7 @@ export default {
     hasNoBusiness,
     businessData,
     businessLogo,
+    businessTerms,
   },
 
   computed: {
