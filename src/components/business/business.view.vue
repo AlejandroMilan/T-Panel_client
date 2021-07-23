@@ -21,6 +21,7 @@
       <v-col cols="12">
         <businessTerms
           :terms="business ? business.termsAndConditions : []"
+          :businessId="user.businessId"
           :loading="loading"
         ></businessTerms>
       </v-col>
