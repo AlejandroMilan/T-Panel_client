@@ -117,7 +117,7 @@ export default {
   validations: {
     phoneNumber: {
       required,
-      minLength: minLength(10),
+      minLength: minLength(6),
       maxLength: maxLength(10),
       numeric,
     },
@@ -139,9 +139,9 @@ export default {
       !this.$v.phoneNumber.numeric &&
         errors.push("Número telefónico no válido");
       !this.$v.phoneNumber.minLength &&
-        errors.push("El número telefónico debe tener 10 dígitos");
+        errors.push("El número telefónico debe tener entre 6 y 10 dígitos");
       !this.$v.phoneNumber.maxLength &&
-        errors.push("El número telefónico debe tener 10 dígitos");
+        errors.push("El número telefónico debe tener entre 6 10 dígitos");
       this.errors.phoneNumber = errors;
     },
 
