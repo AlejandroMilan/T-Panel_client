@@ -34,6 +34,7 @@
         <v-tabs-slider color="primary"></v-tabs-slider>
         <v-tab>Detalles de la reparación</v-tab>
         <v-tab>Comentarios</v-tab>
+        <v-tab>Actividad</v-tab>
       </v-tabs>
       <v-row>
         <v-col cols="12" md="8" lg="9">
@@ -44,6 +45,9 @@
               </v-tab-item>
               <v-tab-item>
                 <commentsList :comments="comments"></commentsList>
+              </v-tab-item>
+              <v-tab-item>
+                <repairLogs :logs="repair.logs" />
               </v-tab-item>
             </v-tabs-items>
           </div>
@@ -122,6 +126,7 @@ import deleteRepairDialog from "./deleteRepairDialog";
 import commentCard from "@/components/comments/commentCard";
 import commentDialog from "@/components/comments/commentDialog";
 import sendWhatsApp from "./sendWhatsapp";
+import repairLogs from "./repairLogs";
 
 export default {
   name: "RepairView",
@@ -138,6 +143,7 @@ export default {
     commentCard,
     commentDialog,
     sendWhatsApp,
+    repairLogs,
   },
 
   data: () => ({
