@@ -37,7 +37,12 @@
         </div>
       </v-col>
       <v-col cols="12">
-        <repairList :repairs="repairs" :loading="loading"></repairList>
+        <repairList
+          :repairs="repairs"
+          :loading="loading"
+          @repairUpdated="repairUpdated"
+          @repairDeleted="repairDeleted"
+        ></repairList>
       </v-col>
       <v-col v-if="error" cols="12">
         <v-alert type="error" outlined>{{ error }}</v-alert>
@@ -95,6 +100,16 @@ export default {
     repairSaved(newRepair) {
       this.showRepairDialog = false;
       this.repairs = [newRepair, ...this.repairs];
+    },
+
+    repairUpdated(repair) {
+      const query = (element) => element._id === repair._id;
+      const index = this.repairs.findIndex(query);
+      this.repairs[index] = repair;
+    },
+
+    repairDeleted(repair) {
+      this.repairs = this.repairs.filter((e) => e._id !== repair._id);
     },
   },
 };

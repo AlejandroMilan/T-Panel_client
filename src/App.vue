@@ -69,9 +69,17 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
 .v-card__text,
 .v-card__title {
   word-break: normal; /* maybe !important  */
+}
+
+.link {
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
 }
 </style>
