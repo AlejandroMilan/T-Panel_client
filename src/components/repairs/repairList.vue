@@ -13,7 +13,21 @@
         ></v-text-field>
       </v-card-title>
       <v-card-text>
+        <v-container v-if="selectedRepairs.length">
+          <div class="flex">
+            <v-btn color="primary" text @click="openManyRepairsStatusDialog()">
+              <v-icon small class="mr-2">mdi-devices</v-icon>
+              <span>Modificar estado</span>
+            </v-btn>
+            <v-divider vertical></v-divider>
+            <v-btn color="error" text>
+              <v-icon small class="mr-2">mdi-delete</v-icon>
+              <span>Eliminar</span>
+            </v-btn>
+          </div>
+        </v-container>
         <v-data-table
+          v-model="selectedRepairs"
           :headers="headers"
           :items="repairs"
           :expanded.sync="expanded"
@@ -22,6 +36,7 @@
           :loading="loading"
           loading-text="Cargando..."
           multi-sort
+          show-select
           no-data-text="No hay reparaciones para mostrar"
           no-results-text="No se encontraron reparaciones"
           :footer-props="{
@@ -37,8 +52,8 @@
             <router-link
               class="link"
               :to="`/panel/reparaciones/${item.invoiceId}`"
-              >{{ item.invoiceId }}</router-link
-            >
+              v-text="repairs.filter((e) => e._id === item._id)[0].invoiceId"
+            ></router-link>
           </template>
           <template v-slot:[`item.status.title`]="{ item }">
             <v-chip
@@ -77,7 +92,13 @@
             </td>
           </template>
           <template v-slot:[`item.actions`]="{ item }">
-            <v-tooltip left>
+            <v-tooltip
+              left
+              v-if="
+                user.role.role === 0 ||
+                user.permissions.filter((e) => e.key === 331).length > 0
+              "
+            >
               <template v-slot:activator="{ on, attrs }">
                 <v-icon
                   small
@@ -92,7 +113,13 @@
               <span>Modificar estado</span>
             </v-tooltip>
 
-            <v-tooltip left>
+            <v-tooltip
+              left
+              v-if="
+                user.role.role === 0 ||
+                user.permissions.filter((e) => e.key === 340).length > 0
+              "
+            >
               <template v-slot:activator="{ on, attrs }">
                 <v-icon
                   small
@@ -114,10 +141,11 @@
     <updateStatusDialog
       v-if="showEditRepairStatus"
       :show="showEditRepairStatus"
-      :invoiceId="repairToAction.invoiceId"
+      :invoiceId="invoiceIdToUpdate"
       :currentStatus="repairToAction.status.key"
       @cancel="closeEditRepairStatusDialog"
       @repairSaved="repairSaved"
+      @manyRepairsSaved="manyRepairsSaved"
     ></updateStatusDialog>
 
     <deleteRepairDialog
@@ -131,6 +159,7 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import { getShortDate } from "@/helpers/date.helper";
 import updateStatusDialog from "./updateStatusDialog";
 import deleteRepairDialog from "./deleteRepairDialog";
@@ -147,6 +176,18 @@ export default {
   },
 
   components: { updateStatusDialog, deleteRepairDialog },
+
+  computed: {
+    ...mapGetters(["user"]),
+    selectedRepairsInvoices() {
+      return this.selectedRepairs.map((e) => e.invoiceId);
+    },
+    deleteQueryString() {
+      return `?invoicesIds=${this.selectedRepairsInvoices.join(
+        "&invoicesIds="
+      )}`;
+    },
+  },
 
   data: () => ({
     search: "",
@@ -189,6 +230,9 @@ export default {
     showEditRepairStatus: false,
     repairToAction: null,
     showDeleteRepair: false,
+
+    selectedRepairs: [],
+    invoiceIdToUpdate: null,
   }),
 
   methods: {
@@ -221,11 +265,13 @@ export default {
 
     openEditRepairStatusDialog(repair) {
       this.repairToAction = repair;
+      this.invoiceIdToUpdate = repair.invoiceId;
       this.showEditRepairStatus = true;
     },
 
     closeEditRepairStatusDialog() {
       this.showEditRepairStatus = false;
+      this.invoiceIdToUpdate = null;
       this.repairToAction = null;
     },
 
@@ -247,6 +293,18 @@ export default {
     repairDeleted(repair) {
       this.closeDeleteRepairStatusDialog();
       this.$emit("repairDeleted", repair);
+    },
+
+    openManyRepairsStatusDialog() {
+      this.repairToAction = this.selectedRepairs[0];
+      this.invoiceIdToUpdate = this.selectedRepairs.map((e) => e.invoiceId);
+      this.showEditRepairStatus = true;
+    },
+
+    manyRepairsSaved(repairs) {
+      this.$emit("manyRepairsSaved", repairs);
+      this.selectedRepairs = [];
+      this.closeEditRepairStatusDialog();
     },
   },
 };

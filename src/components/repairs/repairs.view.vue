@@ -42,6 +42,7 @@
           :loading="loading"
           @repairUpdated="repairUpdated"
           @repairDeleted="repairDeleted"
+          @manyRepairsSaved="manyRepairsSaved"
         ></repairList>
       </v-col>
       <v-col v-if="error" cols="12">
@@ -110,6 +111,12 @@ export default {
 
     repairDeleted(repair) {
       this.repairs = this.repairs.filter((e) => e._id !== repair._id);
+    },
+
+    manyRepairsSaved(repairs) {
+      repairs.forEach((repair) => {
+        this.repairUpdated(repair);
+      });
     },
   },
 };
