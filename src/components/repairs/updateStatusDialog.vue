@@ -45,7 +45,7 @@ export default {
 
   props: {
     show: { type: Boolean, default: true },
-    invoiceId: { type: Number, required: true },
+    invoiceId: { type: [Number, Array], required: true },
     currentStatus: { type: Number, required: true },
   },
 
@@ -88,13 +88,20 @@ export default {
         const requestData = {
           status: this.status,
         };
+        if (Array.isArray(this.invoiceId))
+          requestData.invoicesIds = this.invoiceId;
 
-        const serverResponse = await this.putRequest(
-          `/repairs/${this.invoiceId}/status`,
-          requestData
-        );
+        const serverResponse = Array.isArray(this.invoiceId)
+          ? await this.putRequest(`repairs/status/many`, requestData)
+          : await this.putRequest(
+              `/repairs/${this.invoiceId}/status`,
+              requestData
+            );
+        this.loading = false;
 
-        this.$emit("repairSaved", serverResponse.repair);
+        if (Array.isArray(this.invoiceId))
+          this.$emit("manyRepairsSaved", serverResponse.repairs);
+        else this.$emit("repairSaved", serverResponse.repair);
       } catch (error) {
         this.loading = false;
         this.error = error.data.message;
