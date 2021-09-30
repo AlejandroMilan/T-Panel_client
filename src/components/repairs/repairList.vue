@@ -6,7 +6,8 @@
         <v-spacer> </v-spacer>
         <v-text-field
           v-model="search"
-          append-icon="mdi-magnify"
+          prepend-inner-icon="mdi-magnify"
+          outlined
           label="Buscar por folio, marca, modelo, cliente o estado"
           single-line
           hide-details
