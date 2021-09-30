@@ -43,6 +43,7 @@
           @repairUpdated="repairUpdated"
           @repairDeleted="repairDeleted"
           @manyRepairsSaved="manyRepairsSaved"
+          @manyRepairsDeleted="manyRepairsDeleted"
         ></repairList>
       </v-col>
       <v-col v-if="error" cols="12">
@@ -116,6 +117,12 @@ export default {
     manyRepairsSaved(repairs) {
       repairs.forEach((repair) => {
         this.repairUpdated(repair);
+      });
+    },
+
+    manyRepairsDeleted(repairs) {
+      repairs.forEach((repair) => {
+        this.repairDeleted(repair);
       });
     },
   },

@@ -2,14 +2,20 @@
   <v-dialog v-model="show" width="400" persistent>
     <v-card :loading="loading">
       <v-card-title
-        ><span
-          >¿Está seguro que desea eliminar la reparación?</span
-        ></v-card-title
+        ><span>{{
+          Array.isArray(invoiceId)
+            ? "¿Está seguro que desea eliminar las reparaciones?"
+            : "¿Está seguro que desea eliminar la reparación?"
+        }}</span></v-card-title
       >
       <v-card-text>
-        <span
-          >Una vez eliminada, no se puede recuperar ningún dato de ella.</span
-        >
+        <span>
+          {{
+            Array.isArray(invoiceId)
+              ? "Una vez eliminada, no se puede recuperar ningún dato de ellas."
+              : "Una vez eliminada, no se puede recuperar ningún dato de ella."
+          }}
+        </span>
         <v-alert type="error" outlined class="mt-2" v-if="error">{{
           error
         }}</v-alert>
@@ -46,7 +52,8 @@ export default {
 
   props: {
     show: { type: Boolean, defualt: false },
-    invoiceId: { type: Number, required: true },
+    invoiceId: { type: [Number, Array], required: true },
+    deleteQueryString: { type: String, default: "" },
   },
 
   data: () => ({
@@ -58,12 +65,16 @@ export default {
     async deleteRepair() {
       this.loading = true;
       try {
-        const serverResponse = await this.deleteRequest(
-          `/repairs/${this.invoiceId}`
-        );
+        const serverResponse = Array.isArray(this.invoiceId)
+          ? await this.deleteRequest(
+              `/repairs/delete/many${this.deleteQueryString}`
+            )
+          : await this.deleteRequest(`/repairs/${this.invoiceId}`);
         this.loading = false;
 
-        this.$emit("repairDeleted", serverResponse.repairDeleted);
+        if (Array.isArray(this.invoiceId))
+          this.$emit("manyRepairsDeleted", serverResponse.repairs);
+        else this.$emit("repairDeleted", serverResponse.repairDeleted);
       } catch (error) {
         this.loading = false;
         this.error = error.data.message;

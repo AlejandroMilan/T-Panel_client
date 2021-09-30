@@ -15,12 +15,29 @@
       <v-card-text>
         <v-container v-if="selectedRepairs.length">
           <div class="flex">
-            <v-btn color="primary" text @click="openManyRepairsStatusDialog()">
+            <v-btn
+              v-if="
+                user.role.role === 0 ||
+                user.permissions.filter((e) => e.key === 331).length > 0
+              "
+              color="primary"
+              text
+              @click="openManyRepairsStatusDialog()"
+            >
               <v-icon small class="mr-2">mdi-devices</v-icon>
               <span>Modificar estado</span>
             </v-btn>
             <v-divider vertical></v-divider>
-            <v-btn color="error" text>
+            <v-btn
+              v-if="
+                (user.role.role === 0 ||
+                  user.permissions.filter((e) => e.key === 340).length > 0) &&
+                selectedRepairs.length > 1
+              "
+              color="error"
+              text
+              @click="openDeleteManyRepairsDialog()"
+            >
               <v-icon small class="mr-2">mdi-delete</v-icon>
               <span>Eliminar</span>
             </v-btn>
@@ -151,9 +168,11 @@
     <deleteRepairDialog
       v-if="showDeleteRepair"
       :show="showDeleteRepair"
-      :invoiceId="repairToAction.invoiceId"
+      :invoiceId="invoiceIdToUpdate"
+      :deleteQueryString="deleteQueryString"
       @cancel="closeDeleteRepairStatusDialog"
       @repairDeleted="repairDeleted"
+      @manyRepairsDeleted="manyRepairsDeleted"
     ></deleteRepairDialog>
   </div>
 </template>
@@ -179,9 +198,11 @@ export default {
 
   computed: {
     ...mapGetters(["user"]),
+
     selectedRepairsInvoices() {
       return this.selectedRepairs.map((e) => e.invoiceId);
     },
+
     deleteQueryString() {
       return `?invoicesIds=${this.selectedRepairsInvoices.join(
         "&invoicesIds="
@@ -282,11 +303,13 @@ export default {
 
     openDeleteRepairStatusDialog(repair) {
       this.repairToAction = repair;
+      this.invoiceIdToUpdate = repair.invoiceId;
       this.showDeleteRepair = true;
     },
 
     closeDeleteRepairStatusDialog() {
       this.showDeleteRepair = false;
+      this.invoiceIdToUpdate = null;
       this.repairToAction = null;
     },
 
@@ -305,6 +328,17 @@ export default {
       this.$emit("manyRepairsSaved", repairs);
       this.selectedRepairs = [];
       this.closeEditRepairStatusDialog();
+    },
+
+    openDeleteManyRepairsDialog() {
+      this.repairToAction = this.selectedRepairs[0];
+      this.invoiceIdToUpdate = this.selectedRepairs.map((e) => e.invoiceId);
+      this.showDeleteRepair = true;
+    },
+
+    manyRepairsDeleted(repairs) {
+      this.$emit("manyRepairsDeleted", repairs);
+      this.closeDeleteRepairStatusDialog();
     },
   },
 };
