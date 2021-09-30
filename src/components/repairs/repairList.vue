@@ -7,7 +7,9 @@
         <v-text-field
           v-model="search"
           prepend-inner-icon="mdi-magnify"
+          :class="!$vuetify.breakpoint.mdAndUp ? 'mt-3' : ''"
           outlined
+          dense
           label="Buscar por folio, marca, modelo, cliente o estado"
           single-line
           hide-details
