@@ -67,6 +67,9 @@ export default {
         case 400:
           color = "indigo";
           break;
+        case 310:
+          color = "#1976d2";
+          break;
         case 300:
           color = "green darken-3";
           break;
