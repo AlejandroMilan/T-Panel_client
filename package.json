@@ -1,6 +1,6 @@
 {
   "name": "t-panel_client",
-  "version": "1.5.3",
+  "version": "1.6.3",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
