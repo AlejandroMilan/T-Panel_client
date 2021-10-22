@@ -18,7 +18,9 @@
         <v-form v-model="isImageValid" ref="imageForm" lazy-validation>
           <v-file-input
             v-model="imageFile"
-            :label="loading ? 'Subiendo imagen...' : 'Agregar imagen'"
+            :label="
+              loading ? 'Subiendo imagen...' : 'Agregar imagen (opcional)'
+            "
             filled
             prepend-inner-icon="mdi-camera"
             :disabled="loading"

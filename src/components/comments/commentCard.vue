@@ -17,10 +17,11 @@
       <v-img
         v-if="comment.files.length"
         :src="comment.files[0]"
-        class="mt-3"
+        class="mt-3 comment-image"
         :max-width="
           showFullImage || !$vuetify.breakpoint.mdAndUp ? '100%' : '300px'
         "
+        @click="viewImage(comment.files[0])"
       ></v-img>
     </v-card-text>
   </v-card>
@@ -41,6 +42,21 @@ export default {
     fullDate(isoDate) {
       return getFullDateWithHour(isoDate);
     },
+
+    viewImage(imageUrl) {
+      const a = document.createElement("a");
+      a.href = imageUrl;
+      a.target = "_blank";
+
+      a.click();
+      a.remove();
+    },
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.comment-image {
+  cursor: pointer;
+}
+</style>
