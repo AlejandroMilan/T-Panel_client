@@ -15,6 +15,18 @@
           @input="validateComment"
           @blur="validateComment"
         ></v-textarea>
+        <v-form v-model="isImageValid" ref="imageForm" lazy-validation>
+          <v-file-input
+            v-model="imageFile"
+            :label="loading ? 'Subiendo imagen...' : 'Agregar imagen'"
+            filled
+            prepend-inner-icon="mdi-camera"
+            :disabled="loading"
+            :prepend-icon="null"
+            :accept="accept.join(',')"
+            :rules="imageRules"
+          ></v-file-input>
+        </v-form>
       </v-card-text>
       <v-card-actions>
         <v-btn
@@ -67,6 +79,19 @@ export default {
     errors: {
       comment: [],
     },
+    isImageValid: false,
+    imageFile: null,
+    imageRules: [
+      (image) =>
+        !image ||
+        image.size < 1 * 1024 * 1024 ||
+        "El archivo de imagen no puede exceder 1Mb",
+      (image) =>
+        !image ||
+        ["image/png", "image/jpeg", "image/jpg"].indexOf(image.type) != -1 ||
+        "Tipo de archivo inválido, tipos aceptados: jpeg, jpg, png",
+    ],
+    accept: [".png", ".jpg", ".jpeg"],
   }),
 
   validations: {
@@ -84,15 +109,26 @@ export default {
     async submit() {
       this.submitError = "";
       this.validateComment();
-      if (!this.isFormValid) return;
+      if (!this.isFormValid || !this.$refs.imageForm.validate()) return;
 
       this.loading = true;
 
       try {
-        const serverResponse = await this.postRequest("/comments", {
+        let serverResponse = await this.postRequest("/comments", {
           invoiceId: this.invoiceId,
           content: this.comment,
         });
+
+        if (this.imageFile) {
+          const fileToUpload = new FormData();
+          fileToUpload.append("file", this.imageFile);
+
+          serverResponse = await this.postRequest(
+            `/comments/${serverResponse.comment._id}/files`,
+            fileToUpload
+          );
+        }
+
         this.loading = false;
 
         this.$emit("commentSaved", serverResponse.comment);
