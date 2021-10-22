@@ -66,6 +66,7 @@
           <commentCard
             v-if="comments || comments.length"
             :comment="comments[0]"
+            :showFullImage="true"
           ></commentCard>
         </v-col>
       </v-row>

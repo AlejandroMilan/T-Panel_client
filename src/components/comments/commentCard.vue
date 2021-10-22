@@ -12,9 +12,17 @@
         </v-list-item-content>
       </v-list-item>
     </div>
-    <v-card-text style="white-space: pre-wrap">{{
-      comment.content
-    }}</v-card-text>
+    <v-card-text style="white-space: pre-wrap">
+      <span>{{ comment.content }}</span>
+      <v-img
+        v-if="comment.files.length"
+        :src="comment.files[0]"
+        class="mt-3"
+        :max-width="
+          showFullImage || !$vuetify.breakpoint.mdAndUp ? '100%' : '300px'
+        "
+      ></v-img>
+    </v-card-text>
   </v-card>
 </template>
 
@@ -26,6 +34,7 @@ export default {
 
   props: {
     comment: { type: Object, defualt: null },
+    showFullImage: { type: Boolean, default: false },
   },
 
   methods: {
