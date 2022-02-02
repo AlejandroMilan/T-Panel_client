@@ -2,8 +2,6 @@
   <div class="py-3">
     <v-card outlined>
       <v-card-title>
-        <span>{{ `Todas las reparaciones (${repairs.length})` }}</span>
-        <v-spacer> </v-spacer>
         <v-text-field
           v-model="search"
           prepend-inner-icon="mdi-magnify"
@@ -14,6 +12,7 @@
           single-line
           hide-details
         ></v-text-field>
+        <v-spacer></v-spacer>
       </v-card-title>
       <v-card-text>
         <v-container v-if="selectedRepairs.length">
@@ -55,18 +54,13 @@
           single-expand
           :loading="loading"
           loading-text="Cargando..."
-          multi-sort
           show-select
           no-data-text="No hay reparaciones para mostrar"
           no-results-text="No se encontraron reparaciones"
-          :footer-props="{
-            itemsPerPageText: 'Elementos por página:',
-            itemsPerPageAllText: 'Todos',
-            pageText: getPageText(),
-            showFirstLastPage: true,
-          }"
+          hide-default-footer
           item-key="_id"
           show-expand
+          disable-sort
         >
           <template v-slot:[`item.invoiceId`]="{ item }">
             <router-link
@@ -195,6 +189,7 @@ export default {
       required: true,
     },
     loading: { type: Boolean, default: false },
+    count: { type: Number, default: 0 },
   },
 
   components: { updateStatusDialog, deleteRepairDialog },
