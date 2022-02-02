@@ -2,8 +2,11 @@
   <div>
     <v-row dense>
       <v-col cols="12">
-        <div class="d-flex justify-space-between align-end">
-          <div>
+        <div
+          class="d-flex justify-space-between align-end"
+          :class="{ 'flex-column-reverse': !$vuetify.breakpoint.mdAndUp }"
+        >
+          <div :class="{ 'mt-3': !$vuetify.breakpoint.mdAndUp }">
             <v-btn
               outlined
               small
@@ -39,7 +42,7 @@
               outlined
               small
               text
-              :disabled="lastPage === 1"
+              :disabled="validPage === lastPage"
               @click="nextPage()"
               ><v-icon>mdi-chevron-right</v-icon></v-btn
             >
