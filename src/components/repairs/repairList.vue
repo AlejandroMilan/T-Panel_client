@@ -61,6 +61,7 @@
           item-key="_id"
           show-expand
           disable-sort
+          :items-per-page="20"
         >
           <template v-slot:[`item.invoiceId`]="{ item }">
             <router-link
