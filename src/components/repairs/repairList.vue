@@ -1,19 +1,6 @@
 <template>
   <div class="py-3">
     <v-card outlined>
-      <v-card-title>
-        <v-text-field
-          v-model="search"
-          prepend-inner-icon="mdi-magnify"
-          :class="!$vuetify.breakpoint.mdAndUp ? 'mt-3' : ''"
-          outlined
-          dense
-          label="Buscar por folio, marca, modelo, cliente o estado"
-          single-line
-          hide-details
-        ></v-text-field>
-        <v-spacer></v-spacer>
-      </v-card-title>
       <v-card-text>
         <v-container v-if="selectedRepairs.length">
           <div class="flex">
@@ -24,6 +11,7 @@
               "
               color="primary"
               text
+              outlined
               @click="openManyRepairsStatusDialog()"
             >
               <v-icon small class="mr-2">mdi-devices</v-icon>
@@ -38,6 +26,8 @@
               "
               color="error"
               text
+              outlined
+              class="mx-2"
               @click="openDeleteManyRepairsDialog()"
             >
               <v-icon small class="mr-2">mdi-delete</v-icon>
@@ -50,7 +40,6 @@
           :headers="headers"
           :items="repairs"
           :expanded.sync="expanded"
-          :search="search"
           single-expand
           :loading="loading"
           loading-text="Cargando..."
@@ -210,7 +199,6 @@ export default {
   },
 
   data: () => ({
-    search: "",
     expanded: [],
     headers: [
       { text: "Folio", value: "invoiceId" },

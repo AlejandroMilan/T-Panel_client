@@ -82,7 +82,21 @@
           </div>
         </div>
       </v-col>
-      <v-col cols="12">
+      <v-col
+        cols="12"
+        :md="$vuetify.breakpoint.mdAndUp && !isNavigating ? '3' : '12'"
+      >
+        <filters-card
+          class="my-3"
+          :isLoading="loading"
+          :currentSearch="validTextSearch"
+          @searchChanged="searchChanged"
+        ></filters-card>
+      </v-col>
+      <v-col
+        cols="12"
+        :md="$vuetify.breakpoint.mdAndUp && !isNavigating ? '9' : '12'"
+      >
         <repairList
           :repairs="repairs"
           :loading="loading"
@@ -105,6 +119,7 @@ import { mapGetters } from "vuex";
 import serverRequestMixin from "@/mixins/serverRequest.mixin";
 import repairDialog from "./repairDialog";
 import repairList from "./repairList";
+import repairsFiltersCard from "./repairsFiltersCard.vue";
 
 export default {
   name: "repairsView",
@@ -114,10 +129,11 @@ export default {
   components: {
     repairDialog,
     repairList,
+    "filters-card": repairsFiltersCard,
   },
 
   computed: {
-    ...mapGetters(["user"]),
+    ...mapGetters(["user", "isNavigating"]),
 
     validItemsPerPage() {
       const pathItemsPerPage = this.$route.query.itemsPerPage;
@@ -131,8 +147,26 @@ export default {
       else return 1;
     },
 
+    validTextSearch() {
+      return this.$route.query.textSearch;
+    },
+
     lastPage() {
       return parseInt(this.repairsCount / this.validItemsPerPage + 0.999);
+    },
+
+    getRepairsString() {
+      let result = "/repairs";
+
+      if (this.validPage) result = `${result}?page=${this.validPage}`;
+
+      if (this.validItemsPerPage)
+        result = `${result}&itemsPerPage=${this.validItemsPerPage}`;
+
+      if (this.validTextSearch)
+        result = `${result}&textSearch=${this.validTextSearch}`;
+
+      return result;
     },
   },
 
@@ -159,13 +193,13 @@ export default {
       this.error = "";
       this.loading = true;
       try {
-        const response = await this.getRequest(
-          `/repairs?itemsPerPage=${this.validItemsPerPage}&page=${this.validPage}`
-        );
+        const response = await this.getRequest(this.getRepairsString);
         this.loading = false;
 
         this.repairs = response.repairs;
         this.repairsCount = response.count;
+
+        if (!this.repairs.length) this.goToPage(1);
       } catch (error) {
         this.loading = false;
         this.error = error.data.message;
@@ -212,13 +246,13 @@ export default {
     },
 
     nextPage() {
-      console.log("a");
       if (this.validPage < this.lastPage)
         this.$router.push({
           name: "Reparaciones",
           query: {
             page: this.validPage + 1,
             itemsPerPage: this.validItemsPerPage,
+            textSearch: this.validTextSearch,
           },
         });
     },
@@ -230,8 +264,21 @@ export default {
           query: {
             page: number,
             itemsPerPage: this.validItemsPerPage,
+            textSearch: this.validTextSearch,
           },
         });
+    },
+
+    searchChanged(newSearch) {
+      if (this.validTextSearch === newSearch) return;
+      this.$router.push({
+        name: "Reparaciones",
+        query: {
+          page: this.validPage,
+          itemsPerPage: this.validItemsPerPage,
+          ...(newSearch && { textSearch: newSearch }),
+        },
+      });
     },
   },
 };
