@@ -2,44 +2,105 @@
   <div>
     <v-row dense>
       <v-col cols="12">
-        <div class="d-flex justify-end">
-          <v-btn
-            :disabled="loading"
-            :loading="loading"
-            color="primary"
-            outlined
-            @click="getRepairs"
-            class="mr-2"
-          >
-            <v-icon>mdi-autorenew</v-icon>
-            {{ $vuetify.breakpoint.mdAndUp ? "Actualizar" : null }}</v-btn
-          >
-          <v-btn
-            v-if="
-              user.role.role === 0 ||
-              user.permissions.filter((permission) => permission.key === 320)
-                .length > 0
-            "
-            :disabled="loading"
-            :loading="loading"
-            color="primary"
-            @click="showRepairDialog = true"
-          >
-            <v-icon>mdi-plus</v-icon>
-            Nueva reparación</v-btn
-          >
-          <repairDialog
-            v-if="showRepairDialog"
-            :show="showRepairDialog"
-            @cancel="showRepairDialog = false"
-            @repairSaved="repairSaved"
-          ></repairDialog>
+        <div
+          class="d-flex justify-space-between align-end"
+          :class="{ 'flex-column-reverse': !$vuetify.breakpoint.mdAndUp }"
+        >
+          <div :class="{ 'mt-3': !$vuetify.breakpoint.mdAndUp }">
+            <v-btn
+              outlined
+              small
+              text
+              class="mr-1"
+              :disabled="validPage === 1"
+              @click="prevPage()"
+              ><v-icon>mdi-chevron-left</v-icon></v-btn
+            >
+            <v-btn
+              v-if="validPage !== 1"
+              outlined
+              text
+              small
+              class="mr-1"
+              @click="goToPage(1)"
+              ><span>1</span></v-btn
+            >
+            <v-btn color="primary" small class="mr-1"
+              ><span>{{ validPage }}</span></v-btn
+            >
+            <v-btn
+              v-if="validPage !== lastPage && lastPage > 1"
+              small
+              outlined
+              text
+              class="mr-2"
+              @click="goToPage(lastPage)"
+            >
+              <span>{{ lastPage }}</span>
+            </v-btn>
+            <v-btn
+              outlined
+              small
+              text
+              :disabled="validPage === lastPage"
+              @click="nextPage()"
+              ><v-icon>mdi-chevron-right</v-icon></v-btn
+            >
+          </div>
+          <div>
+            <v-btn
+              :disabled="loading"
+              :loading="loading"
+              color="primary"
+              outlined
+              @click="getRepairs"
+              class="mr-2"
+            >
+              <v-icon>mdi-autorenew</v-icon>
+              {{ $vuetify.breakpoint.mdAndUp ? "Actualizar" : null }}</v-btn
+            >
+            <v-btn
+              v-if="
+                user.role.role === 0 ||
+                user.permissions.filter((permission) => permission.key === 320)
+                  .length > 0
+              "
+              :disabled="loading"
+              :loading="loading"
+              color="primary"
+              @click="showRepairDialog = true"
+            >
+              <v-icon>mdi-plus</v-icon>
+              Nueva reparación</v-btn
+            >
+            <repairDialog
+              v-if="showRepairDialog"
+              :show="showRepairDialog"
+              @cancel="showRepairDialog = false"
+              @repairSaved="repairSaved"
+            ></repairDialog>
+          </div>
         </div>
       </v-col>
-      <v-col cols="12">
+      <v-col
+        cols="12"
+        :md="$vuetify.breakpoint.mdAndUp && !isNavigating ? '3' : '12'"
+      >
+        <filters-card
+          class="my-3"
+          :isLoading="loading"
+          :currentSearch="validTextSearch"
+          @searchChanged="searchChanged"
+        ></filters-card>
+      </v-col>
+      <v-col
+        cols="12"
+        :md="$vuetify.breakpoint.mdAndUp && !isNavigating ? '9' : '12'"
+      >
         <repairList
           :repairs="repairs"
           :loading="loading"
+          :count="repairsCount"
           @repairUpdated="repairUpdated"
           @repairDeleted="repairDeleted"
           @manyRepairsSaved="manyRepairsSaved"
@@ -58,6 +119,7 @@ import { mapGetters } from "vuex";
 import serverRequestMixin from "@/mixins/serverRequest.mixin";
 import repairDialog from "./repairDialog";
 import repairList from "./repairList";
+import repairsFiltersCard from "./repairsFiltersCard.vue";
 
 export default {
   name: "repairsView",
@@ -67,10 +129,45 @@ export default {
   components: {
     repairDialog,
     repairList,
+    "filters-card": repairsFiltersCard,
   },
 
   computed: {
-    ...mapGetters(["user"]),
+    ...mapGetters(["user", "isNavigating"]),
+
+    validItemsPerPage() {
+      const pathItemsPerPage = this.$route.query.itemsPerPage;
+      if (pathItemsPerPage * 1) return pathItemsPerPage * 1;
+      else return 20;
+    },
+
+    validPage() {
+      const pathPage = this.$route.query.page;
+      if (pathPage * 1) return pathPage * 1;
+      else return 1;
+    },
+
+    validTextSearch() {
+      return this.$route.query.textSearch;
+    },
+
+    lastPage() {
+      return parseInt(this.repairsCount / this.validItemsPerPage + 0.999);
+    },
+
+    getRepairsString() {
+      let result = "/repairs";
+
+      if (this.validPage) result = `${result}?page=${this.validPage}`;
+
+      if (this.validItemsPerPage)
+        result = `${result}&itemsPerPage=${this.validItemsPerPage}`;
+
+      if (this.validTextSearch)
+        result = `${result}&textSearch=${this.validTextSearch}`;
+
+      return result;
+    },
   },
 
   data: () => ({
@@ -78,7 +175,14 @@ export default {
     showRepairDialog: false,
     repairs: [],
     error: "",
+    repairsCount: 0,
   }),
+
+  watch: {
+    $route() {
+      this.getRepairs();
+    },
+  },
 
   mounted() {
     this.getRepairs();
@@ -89,9 +193,13 @@ export default {
       this.error = "";
       this.loading = true;
       try {
-        const response = await this.getRequest("/repairs");
+        const response = await this.getRequest(this.getRepairsString);
         this.loading = false;
+
         this.repairs = response.repairs;
+        this.repairsCount = response.count;
+
+        if (!this.repairs.length) this.goToPage(1);
       } catch (error) {
         this.loading = false;
         this.error = error.data.message;
@@ -123,6 +231,53 @@ export default {
     manyRepairsDeleted(repairs) {
       repairs.forEach((repair) => {
         this.repairDeleted(repair);
+      });
+    },
+
+    prevPage() {
+      if (this.validPage > 1)
+        this.$router.push({
+          name: "Reparaciones",
+          query: {
+            page: this.validPage - 1,
+            itemsPerPage: this.validItemsPerPage,
+          },
+        });
+    },
+
+    nextPage() {
+      if (this.validPage < this.lastPage)
+        this.$router.push({
+          name: "Reparaciones",
+          query: {
+            page: this.validPage + 1,
+            itemsPerPage: this.validItemsPerPage,
+            textSearch: this.validTextSearch,
+          },
+        });
+    },
+
+    goToPage(number) {
+      if (number <= this.lastPage)
+        this.$router.push({
+          name: "Reparaciones",
+          query: {
+            page: number,
+            itemsPerPage: this.validItemsPerPage,
+            textSearch: this.validTextSearch,
+          },
+        });
+    },
+
+    searchChanged(newSearch) {
+      if (this.validTextSearch === newSearch) return;
+      this.$router.push({
+        name: "Reparaciones",
+        query: {
+          page: this.validPage,
+          itemsPerPage: this.validItemsPerPage,
+          ...(newSearch && { textSearch: newSearch }),
+        },
       });
     },
   },

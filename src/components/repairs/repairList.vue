@@ -1,20 +1,6 @@
 <template>
   <div class="py-3">
     <v-card outlined>
-      <v-card-title>
-        <span>{{ `Todas las reparaciones (${repairs.length})` }}</span>
-        <v-spacer> </v-spacer>
-        <v-text-field
-          v-model="search"
-          prepend-inner-icon="mdi-magnify"
-          :class="!$vuetify.breakpoint.mdAndUp ? 'mt-3' : ''"
-          outlined
-          dense
-          label="Buscar por folio, marca, modelo, cliente o estado"
-          single-line
-          hide-details
-        ></v-text-field>
-      </v-card-title>
       <v-card-text>
         <v-container v-if="selectedRepairs.length">
           <div class="flex">
@@ -25,6 +11,7 @@
               "
               color="primary"
               text
+              outlined
               @click="openManyRepairsStatusDialog()"
             >
               <v-icon small class="mr-2">mdi-devices</v-icon>
@@ -39,6 +26,8 @@
               "
               color="error"
               text
+              outlined
+              class="mx-2"
               @click="openDeleteManyRepairsDialog()"
             >
               <v-icon small class="mr-2">mdi-delete</v-icon>
@@ -51,22 +40,17 @@
           :headers="headers"
           :items="repairs"
           :expanded.sync="expanded"
-          :search="search"
           single-expand
           :loading="loading"
           loading-text="Cargando..."
-          multi-sort
           show-select
           no-data-text="No hay reparaciones para mostrar"
           no-results-text="No se encontraron reparaciones"
-          :footer-props="{
-            itemsPerPageText: 'Elementos por página:',
-            itemsPerPageAllText: 'Todos',
-            pageText: getPageText(),
-            showFirstLastPage: true,
-          }"
+          hide-default-footer
           item-key="_id"
           show-expand
+          disable-sort
+          :items-per-page="20"
         >
           <template v-slot:[`item.invoiceId`]="{ item }">
             <router-link
@@ -195,6 +179,7 @@ export default {
       required: true,
     },
     loading: { type: Boolean, default: false },
+    count: { type: Number, default: 0 },
   },
 
   components: { updateStatusDialog, deleteRepairDialog },
@@ -214,7 +199,6 @@ export default {
   },
 
   data: () => ({
-    search: "",
     expanded: [],
     headers: [
       { text: "Folio", value: "invoiceId" },
