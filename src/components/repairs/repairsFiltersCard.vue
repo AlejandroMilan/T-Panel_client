@@ -36,6 +36,9 @@
             </v-btn>
           </div>
         </v-col>
+        <v-col cols="12" class="mt-3">
+          <span><small>Más filtros en construcción :D</small></span>
+        </v-col>
       </v-row>
     </v-card-text>
   </v-card>
