@@ -4,7 +4,10 @@
     <v-card-text>
       <v-row dense>
         <v-col cols="12">
-          <div class="d-flex">
+          <div
+            class="d-flex flex-wrap"
+            :class="{ 'flex-column': isFullWidth && isMobile }"
+          >
             <v-text-field
               v-model="search"
               dense
@@ -18,7 +21,8 @@
               text
               small
               outlined
-              class="ml-2 mt-1"
+              class="mt-1"
+              :class="{ 'ml-2': !isMobile }"
               :disabled="isLoading"
               @click="searchChanged()"
             >
@@ -34,6 +38,35 @@
             >
               <v-icon>mdi-close</v-icon>
             </v-btn>
+
+            <div
+              class="d-flex flex-wrap"
+              :class="{
+                'flex-column': isFullWidth && isMobile,
+                'mt-5': !isFullWidth || isMobile,
+                'ml-5': isFullWidth && !isMobile,
+              }"
+            >
+              <v-select
+                v-model="sortBy"
+                dense
+                label="Ordenar por"
+                :items="sortValues"
+                item-text="text"
+                item-value="value"
+                :disabled="isLoading"
+              ></v-select>
+              <v-select
+                v-model="order"
+                dense
+                label="Tipo de orden"
+                :items="orderValues"
+                item-text="text"
+                item-value="value"
+                :class="{ 'ml-2': isFullWidth && !isMobile }"
+                :disabled="isLoading"
+              ></v-select>
+            </div>
           </div>
         </v-col>
         <v-col cols="12" class="mt-3">
@@ -50,16 +83,55 @@ export default {
 
   props: {
     isLoading: { type: Boolean, default: false },
+    isFullWidth: { type: Boolean, default: false },
     currentSearch: { type: String, required: false },
+    currentSort: { type: String, required: true },
+    currentOrder: { type: String, required: true },
   },
 
   data: () => ({
     search: "",
+    sortValues: [
+      {
+        text: "Fecha de ingreso",
+        value: "admissionDate",
+      },
+      {
+        text: "Número de folio",
+        value: "invoiceId",
+      },
+    ],
+    orderValues: [
+      {
+        text: "Descendiente",
+        value: "desc",
+      },
+      {
+        text: "Ascendiente",
+        value: "asc",
+      },
+    ],
+    sortBy: "admissionDate",
+    order: "desc",
   }),
+
+  computed: {
+    isMobile() {
+      return this.$vuetify.breakpoint.mdAndDown;
+    },
+  },
 
   watch: {
     currentSearch() {
       this.setCurrentData();
+    },
+
+    sortBy(value) {
+      this.$emit("sortChanged", value);
+    },
+
+    order(value) {
+      this.$emit("orderChanged", value);
     },
   },
 
@@ -70,6 +142,8 @@ export default {
   methods: {
     setCurrentData() {
       if (this.currentSearch) this.search = this.currentSearch || "";
+      if (this.currentSort) this.sortBy = this.currentSort || "admissionDate";
+      if (this.currentOrder) this.order = this.currentOrder || "desc";
     },
 
     clearSearch() {

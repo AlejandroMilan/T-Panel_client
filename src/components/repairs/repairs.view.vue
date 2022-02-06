@@ -82,21 +82,20 @@
           </div>
         </div>
       </v-col>
-      <v-col
-        cols="12"
-        :md="$vuetify.breakpoint.mdAndUp && !isNavigating ? '3' : '12'"
-      >
+      <v-col cols="12" :md="viewFiltersWithFullWith ? '12' : '3'">
         <filters-card
           class="my-3"
           :isLoading="loading"
           :currentSearch="validTextSearch"
+          :isFullWidth="viewFiltersWithFullWith"
+          :currentSort="validSortValue"
+          :currentOrder="validOrderValue"
           @searchChanged="searchChanged"
+          @sortChanged="sortChanged"
+          @orderChanged="orderChanged"
         ></filters-card>
       </v-col>
-      <v-col
-        cols="12"
-        :md="$vuetify.breakpoint.mdAndUp && !isNavigating ? '9' : '12'"
-      >
+      <v-col cols="12" :md="viewFiltersWithFullWith ? '12' : '9'">
         <repairList
           :repairs="repairs"
           :loading="loading"
@@ -155,6 +154,14 @@ export default {
       return parseInt(this.repairsCount / this.validItemsPerPage + 0.999);
     },
 
+    validSortValue() {
+      return this.$route.query.sortBy || "admissionDate";
+    },
+
+    validOrderValue() {
+      return this.$route.query.order || "desc";
+    },
+
     getRepairsString() {
       let result = "/repairs";
 
@@ -166,7 +173,24 @@ export default {
       if (this.validTextSearch)
         result = `${result}&textSearch=${this.validTextSearch}`;
 
+      if (this.validSortValue)
+        result = `${result}&sortBy=${this.validSortValue}`;
+
+      if (this.validOrderValue)
+        result = `${result}&order=${this.validOrderValue}`;
+
       return result;
+    },
+
+    viewFiltersWithFullWith() {
+      if (!this.$vuetify.breakpoint.mdAndUp) return true;
+      if (
+        this.$vuetify.breakpoint.mdAndUp &&
+        this.isNavigating &&
+        this.$vuetify.breakpoint.lgAndDown
+      )
+        return true;
+      return false;
     },
   },
 
@@ -241,6 +265,8 @@ export default {
           query: {
             page: this.validPage - 1,
             itemsPerPage: this.validItemsPerPage,
+            sortBy: this.validSortValue,
+            order: this.validOrderValue,
           },
         });
     },
@@ -253,6 +279,8 @@ export default {
             page: this.validPage + 1,
             itemsPerPage: this.validItemsPerPage,
             textSearch: this.validTextSearch,
+            sortBy: this.validSortValue,
+            order: this.validOrderValue,
           },
         });
     },
@@ -265,6 +293,8 @@ export default {
             page: number,
             itemsPerPage: this.validItemsPerPage,
             textSearch: this.validTextSearch,
+            sortBy: this.validSortValue,
+            order: this.validOrderValue,
           },
         });
     },
@@ -276,7 +306,35 @@ export default {
         query: {
           page: this.validPage,
           itemsPerPage: this.validItemsPerPage,
+          sortBy: this.validSortValue,
+          order: this.validOrderValue,
           ...(newSearch && { textSearch: newSearch }),
+        },
+      });
+    },
+
+    sortChanged(payload) {
+      this.$router.push({
+        name: "Reparaciones",
+        query: {
+          page: this.validPage,
+          itemsPerPage: this.validItemsPerPage,
+          textSearch: this.validTextSearch,
+          order: this.validOrderValue,
+          ...(payload && { sortBy: payload }),
+        },
+      });
+    },
+
+    orderChanged(payload) {
+      this.$router.push({
+        name: "Reparaciones",
+        query: {
+          page: this.validPage,
+          itemsPerPage: this.validItemsPerPage,
+          textSearch: this.validTextSearch,
+          sortBy: this.validSortValue,
+          ...(payload && { order: payload }),
         },
       });
     },
