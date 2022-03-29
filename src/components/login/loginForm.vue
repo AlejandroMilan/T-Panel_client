@@ -28,6 +28,7 @@
             :disabled="loading"
             @input="validatePassword()"
             @blur="validatePassword()"
+            @keyup.enter="submit()"
           ></v-text-field>
           <!-- <forgottenPassword /> -->
         </v-col>

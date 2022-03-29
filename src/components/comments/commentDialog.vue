@@ -64,7 +64,7 @@ export default {
 
   props: {
     show: { type: Boolean, default: false },
-    invoiceId: { type: Number, required: true },
+    invoiceId: { type: [String, Number], required: true },
   },
 
   computed: {

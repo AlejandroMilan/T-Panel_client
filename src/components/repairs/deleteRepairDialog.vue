@@ -52,7 +52,7 @@ export default {
 
   props: {
     show: { type: Boolean, defualt: false },
-    invoiceId: { type: [Number, Array], required: true },
+    invoiceId: { type: [String, Array, Number], required: true },
     deleteQueryString: { type: String, default: "" },
   },
 

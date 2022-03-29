@@ -185,7 +185,7 @@
 <script>
 import patreonCreator from "./patreonCreator";
 import { validationMixin } from "vuelidate";
-import { required, minLength, maxLength } from "vuelidate/lib/validators";
+import { required, numeric } from "vuelidate/lib/validators";
 import { _ } from "vue-underscore";
 
 export default {
@@ -278,7 +278,7 @@ export default {
     reasonForAdmission: { required },
     state: { required },
     blocking: {
-      pin: { required, minLength: minLength(4), maxLength: maxLength(4) },
+      pin: { required, numeric },
       password: { required },
     },
   },
@@ -328,10 +328,8 @@ export default {
       if (this.blocking.blockingType === "pin") {
         !this.$v.blocking.pin.required &&
           errors.push("El PIN de desbloqueo es requerido");
-        !this.$v.blocking.pin.minLength &&
-          errors.push("El PIN debe contener 4 dígitos");
-        !this.$v.blocking.pin.maxLength &&
-          errors.push("El PIN debe contener 4 dígitos");
+        !this.$v.blocking.pin.numeric &&
+          errors.push("El PIN de desbloqueo no es válido");
       }
       this.errors.pin = errors;
     },
