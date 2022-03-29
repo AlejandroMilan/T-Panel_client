@@ -45,7 +45,7 @@ export default {
 
   props: {
     show: { type: Boolean, default: true },
-    invoiceId: { type: [Number, Array], required: true },
+    invoiceId: { type: [Number, String, Array], required: true },
     currentStatus: { type: Number, required: true },
   },
 
