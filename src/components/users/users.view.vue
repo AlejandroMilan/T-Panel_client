@@ -2,7 +2,7 @@
   <div>
     <v-progress-linear
       indeterminate
-      color="primary"
+      color="accent"
       v-if="loading"
     ></v-progress-linear>
     <v-row v-else dense>

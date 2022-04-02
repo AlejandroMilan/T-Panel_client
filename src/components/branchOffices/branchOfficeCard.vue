@@ -19,12 +19,14 @@
                 @click="methodLaunched = option.method"
                 :disabled="!canUse(option.permission)"
               >
-                <v-list-item-icon
-                  ><v-icon :color="option.color">{{
-                    option.icon
-                  }}</v-icon></v-list-item-icon
-                >
-                <v-list-item-title>{{ option.title }}</v-list-item-title>
+                <v-list-item-content>
+                  <v-list-item-title>
+                    <v-icon small class="mr-2" :color="option.color">{{
+                      option.icon
+                    }}</v-icon>
+                    <span>{{ option.title }}</span></v-list-item-title
+                  >
+                </v-list-item-content>
               </v-list-item>
             </v-list-item-group>
           </v-list>

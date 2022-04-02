@@ -13,6 +13,7 @@
               :error-messages="errors.name"
               label="Nombre de la sucursal"
               outlined
+              color="secondary"
               @input="validateName()"
               @blur="validateName()"
             ></v-text-field>
@@ -22,6 +23,7 @@
               v-model="adress"
               label="Dirección de la sucursal (opcional)"
               outlined
+              color="secondary"
             ></v-text-field>
           </v-col>
         </v-row>
@@ -31,18 +33,19 @@
           color="secondary"
           outlined
           @click="$emit('cancel')"
-          :loading="loading"
           :disabled="loading"
-          >Cancelar</v-btn
         >
+          <v-icon small class="mr-2">mdi-close</v-icon>
+          <span>Cancelar</span>
+        </v-btn>
         <v-btn
           color="primary"
           :loading="loading"
           :disabled="loading || !isFormValid"
           @click="submit"
         >
-          <v-icon small>mdi-content-save</v-icon>
-          <span>Guardar</span>
+          <v-icon small class="mr-2" color="secondary">mdi-content-save</v-icon>
+          <span class="secondary--text">Guardar</span>
         </v-btn>
       </v-card-actions>
     </v-card>
