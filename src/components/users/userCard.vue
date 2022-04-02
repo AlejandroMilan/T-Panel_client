@@ -1,6 +1,6 @@
 <template>
   <div style="height: 100%">
-    <v-card outlined :loading="loading" height="100%">
+    <v-card tile flat :loading="loading" height="100%">
       <v-card-title
         >{{ currentUser ? currentUser.name : "" }}
         <v-spacer></v-spacer>
@@ -19,12 +19,14 @@
                 @click="methodLaunched = option.method"
                 :disabled="!canUse(option.permission)"
               >
-                <v-list-item-icon
-                  ><v-icon :color="option.color">{{
-                    option.icon
-                  }}</v-icon></v-list-item-icon
-                >
-                <v-list-item-title>{{ option.title }}</v-list-item-title>
+                <v-list-item-content>
+                  <v-list-item-title>
+                    <v-icon small :color="option.color" class="mr-2">{{
+                      option.icon
+                    }}</v-icon>
+                    <span>{{ option.title }}</span></v-list-item-title
+                  >
+                </v-list-item-content>
               </v-list-item>
             </v-list-item-group>
           </v-list>
@@ -65,8 +67,9 @@
             >No, cancelar</v-btn
           >
           <v-btn color="error" dark @click="deleteUser"
-            ><v-icon>mdi-delete-outline</v-icon> Sí, eliminar</v-btn
-          >
+            ><v-icon small class="mr-2">mdi-delete</v-icon>
+            <span>Sí, eliminar</span>
+          </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -128,7 +131,7 @@ export default {
     options: [
       {
         title: "Modificar",
-        color: "primary",
+        color: null,
         icon: "mdi-pencil",
         method: "activateEditUser",
         permission: 130,

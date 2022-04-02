@@ -1,9 +1,13 @@
 <template>
   <v-dialog width="600" v-model="show" persistent>
     <v-card :loading="loading">
-      <v-card-title>{{
-        currentUser ? currentUser.name : "Nuevo usuario"
-      }}</v-card-title>
+      <v-card-title>
+        <span>{{ currentUser ? currentUser.name : "Nuevo usuario" }}</span>
+        <v-spacer></v-spacer>
+        <v-btn icon @click="$emit('cancel')">
+          <v-icon>mdi-close</v-icon>
+        </v-btn>
+      </v-card-title>
       <v-card-text>
         <v-row dense>
           <v-col cols="12" v-if="signupError" class="my-5">
@@ -15,7 +19,7 @@
               label="Nombre completo"
               outlined
               dense
-              color="primary"
+              color="secondary"
               :disabled="loading"
               :error-messages="errors.name"
               @input="validateName()"
@@ -28,7 +32,7 @@
               label="Correo electrónico"
               outlined
               dense
-              color="primary"
+              color="secondary"
               :disabled="loading"
               :error-messages="errors.email"
               @input="validateEmail()"
@@ -43,7 +47,7 @@
               outlined
               type="password"
               dense
-              color="primary"
+              color="secondary"
               :disabled="loading"
               :error-messages="errors.firstPassword"
               @input="validateFirstPassword()"
@@ -58,7 +62,7 @@
               outlined
               type="password"
               dense
-              color="primary"
+              color="secondary"
               :disabled="loading"
               :error-messages="errors.secondPassword"
               @input="validateSecondPassword()"
@@ -73,6 +77,8 @@
               :items="roles"
               item-value="role"
               item-text="name"
+              color="secondary"
+              item-color="secondary"
               :hint="
                 roles.length > 0
                   ? roles.filter((e) => e.role == role)[0].description
@@ -92,6 +98,8 @@
               :items="branchOffices"
               item-value="_id"
               item-text="name"
+              color="secondary"
+              item-color="secondary"
               hint="La sucursal limitará las reparaciones a las que el usuario tendrá accesso"
               :disabled="loading"
               persistent-hint
@@ -108,6 +116,8 @@
               multiple
               chips
               outlined
+              color="secondary"
+              item-color="secondary"
               hint="Al cambiar de tipo de usuario, se adaptarán los permisos correspondientes al tipo seleccionado. Sin embargo, puedes cambiarlos a tu gusto."
               persistent-hint
             ></v-select>
@@ -116,16 +126,19 @@
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="secondary" outlined @click="$emit('cancel')"
-          >Cancelar</v-btn
-        >
+        <v-btn color="secondary" outlined @click="$emit('cancel')">
+          <v-icon small class="mr-2">mdi-close</v-icon>
+          <span>Cancelar</span>
+        </v-btn>
         <v-btn
           color="primary"
           :disabled="loading || !isFormValid"
           :loading="loading"
           @click="submit"
-          >Guardar</v-btn
         >
+          <v-icon small class="mr-2" color="secondary">mdi-content-save</v-icon>
+          <span class="secondary--text">Guardar</span>
+        </v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>

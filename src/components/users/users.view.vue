@@ -16,8 +16,8 @@
       >
         <div class="d-flex justify-end">
           <v-btn color="primary" @click="createUser = true">
-            <v-icon>mdi-plus</v-icon>
-            Añadir usuario</v-btn
+            <v-icon small class="mr-2" color="secondary">mdi-plus</v-icon>
+            <span class="secondary--text">Añadir usuario</span></v-btn
           >
           <userDialog
             v-if="createUser"
