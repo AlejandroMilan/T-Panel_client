@@ -1,8 +1,12 @@
 <template>
   <div class="py-3">
-    <v-card outlined>
+    <v-card flat tile>
+      <v-toolbar color="secondary" dark flat dense>
+        <v-toolbar-title>Listado de reparaciones</v-toolbar-title>
+      </v-toolbar>
       <v-card-text>
-        <v-container v-if="selectedRepairs.length">
+        <v-container v-if="selectedRepairs.length" class="pt-0">
+          <v-subheader class="px-0">Acciones disponibles:</v-subheader>
           <div class="flex">
             <v-btn
               v-if="
@@ -10,12 +14,10 @@
                 user.permissions.filter((e) => e.key === 331).length > 0
               "
               color="primary"
-              text
-              outlined
               @click="openManyRepairsStatusDialog()"
             >
-              <v-icon small class="mr-2">mdi-devices</v-icon>
-              <span>Modificar estado</span>
+              <v-icon small class="mr-2" color="secondary">mdi-devices</v-icon>
+              <span class="secondary--text">Modificar estado</span>
             </v-btn>
             <v-divider vertical></v-divider>
             <v-btn
@@ -25,8 +27,6 @@
                 selectedRepairs.length > 1
               "
               color="error"
-              text
-              outlined
               class="mx-2"
               @click="openDeleteManyRepairsDialog()"
             >
@@ -53,11 +53,15 @@
           :items-per-page="20"
         >
           <template v-slot:[`item.invoiceId`]="{ item }">
-            <router-link
-              class="link"
-              :to="`/panel/reparaciones/${item.invoiceId}`"
-              v-text="repairs.filter((e) => e._id === item._id)[0].invoiceId"
-            ></router-link>
+            <v-btn
+              color="primary"
+              small
+              elevation="0"
+              tile
+              @click="$router.push(`/panel/reparaciones/${item.invoiceId}`)"
+            >
+              <span class="secondary--text">{{ item.invoiceId }}</span>
+            </v-btn>
           </template>
           <template v-slot:[`item.status.title`]="{ item }">
             <v-chip
@@ -67,19 +71,13 @@
                 )
               "
               dark
-              link
-              @click="search = item.status.title"
+              label
             >
               {{ repairs.filter((e) => e._id === item._id)[0].status.title }}
             </v-chip>
           </template>
           <template v-slot:[`item.branchOffice.name`]="{ item }">
-            <v-chip
-              color="grey"
-              dark
-              link
-              @click="search = item.branchOffice.name"
-            >
+            <v-chip color="grey" dark label>
               {{ item.branchOffice.name }}
             </v-chip>
           </template>

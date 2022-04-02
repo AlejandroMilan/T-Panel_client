@@ -10,6 +10,8 @@
               v-model="status"
               outlined
               dense
+              color="secondary"
+              item-color="secondary"
               label="Nuevo estado"
               :items="statusItems"
               item-text="title"
@@ -25,11 +27,14 @@
           :disabled="loading"
           outlined
           @click="$emit('cancel')"
-          >Cancelar</v-btn
         >
-        <v-btn color="primary" :disabled="loading" @click="submit"
-          >Guardar</v-btn
-        >
+          <v-icon small class="mr-2">mdi-close</v-icon>
+          <span>Cancelar</span>
+        </v-btn>
+        <v-btn color="primary" :disabled="loading" @click="submit">
+          <v-icon small class="mr-2" color="secondary">mdi-content-save</v-icon>
+          <span class="secondary--text">Guardar</span>
+        </v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>

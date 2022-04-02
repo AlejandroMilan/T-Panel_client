@@ -1,8 +1,8 @@
 <template>
   <div>
-    <v-card v-if="!comments || !comments.length" outlined>
+    <v-card v-if="!comments || !comments.length" tile flat>
       <v-card-text>
-        <span class="text--secondary"
+        <span class="secondary--text"
           >No se han agregado comentarios a esta reparación.</span
         >
       </v-card-text>

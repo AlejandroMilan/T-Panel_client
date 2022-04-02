@@ -17,7 +17,7 @@
           <v-icon small color="secondary">mdi-exit-to-app</v-icon>
         </v-btn>
       </template>
-      <span class="text--secondary">Cerrar sesión</span>
+      <span class="secondary--text">Cerrar sesión</span>
     </v-tooltip>
   </v-app-bar>
 </template>

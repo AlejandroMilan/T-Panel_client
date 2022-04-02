@@ -8,9 +8,9 @@
         >
           <div :class="{ 'mt-3': !$vuetify.breakpoint.mdAndUp }">
             <v-btn
-              outlined
+              color="secondary"
+              tile
               small
-              text
               class="mr-1"
               :disabled="validPage === 1"
               @click="prevPage()"
@@ -18,30 +18,32 @@
             >
             <v-btn
               v-if="validPage !== 1"
+              tile
+              color="secondary"
               outlined
-              text
               small
               class="mr-1"
               @click="goToPage(1)"
               ><span>1</span></v-btn
             >
-            <v-btn color="primary" small class="mr-1"
-              ><span>{{ validPage }}</span></v-btn
+            <v-btn color="primary" tile small class="mr-1"
+              ><span class="secondary--text">{{ validPage }}</span></v-btn
             >
             <v-btn
               v-if="validPage !== lastPage && lastPage > 1"
+              color="secondary"
               small
+              tile
               outlined
-              text
-              class="mr-2"
+              class="mr-1"
               @click="goToPage(lastPage)"
             >
-              <span>{{ lastPage }}</span>
+              <span class="secondary--text">{{ lastPage }}</span>
             </v-btn>
             <v-btn
-              outlined
+              color="secondary"
+              tile
               small
-              text
               :disabled="validPage === lastPage"
               @click="nextPage()"
               ><v-icon>mdi-chevron-right</v-icon></v-btn
@@ -51,7 +53,7 @@
             <v-btn
               :disabled="loading"
               :loading="loading"
-              color="primary"
+              color="secondary"
               outlined
               @click="getRepairs"
               class="mr-2"
@@ -66,12 +68,11 @@
                   .length > 0
               "
               :disabled="loading"
-              :loading="loading"
               color="primary"
               @click="showRepairDialog = true"
             >
-              <v-icon>mdi-plus</v-icon>
-              Nueva reparación</v-btn
+              <v-icon small class="mr-2" color="secondary">mdi-plus</v-icon>
+              <span class="secondary--text">Nueva reparación</span></v-btn
             >
             <repairDialog
               v-if="showRepairDialog"

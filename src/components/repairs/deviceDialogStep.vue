@@ -10,7 +10,7 @@
           label="Marca del dispositivo"
           outlined
           dense
-          color="primary"
+          color="secondary"
           :error-messages="errors.trademark"
           @input="validateTrademark()"
           @blur="validateTrademark()"
@@ -23,7 +23,7 @@
           label="Modelo del dispositivo"
           outlined
           dense
-          color="primary"
+          color="secondary"
           :error-messages="errors.model"
           @input="validateModel()"
           @blur="validateModel()"
@@ -36,7 +36,7 @@
           label="Color del dispositivo"
           outlined
           dense
-          color="primary"
+          color="secondary"
           :error-messages="errors.color"
           @input="validateColor()"
           @blur="validateColor()"
@@ -49,7 +49,7 @@
           label="IMEI/ESN (opcional)"
           outlined
           dense
-          color="primary"
+          color="secondary"
         >
         </v-text-field>
       </v-col>
@@ -59,7 +59,7 @@
           label="Motivo de ingreso (falla)"
           outlined
           dense
-          color="primary"
+          color="secondary"
           :error-messages="errors.reasonForAdmission"
           @input="validateReasonForAdmission()"
           @blur="validateReasonForAdmission()"
@@ -73,25 +73,28 @@
           hint="Aquí puedes dar más detalles acerca de cómo es que se encuentra el dispositivo al momento de recibido"
           outlined
           dense
-          color="primary"
+          color="secondary"
         >
         </v-text-field>
       </v-col>
       <v-col cols="12" md="6">
         <v-checkbox
           v-model="canStart"
+          color="secondary"
           :label="`¿Puede encender?: ${canStart ? 'Sí' : 'No'}`"
         ></v-checkbox>
       </v-col>
       <v-col cols="12" md="6">
         <v-checkbox
           v-model="beforeRepaired"
+          color="secondary"
           :label="`¿Ya ha sido reparado?: ${beforeRepaired ? 'Sí' : 'No'}`"
         ></v-checkbox>
       </v-col>
       <v-col cols="12" md="6">
         <v-checkbox
           v-model="presentsMoisture"
+          color="secondary"
           :label="`¿Presenta humedad (está mojado)?: ${
             presentsMoisture ? 'Sí' : 'No'
           }`"
@@ -100,6 +103,7 @@
       <v-col cols="12" md="6">
         <v-checkbox
           v-model="blocking.hasBlocking"
+          color="secondary"
           :label="`¿Tiene algún método de desbloqueo?: ${
             blocking.hasBlocking ? 'Sí' : 'No'
           }`"
@@ -111,6 +115,7 @@
           label="Tipo de desbloqueo"
           outlined
           dense
+          color="secondary"
           :items="blockingTypes"
           item-text="name"
           item-value="value"
@@ -126,7 +131,7 @@
           label="PIN de desbloqueo"
           outlined
           dense
-          color="primary"
+          color="secondary"
           :error-messages="errors.pin"
           @input="validatePin()"
           @blur="validatePin()"
@@ -143,7 +148,7 @@
           label="Contraseña de desbloqueo"
           outlined
           dense
-          color="primary"
+          color="secondary"
           :error-messages="errors.password"
           @input="validatePassword()"
           @blur="validatePassword()"
@@ -173,8 +178,12 @@
             {{ $vuetify.breakpoint.mdAndUp ? "Cancelar" : null }}</v-btn
           >
           <v-btn color="primary" :disabled="!isFormValid" @click="validateStep">
-            {{ $vuetify.breakpoint.mdAndUp ? "Siguiente" : null
-            }}<v-icon small>mdi-arrow-right</v-icon></v-btn
+            <span class="secondary--text">{{
+              $vuetify.breakpoint.mdAndUp ? "Siguiente" : null
+            }}</span>
+            <v-icon small class="ml-2" color="secondary"
+              >mdi-arrow-right</v-icon
+            ></v-btn
           >
         </div>
       </v-col>

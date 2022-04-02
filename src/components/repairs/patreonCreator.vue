@@ -22,13 +22,13 @@
         <v-col cols="4" v-for="i in 9" :key="i" class="d-flex justify-center">
           <v-btn
             fab
-            :color="isInPatreon(i) ? 'primary' : 'grey'"
+            :color="isInPatreon(i) ? 'secondary' : 'grey'"
             small
             @click="
               !isInPatreon(i) && !readOnly && patreon.push(i) && emitPatreon()
             "
           >
-            {{ isInPatreon(i) ? patreon.indexOf(i) + 1 : null }}
+            <span>{{ isInPatreon(i) ? patreon.indexOf(i) + 1 : null }}</span>
           </v-btn>
         </v-col>
       </v-row>

@@ -16,6 +16,7 @@
                 <v-checkbox
                   readonly
                   v-model="deviceData.canStart"
+                  color="secondary"
                   class="ma-0"
                 ></v-checkbox>
                 <span class="text-body-1 mt-1">{{
@@ -37,6 +38,7 @@
                 <v-checkbox
                   readonly
                   v-model="deviceData.beforeRepaired"
+                  color="secondary"
                   class="ma-0"
                 ></v-checkbox>
                 <span class="text-body-1 mt-1">{{
@@ -56,6 +58,7 @@
                 <v-checkbox
                   readonly
                   v-model="deviceData.presentsMoisture"
+                  color="secondary"
                   class="ma-0"
                 ></v-checkbox>
                 <span class="text-body-1 mt-1">{{

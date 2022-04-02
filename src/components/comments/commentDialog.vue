@@ -7,10 +7,11 @@
           submitError
         }}</v-alert>
         <v-textarea
-          outlined
+          filled
           v-model="comment"
           rows="4"
           label="Comentario"
+          color="secondary"
           :error-messages="errors.comment"
           @input="validateComment"
           @blur="validateComment"
@@ -22,6 +23,7 @@
               loading ? 'Subiendo imagen...' : 'Agregar imagen (opcional)'
             "
             filled
+            color="secondary"
             prepend-inner-icon="mdi-camera"
             :disabled="loading"
             :prepend-icon="null"
@@ -36,16 +38,18 @@
           outlined
           :disabled="loading"
           @click="$emit('cancel')"
-          >Cancelar</v-btn
         >
+          <v-icon small class="mr-2">mdi-close</v-icon>
+          <span>Cancelar</span>
+        </v-btn>
         <v-btn
           color="primary"
           :loading="loading"
           :disabled="loading || !isFormValid"
           @click="submit"
         >
-          <v-icon small>mdi-content-save</v-icon>
-          Guardar
+          <v-icon small class="mr-2" color="secondary">mdi-content-save</v-icon>
+          <span class="secondary--text">Guardar</span>
         </v-btn>
       </v-card-actions>
     </v-card>

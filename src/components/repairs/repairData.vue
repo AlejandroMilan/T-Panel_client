@@ -1,12 +1,12 @@
 <template>
   <div>
-    <v-card outlined>
+    <v-card tile flat>
       <v-card-title>
         <span>{{
           `${repairData.device.trademark} ${repairData.device.model}`
         }}</span>
         <v-spacer></v-spacer>
-        <v-chip :color="getStatusColor(repairData.status.key)" dark>{{
+        <v-chip :color="getStatusColor(repairData.status.key)" label dark>{{
           repairData.status.title
         }}</v-chip>
       </v-card-title>

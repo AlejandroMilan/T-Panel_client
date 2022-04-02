@@ -19,7 +19,7 @@
             submitError
           }}</v-alert>
           <v-stepper v-model="formStep" vertical class="elevation-0">
-            <v-stepper-step step="1" :complete="formStep > 1"
+            <v-stepper-step step="1" color="accent" :complete="formStep > 1"
               >Datos del dispositivo</v-stepper-step
             >
             <v-stepper-content step="1">
@@ -29,7 +29,7 @@
                 :currentDevice="repair ? device : null"
               ></deviceDialogStep>
             </v-stepper-content>
-            <v-stepper-step step="2" :complete="formStep > 2"
+            <v-stepper-step step="2" color="accent" :complete="formStep > 2"
               >Datos del cliente</v-stepper-step
             >
             <v-stepper-content step="2">
@@ -39,13 +39,14 @@
                 @stepValid="customerStepValid"
               ></customerDialogStep>
             </v-stepper-content>
-            <v-stepper-step step="3">
+            <v-stepper-step step="3" color="accent">
               Otros datos
               <small>Folio del servicio, costos</small>
             </v-stepper-step>
             <v-stepper-content step="3">
               <generalDataDialogStep
                 :currentData="repair ? getGeneralData() : null"
+                :isLoading="loading"
                 @cancel="formStep = 2"
                 @stepValid="generalDataStepValid"
               ></generalDataDialogStep>

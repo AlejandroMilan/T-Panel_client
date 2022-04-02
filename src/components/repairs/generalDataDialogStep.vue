@@ -13,7 +13,7 @@
           label="Número de folio"
           outlined
           dense
-          color="primary"
+          color="secondary"
           :error-messages="errors.invoiceId"
           :disabled="loading"
           @input="validateInvoiceId()"
@@ -26,13 +26,15 @@
           <v-tooltip top>
             <template v-slot:activator="{ on, attrs }">
               <v-btn
-                icon
+                fab
+                x-small
                 color="primary"
+                light
                 v-bind="attrs"
                 v-on="on"
                 :loading="loading"
                 @click="getInvoiceId"
-                ><v-icon>mdi-autorenew</v-icon></v-btn
+                ><v-icon small color="secondary">mdi-autorenew</v-icon></v-btn
               >
             </template>
             <span>Generar folio automáticamente</span>
@@ -45,7 +47,7 @@
           label="Costo estimado (opcional)"
           outlined
           dense
-          color="primary"
+          color="secondary"
           :hint="convertToCurrency(payment.estimatedCost)"
           persistent-hint
           :error-messages="errors.estimatedCost"
@@ -61,7 +63,7 @@
           label="Adelanto del cliente (opcional)"
           outlined
           dense
-          color="primary"
+          color="secondary"
           :hint="convertToCurrency(payment.prePayment)"
           persistent-hint
           :error-messages="errors.prePayment"
@@ -82,6 +84,8 @@
           :disabled="loading"
           outlined
           dense
+          color="secondary"
+          item-color="secondary"
         ></v-select>
       </v-col>
       <v-col cols="12">
@@ -89,20 +93,26 @@
           <v-btn
             color="secondary"
             outlined
+            :disabled="loading"
             @click="$emit('cancel')"
             class="mr-2"
           >
-            <v-icon>mdi-arrow-left</v-icon>
+            <v-icon small class="mr-2">mdi-arrow-left</v-icon>
             {{ $vuetify.breakpoint.mdAndUp ? "Paso anterior" : null }}</v-btn
           >
           <v-btn
             color="primary"
             :disabled="!isFormValid || loading"
+            :loading="loading"
             @click="validateStep"
           >
-            <v-icon>mdi-content-save</v-icon>
-            Guardar
-            {{ $vuetify.breakpoint.mdAndUp ? "reparación" : null }}</v-btn
+            <v-icon small class="mr-2" color="secondary"
+              >mdi-content-save</v-icon
+            >
+            <span class="secondary--text"
+              >Guardar
+              {{ $vuetify.breakpoint.mdAndUp ? "reparación" : null }}</span
+            ></v-btn
           >
         </div>
       </v-col>
@@ -123,6 +133,7 @@ export default {
 
   props: {
     currentData: { type: Object, default: null },
+    isLoading: { type: Boolean, default: false },
   },
 
   mixins: [validationMixin, serverRequestMixin],
@@ -146,6 +157,10 @@ export default {
   watch: {
     currentData() {
       this.setCurrentData();
+    },
+
+    isLoading() {
+      this.loading = this.isLoading;
     },
   },
 

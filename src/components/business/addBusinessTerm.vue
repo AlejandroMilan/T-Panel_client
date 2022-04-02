@@ -33,7 +33,7 @@
           :loading="loading"
         >
           <v-icon small class="mr-2" color="secondary">mdi-content-save</v-icon>
-          <span class="text--secondary">Guardar término</span>
+          <span class="secondary--text">Guardar término</span>
         </v-btn>
       </v-card-actions>
     </v-card>

@@ -1,7 +1,9 @@
 <template>
   <div class="py-2">
-    <v-card outlined>
-      <v-card-title>Acciones</v-card-title>
+    <v-card tile flat>
+      <v-toolbar color="secondary" dark flat dense>
+        <v-toolbar-title>Acciones</v-toolbar-title>
+      </v-toolbar>
       <v-card-text>
         <v-row dense>
           <v-col

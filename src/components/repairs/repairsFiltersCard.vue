@@ -1,7 +1,10 @@
 <template>
-  <v-card outlined>
-    <v-card-title>Filtros</v-card-title>
-    <v-card-text>
+  <v-card tile flat>
+    <v-card-title v-if="false">Filtros</v-card-title>
+    <v-toolbar color="secondary" dark dense flat>
+      <v-toolbar-title>Filtros</v-toolbar-title>
+    </v-toolbar>
+    <v-card-text class="pt-5">
       <v-row dense>
         <v-col cols="12">
           <div
@@ -13,6 +16,7 @@
               dense
               label="Búsqueda"
               hint="Busca por folio, IMEI, dispositivo o cliente."
+              color="secondary"
               :disabled="isLoading"
               @keyup.enter="searchChanged()"
             ></v-text-field>
@@ -54,6 +58,7 @@
                 :items="sortValues"
                 item-text="text"
                 item-value="value"
+                color="secondary"
                 :disabled="isLoading"
               ></v-select>
               <v-select
@@ -63,14 +68,12 @@
                 :items="orderValues"
                 item-text="text"
                 item-value="value"
+                color="secondary"
                 :class="{ 'ml-2': isFullWidth && !isMobile }"
                 :disabled="isLoading"
               ></v-select>
             </div>
           </div>
-        </v-col>
-        <v-col cols="12" class="mt-3">
-          <span><small>Más filtros en construcción :D</small></span>
         </v-col>
       </v-row>
     </v-card-text>
