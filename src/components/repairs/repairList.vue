@@ -54,7 +54,7 @@
         >
           <template v-slot:[`item.invoiceId`]="{ item }">
             <v-btn
-              color="primary"
+              color="accent"
               small
               elevation="0"
               tile
