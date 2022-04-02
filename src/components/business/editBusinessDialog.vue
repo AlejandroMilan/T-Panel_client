@@ -21,7 +21,7 @@
                 label="Nombre del negocio"
                 outlined
                 dense
-                color="primary"
+                color="secondary"
                 :disabled="loading"
                 :error-messages="errors.name"
                 @input="validateName()"
@@ -35,6 +35,7 @@
                 :items="validTimezones"
                 outlined
                 dense
+                color="secondary"
                 :item-text="`${timezone} (HH:MM)`"
                 label="Zona horaria"
                 hint="La zona horaria está definida por tu país, y zona en la mayoría de casos."
@@ -57,7 +58,7 @@
                 label="Correo electrónico"
                 outlined
                 dense
-                color="primary"
+                color="secondary"
                 :disabled="loading"
                 :error-messages="errors.email"
                 @input="validateEmail()"
@@ -71,7 +72,7 @@
                 label="Número telefónico"
                 outlined
                 dense
-                color="primary"
+                color="secondary"
                 :disabled="loading"
                 :error-messages="errors.phoneNumber"
                 @input="validatePhoneNumber()"
@@ -85,7 +86,7 @@
                 label="Sitio web (opcional)"
                 outlined
                 dense
-                color="primary"
+                color="secondary"
                 :disabled="loading"
                 :error-messages="errors.website"
                 @input="validateWebsite()"
@@ -105,7 +106,7 @@
                 label="Calle"
                 outlined
                 dense
-                color="primary"
+                color="secondary"
                 :disabled="loading"
                 :error-messages="errors.street"
                 @input="validateField('street')"
@@ -119,7 +120,7 @@
                 label="Núm. Exterior"
                 outlined
                 dense
-                color="primary"
+                color="secondary"
                 :disabled="loading"
                 :error-messages="errors.extNumber"
                 @input="validateField('extNumber')"
@@ -133,7 +134,7 @@
                 label="Núm. Interior (opcional)"
                 outlined
                 dense
-                color="primary"
+                color="secondary"
                 :disabled="loading"
               >
               </v-text-field>
@@ -144,7 +145,7 @@
                 label="Colonia"
                 outlined
                 dense
-                color="primary"
+                color="secondary"
                 :disabled="loading"
                 :error-messages="errors.county"
                 @input="validateField('county')"
@@ -158,7 +159,7 @@
                 label="Ciudad"
                 outlined
                 dense
-                color="primary"
+                color="secondary"
                 :disabled="loading"
                 :error-messages="errors.city"
                 @input="validateField('city')"
@@ -172,7 +173,7 @@
                 label="Estado"
                 outlined
                 dense
-                color="primary"
+                color="secondary"
                 :disabled="loading"
                 :error-messages="errors.state"
                 @input="validateField('state')"
@@ -186,7 +187,7 @@
                 label="País"
                 outlined
                 dense
-                color="primary"
+                color="secondary"
                 :disabled="loading"
                 :error-messages="errors.country"
                 @input="validateField('country')"
@@ -199,15 +200,18 @@
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="secondary" outlined @click="$emit('cancel')"
-          >Cancelar</v-btn
+        <v-btn color="secondary" outlined @click="$emit('cancel')">
+          <v-icon small class="mr-2">mdi-close</v-icon>
+          <span>Cancelar</span></v-btn
         >
         <v-btn
           color="primary"
           :disabled="!isFormValid || loading"
           :loading="loading"
           @click="submit"
-          >Guardar</v-btn
+        >
+          <v-icon small class="mr-2" color="secondary">mdi-content-save</v-icon>
+          <span class="text--primary">Guardar</span></v-btn
         >
       </v-card-actions>
     </v-card>

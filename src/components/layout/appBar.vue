@@ -1,17 +1,23 @@
 <template>
-  <v-app-bar app color="primary" dark>
-    <v-app-bar-nav-icon
-      @click="isNavigating = !isNavigating"
-    ></v-app-bar-nav-icon>
+  <v-app-bar app color="secondary" dark>
+    <v-btn icon @click="isNavigating = !isNavigating">
+      <v-icon color="primary">mdi-menu</v-icon>
+    </v-btn>
     <v-toolbar-title>{{ $route.name }}</v-toolbar-title>
     <v-spacer></v-spacer>
     <v-tooltip left color="primary">
       <template v-slot:activator="{ on, attrs }">
-        <v-btn icon @click="exit" v-bind="attrs" v-on="on">
-          <v-icon>mdi-exit-to-app</v-icon>
+        <v-btn
+          color="primary"
+          elevation="0"
+          @click="exit"
+          v-bind="attrs"
+          v-on="on"
+        >
+          <v-icon small color="secondary">mdi-exit-to-app</v-icon>
         </v-btn>
       </template>
-      <span>Cerrar sesión</span>
+      <span class="text--secondary">Cerrar sesión</span>
     </v-tooltip>
   </v-app-bar>
 </template>

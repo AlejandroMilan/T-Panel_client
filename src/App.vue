@@ -70,6 +70,10 @@ export default {
 </script>
 
 <style lang="scss">
+#app {
+  background-color: var(--v-background-base);
+}
+
 .v-card__text,
 .v-card__title {
   word-break: normal; /* maybe !important  */

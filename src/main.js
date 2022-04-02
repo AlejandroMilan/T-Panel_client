@@ -12,12 +12,14 @@ const vuetify = new Vuetify({
   theme: {
     themes: {
       light: {
-        primary: "#1976d2",
-        secondary: "#263238",
-        accent: "#FFC107",
+        primary: "#00FCA7",
+        secondary: "#000",
+        accent: "#1CDBFF",
         error: "#B71C1C",
+        background: "#f3f3f3",
       },
     },
+    options: { customProperties: true },
   },
 });
 

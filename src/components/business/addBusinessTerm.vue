@@ -7,7 +7,8 @@
           <v-col cols="12">
             <v-textarea
               v-model="newTerm"
-              outlined
+              filled
+              color="secondary"
               label="Nuevo término"
               @input="validateNewTerm"
               @blur="validateNewTerm"
@@ -31,8 +32,8 @@
           @click="submit"
           :loading="loading"
         >
-          <v-icon small>mdi-content-save</v-icon>
-          <span>Guardar término</span>
+          <v-icon small class="mr-2" color="secondary">mdi-content-save</v-icon>
+          <span class="text--secondary">Guardar término</span>
         </v-btn>
       </v-card-actions>
     </v-card>

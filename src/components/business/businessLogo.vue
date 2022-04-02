@@ -1,9 +1,9 @@
 <template>
   <div>
-    <v-card outlined :loading="loading" height="100%">
-      <v-card-title>
-        <span> Logo del negocio </span>
-      </v-card-title>
+    <v-card tile flat :loading="loading" height="100%">
+      <v-toolbar color="secondary" dark dense flat>
+        <v-toolbar-title>Logo del negocio</v-toolbar-title>
+      </v-toolbar>
       <v-card-text>
         <v-img :src="imageSrc"></v-img>
       </v-card-text>
@@ -20,6 +20,9 @@
               <v-file-input
                 v-model="imageFile"
                 :label="loading ? 'Subiendo imagen...' : 'Seleccionar logo'"
+                color="primary"
+                dark
+                background-color="secondary"
                 filled
                 prepend-inner-icon="mdi-camera"
                 :disabled="loading"

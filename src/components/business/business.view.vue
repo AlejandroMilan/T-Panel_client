@@ -5,14 +5,14 @@
       <v-col cols="12">
         <v-alert v-if="error" type="error" dense outlined>{{ error }}</v-alert>
       </v-col>
-      <v-col cols="12" md="6">
+      <v-col cols="12" md="9">
         <businessData
           :loading="loading"
           :business="business"
           @businessUpdated="businessUpdated"
         ></businessData>
       </v-col>
-      <v-col cols="12" md="6">
+      <v-col cols="12" md="3">
         <businessLogo
           v-if="business"
           :logoUrl="business.logoUrl"

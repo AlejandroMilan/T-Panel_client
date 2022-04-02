@@ -1,8 +1,8 @@
 <template>
   <div>
-    <v-card outlined :loading="loadingLocal">
-      <v-card-title class="d-fex justify-space-between align-center">
-        <span style="max-width: 75%">Términos y condiciones de servicio</span>
+    <v-card flat tile :loading="loadingLocal">
+      <v-toolbar color="secondary" dark dense flat>
+        <v-toolbar-title>Términos y condiciones de servicio</v-toolbar-title>
         <v-spacer></v-spacer>
         <v-tooltip left>
           <template v-slot:activator="{ on, attrs }">
@@ -11,14 +11,14 @@
               :disabled="loading"
               @click="showBusinessTermDialog = true"
             >
-              <v-icon class="mr-2" v-bind="attrs" v-on="on">
+              <v-icon color="primary" class="mr-2" v-bind="attrs" v-on="on">
                 mdi-plus-circle
               </v-icon>
             </v-btn>
           </template>
           <span>Añadir condición</span>
         </v-tooltip>
-      </v-card-title>
+      </v-toolbar>
       <v-card-subtitle
         >Aquí puedes expresar cualquier tipo de condición de servicio que tus
         clientes aceptan al solicitar una reparación en tu negocio, estos datos
@@ -32,7 +32,6 @@
         <v-alert
           v-if="!error && !loading && !termsLocal.length"
           text
-          outlined
           type="info"
           >Aún no has registrado términos y condiciones de tu servicio, da click
           en el botón <v-icon small color="info">mdi-plus-circle</v-icon> para
@@ -53,12 +52,17 @@
                     :disabled="loading"
                     @click="deleteCondition(index)"
                   >
-                    <v-icon class="mr-2" v-bind="attrs" v-on="on">
+                    <v-icon
+                      color="secondary"
+                      class="mr-2"
+                      v-bind="attrs"
+                      v-on="on"
+                    >
                       mdi-delete
                     </v-icon>
                   </v-btn>
                 </template>
-                <span>Eliminar</span>
+                <span>Eliminar término</span>
               </v-tooltip>
             </v-list-item-icon>
           </v-list-item>
