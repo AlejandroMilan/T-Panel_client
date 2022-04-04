@@ -2,7 +2,7 @@
   <v-navigation-drawer app v-model="isNavigating">
     <div class="user-details">
       <v-card tile color="secondary" dark class="pt-10">
-        <div class="px-5">
+        <div v-if="false" class="px-5">
           <v-img :src="require('../../assets/logo.jpeg')" width="100%"></v-img>
         </div>
         <v-list-item>

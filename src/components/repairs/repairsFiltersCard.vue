@@ -69,6 +69,7 @@
                 item-text="text"
                 item-value="value"
                 color="secondary"
+                item-color="secondary"
                 :class="{ 'ml-2': isFullWidth && !isMobile }"
                 :disabled="isLoading"
               ></v-select>
