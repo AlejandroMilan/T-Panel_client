@@ -211,7 +211,7 @@
           @click="submit"
         >
           <v-icon small class="mr-2" color="secondary">mdi-content-save</v-icon>
-          <span class="primary--text">Guardar</span></v-btn
+          <span class="secondary--text">Guardar</span></v-btn
         >
       </v-card-actions>
     </v-card>
