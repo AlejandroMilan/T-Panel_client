@@ -3,7 +3,7 @@
     <v-progress-linear
       v-if="loadingPrint"
       indeterminate
-      color="primary"
+      color="secondary"
     ></v-progress-linear>
     <v-alert type="error" outlined v-if="!loadingPrint && errorPrint">
       <v-row align="center">
@@ -13,7 +13,7 @@
     <v-progress-linear
       v-if="loading"
       indeterminate
-      color="primary"
+      color="accent"
     ></v-progress-linear>
     <v-alert type="error" v-if="!loading && error">
       <v-row align="center">
