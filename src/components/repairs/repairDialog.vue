@@ -4,7 +4,7 @@
       persistent
       v-model="show"
       :fullscreen="!$vuetify.breakpoint.mdAndUp"
-      :width="$vuetify.breakpoint.mdAndUp ? '750' : null"
+      :width="$vuetify.breakpoint.mdAndUp ? '850' : null"
     >
       <v-card :loading="loading">
         <v-card-title

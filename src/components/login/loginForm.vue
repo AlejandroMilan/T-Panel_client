@@ -8,7 +8,7 @@
             label="Correo electrónico"
             outlined
             dense
-            color="primary"
+            color="secondary"
             :error-messages="errors.email"
             :disabled="loading"
             @input="validateEmail()"
@@ -21,6 +21,7 @@
             outlined
             dense
             label="Contraseña"
+            color="secondary"
             :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
             :type="showPassword ? 'text' : 'password'"
             @click:append="showPassword = !showPassword"
@@ -35,14 +36,16 @@
         <v-col cols="12" class="mt-5">
           <v-btn
             color="primary"
+            tile
             :disabled="!isFormValid"
             @click="submit"
             :loading="loading"
-            >Iniciar sesión</v-btn
           >
+            <span class="secondary--text">Iniciar sesión</span>
+          </v-btn>
         </v-col>
         <v-col cols="12" v-if="loginError" class="my-5">
-          <v-alert type="error" dense outlined>{{ loginError }}</v-alert>
+          <v-alert type="error" dense text>{{ loginError }}</v-alert>
         </v-col>
       </v-row>
     </v-form>

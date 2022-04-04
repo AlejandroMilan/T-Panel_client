@@ -38,32 +38,14 @@
         </v-list-item-group>
       </v-list>
     </div>
-
-    <template v-slot:append>
-      <div class="pa-2">
-        <v-btn color="secondary" small block @click="showDonationDialog = true">
-          <v-icon small>mdi-currency-usd</v-icon>
-          <span>Realizar donación</span>
-        </v-btn>
-      </div>
-    </template>
-
-    <donation-dialog
-      v-if="showDonationDialog"
-      :show="showDonationDialog"
-      @cancel="showDonationDialog = false"
-    ></donation-dialog>
   </v-navigation-drawer>
 </template>
 
 <script>
-import donationDialog from "./donationDialog.vue";
 import { mapGetters } from "vuex";
 
 export default {
   name: "navigationDrawer",
-
-  components: { "donation-dialog": donationDialog },
 
   computed: {
     ...mapGetters(["user"]),
@@ -108,8 +90,6 @@ export default {
         route: "/panel/sucursales",
       },
     ],
-
-    showDonationDialog: false,
   }),
 
   methods: {
