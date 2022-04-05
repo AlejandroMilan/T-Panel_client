@@ -17,25 +17,27 @@
               label="Búsqueda"
               hint="Busca por folio, IMEI, dispositivo o cliente."
               color="secondary"
-              :disabled="isLoading"
-              @keyup.enter="searchChanged()"
+              :disabled="isLoading || loading"
+              @keyup.enter="queryChanged()"
             ></v-text-field>
             <v-btn
               v-if="!search"
-              text
               small
+              tile
               outlined
+              color="secondary"
               class="mt-1"
               :class="{ 'ml-2': !isMobile }"
-              :disabled="isLoading"
-              @click="searchChanged()"
+              :disabled="isLoading || loading"
+              @click="queryChanged()"
             >
               <v-icon>mdi-magnify</v-icon>
             </v-btn>
             <v-btn
               v-else
-              text
               small
+              color="secondary"
+              tile
               outlined
               class="ml-2 mt-1"
               @click="clearSearch()"
@@ -59,7 +61,9 @@
                 item-text="text"
                 item-value="value"
                 color="secondary"
-                :disabled="isLoading"
+                item-color="secondary"
+                :disabled="isLoading || loading"
+                @change="queryChanged()"
               ></v-select>
               <v-select
                 v-model="order"
@@ -71,10 +75,50 @@
                 color="secondary"
                 item-color="secondary"
                 :class="{ 'ml-2': isFullWidth && !isMobile }"
-                :disabled="isLoading"
+                :disabled="isLoading || loading"
+                @change="queryChanged()"
               ></v-select>
             </div>
           </div>
+        </v-col>
+      </v-row>
+      <v-row dense>
+        <v-col cols="12" :md="isFullWidth ? '4' : '12'">
+          <v-select
+            v-model="status"
+            multiple
+            no-data-text="Sin estados disponibles"
+            :items="statusValues"
+            item-value="key"
+            item-text="title"
+            color="secondary"
+            item-color="secondary"
+            dense
+            label="Estado"
+            @change="queryChanged()"
+            :disabled="isLoading || loading"
+          ></v-select>
+        </v-col>
+        <v-col
+          v-if="hasPermission(321)"
+          cols="12"
+          :md="isFullWidth ? '4' : '12'"
+        >
+          <v-select
+            v-model="branchOffice"
+            no-data-text="Sin sucursales disponibles"
+            :items="branchOffices"
+            item-value="_id"
+            item-text="name"
+            color="secondary"
+            item-color="secondary"
+            dense
+            label="Sucursal"
+            :disabled="isLoading || loading"
+            :append-icon="branchOffice ? 'mdi-close' : 'mdi-chevron-down'"
+            @click:append="clearBranchOffice()"
+            @change="queryChanged()"
+          ></v-select>
         </v-col>
       </v-row>
     </v-card-text>
@@ -82,18 +126,22 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+import serverRequestMixin from "@/mixins/serverRequest.mixin";
+
 export default {
   name: "repairsFiltersCard",
+
+  mixins: [serverRequestMixin],
 
   props: {
     isLoading: { type: Boolean, default: false },
     isFullWidth: { type: Boolean, default: false },
-    currentSearch: { type: String, required: false },
-    currentSort: { type: String, required: true },
-    currentOrder: { type: String, required: true },
+    currentQuery: { type: Object, default: () => null },
   },
 
   data: () => ({
+    loading: false,
     search: "",
     sortValues: [
       {
@@ -117,46 +165,102 @@ export default {
     ],
     sortBy: "admissionDate",
     order: "desc",
+    statusValues: [],
+    status: [],
+    branchOffices: [],
+    branchOffice: "",
   }),
 
   computed: {
+    ...mapGetters(["hasPermission"]),
+
     isMobile() {
       return this.$vuetify.breakpoint.mdAndDown;
     },
   },
 
   watch: {
-    currentSearch() {
+    currentQuery() {
       this.setCurrentData();
-    },
-
-    sortBy(value) {
-      this.$emit("sortChanged", value);
-    },
-
-    order(value) {
-      this.$emit("orderChanged", value);
     },
   },
 
-  mounted() {
+  async mounted() {
+    await this.getStatus();
+    if (this.hasPermission(321)) await this.getBranchOffices();
     this.setCurrentData();
   },
 
   methods: {
     setCurrentData() {
-      if (this.currentSearch) this.search = this.currentSearch || "";
-      if (this.currentSort) this.sortBy = this.currentSort || "admissionDate";
-      if (this.currentOrder) this.order = this.currentOrder || "desc";
+      if (this.currentQuery) {
+        if (typeof this.currentQuery.textSearch === "string")
+          this.search = this.currentQuery.textSearch;
+        if (this.currentQuery.order) this.order = this.currentQuery.order;
+        if (this.currentQuery.sortBy) this.sortBy = this.currentQuery.sortBy;
+        if (typeof this.currentQuery.branchOffice === "string")
+          this.branchOffice = this.currentQuery.branchOffice;
+
+        if (this.currentQuery.status) {
+          if (Array.isArray(this.currentQuery.status))
+            this.status = this.currentQuery.status.map((e) => Number(e));
+          else this.status = [Number(this.currentQuery.status)];
+        }
+      } else {
+        this.search = "";
+      }
     },
 
     clearSearch() {
       this.search = "";
-      this.searchChanged();
+      this.queryChanged();
     },
 
-    searchChanged() {
-      this.$emit("searchChanged", this.search);
+    clearBranchOffice() {
+      this.branchOffice = "";
+      this.queryChanged();
+    },
+
+    queryChanged() {
+      const query = {
+        ...(typeof this.search === "string" && { textSearch: this.search }),
+        ...(this.order && { order: this.order }),
+        ...(this.sortBy && { sortBy: this.sortBy }),
+        ...(typeof this.branchOffice === "string" && {
+          branchOffice: this.branchOffice,
+        }),
+      };
+      if (this.status) {
+        query.status = this.status.length > 1 ? this.status : this.status[0];
+      }
+
+      this.$emit("queryChanged", query);
+    },
+
+    async getStatus() {
+      this.loading = true;
+
+      try {
+        const serverResponse = await this.getRequest("/status");
+        this.loading = false;
+
+        this.statusValues = serverResponse.status;
+      } catch (error) {
+        console.error(error);
+      }
+    },
+
+    async getBranchOffices() {
+      this.loading = true;
+
+      try {
+        const serverResponse = await this.getRequest("/branchOffices");
+        this.loading = false;
+
+        this.branchOffices = serverResponse.branchOffices;
+      } catch (error) {
+        console.error(error);
+      }
     },
   },
 };

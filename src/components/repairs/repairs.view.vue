@@ -87,13 +87,9 @@
         <filters-card
           class="my-3"
           :isLoading="loading"
-          :currentSearch="validTextSearch"
+          :currentQuery="$route.query"
           :isFullWidth="viewFiltersWithFullWith"
-          :currentSort="validSortValue"
-          :currentOrder="validOrderValue"
-          @searchChanged="searchChanged"
-          @sortChanged="sortChanged"
-          @orderChanged="orderChanged"
+          @queryChanged="queryChanged"
         ></filters-card>
       </v-col>
       <v-col cols="12" :md="viewFiltersWithFullWith ? '12' : '9'">
@@ -218,7 +214,17 @@ export default {
       this.error = "";
       this.loading = true;
       try {
-        const response = await this.getRequest(this.getRepairsString);
+        const routeQuery = this.$route.query;
+        const query = {
+          ...(routeQuery.textSearch && { textSearch: routeQuery.textSearch }),
+          ...(routeQuery.order && { order: routeQuery.order }),
+          ...(routeQuery.sortBy && { sortBy: routeQuery.sortBy }),
+          ...(routeQuery.status && { status: routeQuery.status }),
+          ...(routeQuery.branchOffice && {
+            branchOffice: routeQuery.branchOffice,
+          }),
+        };
+        const response = await this.getRequest("/repairs", true, query);
         this.loading = false;
 
         this.repairs = response.repairs;
@@ -337,6 +343,28 @@ export default {
           sortBy: this.validSortValue,
           ...(payload && { order: payload }),
         },
+      });
+    },
+
+    queryChanged(query) {
+      const haveSameData = function (obj1, obj2) {
+        const obj1Length = Object.keys(obj1).length;
+        const obj2Length = Object.keys(obj2).length;
+
+        if (obj1Length === obj2Length) {
+          return Object.keys(obj1).every(
+            // eslint-disable-next-line no-prototype-builtins
+            (key) => obj2.hasOwnProperty(key) && obj2[key] === obj1[key]
+          );
+        }
+        return false;
+      };
+
+      if (haveSameData(query, this.$route.query)) return;
+
+      this.$router.push({
+        name: "Reparaciones",
+        query,
       });
     },
   },
