@@ -4,7 +4,7 @@
       <v-toolbar color="secondary" dark dense flat>
         <v-toolbar-title>Términos y condiciones de servicio</v-toolbar-title>
         <v-spacer></v-spacer>
-        <v-tooltip left>
+        <v-tooltip v-if="hasPermission(230)" left>
           <template v-slot:activator="{ on, attrs }">
             <v-btn
               icon
@@ -30,7 +30,7 @@
       <v-card-text>
         <v-alert text outlined type="error" v-if="error">{{ error }}</v-alert>
         <v-alert
-          v-if="!error && !loading && !termsLocal.length"
+          v-if="!error && !loading && !termsLocal.length && hasPermission(230)"
           text
           type="info"
           >Aún no has registrado términos y condiciones de tu servicio, da click
@@ -44,7 +44,7 @@
                 term
               }}</v-list-item-subtitle>
             </v-list-item-content>
-            <v-list-item-icon>
+            <v-list-item-icon v-if="hasPermission(230)">
               <v-tooltip left>
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn
@@ -82,6 +82,7 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import serverRequestMixin from "@/mixins/serverRequest.mixin";
 
 import addBusinessTerm from "./addBusinessTerm";
@@ -128,6 +129,10 @@ export default {
     error: null,
     showBusinessTermDialog: false,
   }),
+
+  computed: {
+    ...mapGetters(["hasPermission"]),
+  },
 
   mounted() {
     this.termsLocal = this.terms;

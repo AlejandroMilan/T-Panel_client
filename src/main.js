@@ -12,8 +12,8 @@ const vuetify = new Vuetify({
   theme: {
     themes: {
       light: {
-        primary: "#FFE082",
-        secondary: "#263238",
+        primary: "#3ca6a6",
+        secondary: "#012e40",
         accent: "#B3E5FC",
         error: "#B71C1C",
         background: "#f3f3f3",
