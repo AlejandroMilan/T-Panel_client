@@ -48,6 +48,9 @@
               @click="nextPage()"
               ><v-icon>mdi-chevron-right</v-icon></v-btn
             >
+            <span v-if="!$vuetify.breakpoint.smAndDown" class="ml-2"
+              >Resultados: {{ repairsCount }}</span
+            >
           </div>
           <div>
             <v-btn
