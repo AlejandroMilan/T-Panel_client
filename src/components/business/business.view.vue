@@ -20,6 +20,7 @@
       </v-col>
       <v-col cols="12">
         <businessTerms
+          v-if="business"
           :terms="business ? business.termsAndConditions : []"
           :businessId="user.businessId"
           :loading="loading"

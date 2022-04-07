@@ -1,5 +1,5 @@
 <template>
-  <v-card tile flat>
+  <v-card tile>
     <v-card-title class="secondary--text"
       >Bienvenid@ {{ user.name.split(" ")[0] }}</v-card-title
     >

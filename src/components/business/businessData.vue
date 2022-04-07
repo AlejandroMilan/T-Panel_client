@@ -51,6 +51,7 @@
 
 <script>
 import { mapGetters } from "vuex";
+import { getFullDate } from "../../helpers/date.helper";
 import editBusinessDialog from "./editBusinessDialog";
 
 export default {
@@ -108,6 +109,8 @@ export default {
   },
 
   methods: {
+    getFullDate,
+
     setSections() {
       const noFieldString = "Sin registrar";
 
@@ -119,6 +122,12 @@ export default {
         {
           fieldName: "Zona horaria",
           fieldValue: this.business ? this.business.timezone : noFieldString,
+        },
+        {
+          fieldName: "Expiración de licencia",
+          fieldValue: this.business
+            ? this.getFullDate(this.business.licenseExpiration)
+            : noFieldString,
         },
       ];
 
