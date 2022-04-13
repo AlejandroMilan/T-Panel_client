@@ -21,11 +21,12 @@
           <v-btn
             v-if="canAddBranches"
             color="primary"
+            dark
             class="ml-2"
             @click="showBranchDialog = true"
           >
-            <v-icon small class="mr-2" color="secondary">mdi-plus</v-icon>
-            <span class="secondary--text">Agregar sucursal</span>
+            <v-icon small class="mr-2">mdi-plus</v-icon>
+            <span>Agregar sucursal</span>
           </v-btn>
         </div>
       </v-col>

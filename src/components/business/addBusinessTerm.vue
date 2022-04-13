@@ -28,12 +28,13 @@
         >
         <v-btn
           color="primary"
+          dark
           :disabled="!isFormValid || loading"
           @click="submit"
           :loading="loading"
         >
-          <v-icon small class="mr-2" color="secondary">mdi-content-save</v-icon>
-          <span class="secondary--text">Guardar término</span>
+          <v-icon small class="mr-2">mdi-content-save</v-icon>
+          <span>Guardar término</span>
         </v-btn>
       </v-card-actions>
     </v-card>

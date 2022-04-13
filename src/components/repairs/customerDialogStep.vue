@@ -64,13 +64,14 @@
             <v-icon small class="mr-2">mdi-arrow-left</v-icon>
             {{ $vuetify.breakpoint.mdAndUp ? "Paso anterior" : null }}</v-btn
           >
-          <v-btn color="primary" :disabled="!isFormValid" @click="validateStep">
-            <span class="secondary--text">{{
-              $vuetify.breakpoint.mdAndUp ? "Siguiente" : null
-            }}</span>
-            <v-icon small class="ml-2" color="secondary"
-              >mdi-arrow-right</v-icon
-            >
+          <v-btn
+            color="primary"
+            dark
+            :disabled="!isFormValid"
+            @click="validateStep"
+          >
+            <span>{{ $vuetify.breakpoint.mdAndUp ? "Siguiente" : null }}</span>
+            <v-icon small class="ml-2">mdi-arrow-right</v-icon>
           </v-btn>
         </div>
       </v-col>

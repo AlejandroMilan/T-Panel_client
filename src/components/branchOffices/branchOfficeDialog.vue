@@ -40,12 +40,13 @@
         </v-btn>
         <v-btn
           color="primary"
+          dark
           :loading="loading"
           :disabled="loading || !isFormValid"
           @click="submit"
         >
-          <v-icon small class="mr-2" color="secondary">mdi-content-save</v-icon>
-          <span class="secondary--text">Guardar</span>
+          <v-icon small class="mr-2">mdi-content-save</v-icon>
+          <span>Guardar</span>
         </v-btn>
       </v-card-actions>
     </v-card>

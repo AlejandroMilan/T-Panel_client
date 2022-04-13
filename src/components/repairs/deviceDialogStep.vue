@@ -177,13 +177,14 @@
             <v-icon small>mdi-close</v-icon>
             {{ $vuetify.breakpoint.mdAndUp ? "Cancelar" : null }}</v-btn
           >
-          <v-btn color="primary" :disabled="!isFormValid" @click="validateStep">
-            <span class="secondary--text">{{
-              $vuetify.breakpoint.mdAndUp ? "Siguiente" : null
-            }}</span>
-            <v-icon small class="ml-2" color="secondary"
-              >mdi-arrow-right</v-icon
-            ></v-btn
+          <v-btn
+            color="primary"
+            dark
+            :disabled="!isFormValid"
+            @click="validateStep"
+          >
+            <span>{{ $vuetify.breakpoint.mdAndUp ? "Siguiente" : null }}</span>
+            <v-icon small class="ml-2">mdi-arrow-right</v-icon></v-btn
           >
         </div>
       </v-col>

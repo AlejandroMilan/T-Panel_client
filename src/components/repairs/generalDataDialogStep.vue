@@ -102,14 +102,13 @@
           >
           <v-btn
             color="primary"
+            dark
             :disabled="!isFormValid || loading"
             :loading="loading"
             @click="validateStep"
           >
-            <v-icon small class="mr-2" color="secondary"
-              >mdi-content-save</v-icon
-            >
-            <span class="secondary--text"
+            <v-icon small class="mr-2">mdi-content-save</v-icon>
+            <span
               >Guardar
               {{ $vuetify.breakpoint.mdAndUp ? "reparación" : null }}</span
             ></v-btn

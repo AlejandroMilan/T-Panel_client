@@ -36,12 +36,13 @@
         <v-col cols="12" class="mt-5">
           <v-btn
             color="primary"
+            dark
             tile
             :disabled="!isFormValid"
             @click="submit"
             :loading="loading"
           >
-            <span class="secondary--text">Iniciar sesión</span>
+            <span>Iniciar sesión</span>
           </v-btn>
         </v-col>
         <v-col cols="12" v-if="loginError" class="my-5">

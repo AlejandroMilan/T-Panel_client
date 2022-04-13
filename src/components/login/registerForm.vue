@@ -81,12 +81,13 @@
           >
           <v-btn
             color="primary"
+            dark
             :disabled="!isFormValid || loading"
             :loading="loading"
             class="ml-2"
             @click="submit"
           >
-            <span class="secondary--text">Crear cuenta</span>
+            <span>Crear cuenta</span>
           </v-btn>
         </v-col>
         <v-col cols="12" v-if="signupError" class="my-5">

@@ -26,8 +26,8 @@
               @click="goToPage(1)"
               ><span>1</span></v-btn
             >
-            <v-btn color="primary" tile small class="mr-1"
-              ><span class="secondary--text">{{ validPage }}</span></v-btn
+            <v-btn color="primary" dark tile small class="mr-1"
+              ><span>{{ validPage }}</span></v-btn
             >
             <v-btn
               v-if="validPage !== lastPage && lastPage > 1"
@@ -72,10 +72,11 @@
               "
               :disabled="loading"
               color="primary"
+              dark
               @click="showRepairDialog = true"
             >
-              <v-icon small class="mr-2" color="secondary">mdi-plus</v-icon>
-              <span class="secondary--text">Nueva reparación</span></v-btn
+              <v-icon small class="mr-2">mdi-plus</v-icon>
+              <span>Nueva reparación</span></v-btn
             >
             <repairDialog
               v-if="showRepairDialog"
@@ -219,10 +220,14 @@ export default {
       try {
         const routeQuery = this.$route.query;
         const query = {
+          ...(routeQuery.page && { page: routeQuery.page }),
           ...(routeQuery.textSearch && { textSearch: routeQuery.textSearch }),
           ...(routeQuery.order && { order: routeQuery.order }),
           ...(routeQuery.sortBy && { sortBy: routeQuery.sortBy }),
           ...(routeQuery.status && { status: routeQuery.status }),
+          ...(routeQuery.itemsPerPage && {
+            itemsPerPage: routeQuery.itemsPerPage,
+          }),
           ...(routeQuery.branchOffice && {
             branchOffice: routeQuery.branchOffice,
           }),
@@ -275,6 +280,7 @@ export default {
           query: {
             page: this.validPage - 1,
             itemsPerPage: this.validItemsPerPage,
+            textSearch: this.validTextSearch,
             sortBy: this.validSortValue,
             order: this.validOrderValue,
           },
