@@ -56,7 +56,7 @@ export default {
           ? error.response.data.message
           : "Error inesperado, favor de contactar con los desarrolladores.";
         this.setGlobalError({
-          title: "Sesión caducada",
+          title: "Upps",
           message,
         });
         this.logOut();
