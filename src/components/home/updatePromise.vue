@@ -9,7 +9,7 @@
       >Asignación de reparación a un técnico específico</v-card-title
     >
     <v-card-text>
-      <span>Fecha de actualización aproximada: 30 de abril de 2022</span>
+      <span>Fecha de actualización aproximada: 15 de mayo de 2022</span>
     </v-card-text>
   </v-card>
 </template>
