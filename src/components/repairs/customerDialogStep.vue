@@ -10,7 +10,7 @@
           label="Nombre del cliente"
           outlined
           dense
-          color="primary"
+          color="secondary"
           :error-messages="errors.name"
           @input="validateName()"
           @blur="validateName()"
@@ -23,7 +23,7 @@
           label="Número telefónico (opcional)"
           outlined
           dense
-          color="primary"
+          color="secondary"
           :error-messages="errors.phoneNumber"
           @input="validatePhoneNumber()"
           @blur="validatePhoneNumber()"
@@ -36,7 +36,7 @@
           label="Correo electrónico (opcional)"
           outlined
           dense
-          color="primary"
+          color="secondary"
           :error-messages="errors.email"
           @input="validateEmail()"
           @blur="validateEmail()"
@@ -49,7 +49,7 @@
           label="Dirección (opcional)"
           outlined
           dense
-          color="primary"
+          color="secondary"
         >
         </v-text-field>
       </v-col>
@@ -61,12 +61,17 @@
             @click="$emit('cancel')"
             class="mr-2"
           >
-            <v-icon small>mdi-arrow-left</v-icon>
+            <v-icon small class="mr-2">mdi-arrow-left</v-icon>
             {{ $vuetify.breakpoint.mdAndUp ? "Paso anterior" : null }}</v-btn
           >
-          <v-btn color="primary" :disabled="!isFormValid" @click="validateStep"
-            >{{ $vuetify.breakpoint.mdAndUp ? "Siguiente" : null }}
-            <v-icon small>mdi-arrow-right</v-icon>
+          <v-btn
+            color="primary"
+            dark
+            :disabled="!isFormValid"
+            @click="validateStep"
+          >
+            <span>{{ $vuetify.breakpoint.mdAndUp ? "Siguiente" : null }}</span>
+            <v-icon small class="ml-2">mdi-arrow-right</v-icon>
           </v-btn>
         </div>
       </v-col>

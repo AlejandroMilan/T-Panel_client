@@ -1,21 +1,24 @@
 <template>
-  <v-card outlined :loading="loading" height="100%">
-    <v-card-title>
-      <span>Datos del negocio</span>
+  <v-card flat tile :loading="loading" height="100%">
+    <v-toolbar dense flat color="secondary" dark>
+      <v-toolbar-title>Datos del negocio</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn
-        icon
+        fab
+        x-small
+        color="primary"
         v-if="
           user.role.role === 0 ||
           user.permissions.filter((e) => e.key === 230).length > 0
         "
+        @click="editBusiness = true"
       >
-        <v-icon @click="editBusiness = true">mdi-pencil</v-icon>
+        <v-icon small color="secondary">mdi-pencil</v-icon>
       </v-btn>
-    </v-card-title>
+    </v-toolbar>
     <div v-for="(section, index) in sections" :key="index">
       <v-subheader>
-        <v-icon color="primary" class="mr-2" small>{{
+        <v-icon color="secondary" class="mr-2" small>{{
           section.sectionIcon
         }}</v-icon>
         {{ section.sectionName }}</v-subheader
@@ -48,6 +51,7 @@
 
 <script>
 import { mapGetters } from "vuex";
+import { getFullDate } from "../../helpers/date.helper";
 import editBusinessDialog from "./editBusinessDialog";
 
 export default {
@@ -105,6 +109,8 @@ export default {
   },
 
   methods: {
+    getFullDate,
+
     setSections() {
       const noFieldString = "Sin registrar";
 
@@ -116,6 +122,12 @@ export default {
         {
           fieldName: "Zona horaria",
           fieldValue: this.business ? this.business.timezone : noFieldString,
+        },
+        {
+          fieldName: "Expiración de licencia",
+          fieldValue: this.business
+            ? this.getFullDate(this.business.licenseExpiration)
+            : noFieldString,
         },
       ];
 

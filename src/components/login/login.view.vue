@@ -4,7 +4,7 @@
       <div id="banner">
         <v-card
           elevation="0"
-          class="banner-card"
+          class="banner-card pb-2"
           :height="$vuetify.breakpoint.mdAndUp ? '96vh' : '30vh'"
         >
           <v-img
@@ -13,7 +13,7 @@
             height="95%"
           ></v-img>
           <v-card-text v-if="$vuetify.breakpoint.mdAndUp"
-            >Desarrollado por: devtek.com.mx</v-card-text
+            >Desarrollado por: Dev Tek</v-card-text
           >
         </v-card>
       </div>

@@ -2,7 +2,7 @@
   <div>
     <v-progress-linear
       indeterminate
-      color="primary"
+      color="accent"
       v-if="loading"
     ></v-progress-linear>
     <v-row v-else dense>
@@ -15,9 +15,9 @@
         "
       >
         <div class="d-flex justify-end">
-          <v-btn color="primary" @click="createUser = true">
-            <v-icon>mdi-plus</v-icon>
-            Añadir usuario</v-btn
+          <v-btn color="primary" dark @click="createUser = true">
+            <v-icon small class="mr-2">mdi-plus</v-icon>
+            <span>Añadir usuario</span></v-btn
           >
           <userDialog
             v-if="createUser"

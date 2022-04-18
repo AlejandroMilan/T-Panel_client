@@ -1,24 +1,24 @@
 <template>
   <div>
-    <v-card outlined :loading="loadingLocal">
-      <v-card-title class="d-fex justify-space-between align-center">
-        <span style="max-width: 75%">Términos y condiciones de servicio</span>
+    <v-card flat tile :loading="loadingLocal">
+      <v-toolbar color="secondary" dark dense flat>
+        <v-toolbar-title>Términos y condiciones de servicio</v-toolbar-title>
         <v-spacer></v-spacer>
-        <v-tooltip left>
+        <v-tooltip v-if="hasPermission(230)" left>
           <template v-slot:activator="{ on, attrs }">
             <v-btn
               icon
               :disabled="loading"
               @click="showBusinessTermDialog = true"
             >
-              <v-icon class="mr-2" v-bind="attrs" v-on="on">
+              <v-icon color="primary" class="mr-2" v-bind="attrs" v-on="on">
                 mdi-plus-circle
               </v-icon>
             </v-btn>
           </template>
           <span>Añadir condición</span>
         </v-tooltip>
-      </v-card-title>
+      </v-toolbar>
       <v-card-subtitle
         >Aquí puedes expresar cualquier tipo de condición de servicio que tus
         clientes aceptan al solicitar una reparación en tu negocio, estos datos
@@ -30,9 +30,8 @@
       <v-card-text>
         <v-alert text outlined type="error" v-if="error">{{ error }}</v-alert>
         <v-alert
-          v-if="!error && !loading && !termsLocal.length"
+          v-if="!error && !loading && !termsLocal.length && hasPermission(230)"
           text
-          outlined
           type="info"
           >Aún no has registrado términos y condiciones de tu servicio, da click
           en el botón <v-icon small color="info">mdi-plus-circle</v-icon> para
@@ -45,7 +44,7 @@
                 term
               }}</v-list-item-subtitle>
             </v-list-item-content>
-            <v-list-item-icon>
+            <v-list-item-icon v-if="hasPermission(230)">
               <v-tooltip left>
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn
@@ -53,12 +52,17 @@
                     :disabled="loading"
                     @click="deleteCondition(index)"
                   >
-                    <v-icon class="mr-2" v-bind="attrs" v-on="on">
+                    <v-icon
+                      color="secondary"
+                      class="mr-2"
+                      v-bind="attrs"
+                      v-on="on"
+                    >
                       mdi-delete
                     </v-icon>
                   </v-btn>
                 </template>
-                <span>Eliminar</span>
+                <span>Eliminar término</span>
               </v-tooltip>
             </v-list-item-icon>
           </v-list-item>
@@ -78,6 +82,7 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import serverRequestMixin from "@/mixins/serverRequest.mixin";
 
 import addBusinessTerm from "./addBusinessTerm";
@@ -124,6 +129,10 @@ export default {
     error: null,
     showBusinessTermDialog: false,
   }),
+
+  computed: {
+    ...mapGetters(["hasPermission"]),
+  },
 
   mounted() {
     this.termsLocal = this.terms;

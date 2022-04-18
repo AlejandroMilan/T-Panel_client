@@ -3,28 +3,29 @@
     <v-progress-linear
       indeterminate
       v-if="loading"
-      color="primary"
+      color="accent"
     ></v-progress-linear>
     <v-row v-else dense>
       <v-col cols="12">
         <div class="d-flex justify-end">
           <v-btn
-            color="primary"
+            color="secondary"
             outlined
             :loading="loading"
             :disabled="loading"
             @click="getBranches"
           >
-            <v-icon small>mdi-autorenew</v-icon>
+            <v-icon small class="mr-2">mdi-autorenew</v-icon>
             <span v-if="$vuetify.breakpoint.mdAndUp">Actualizar</span>
           </v-btn>
           <v-btn
             v-if="canAddBranches"
             color="primary"
+            dark
             class="ml-2"
             @click="showBranchDialog = true"
           >
-            <v-icon>mdi-plus</v-icon>
+            <v-icon small class="mr-2">mdi-plus</v-icon>
             <span>Agregar sucursal</span>
           </v-btn>
         </div>

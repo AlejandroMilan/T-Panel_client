@@ -29,6 +29,14 @@ export default new Vuex.Store({
     countryCode: (state) => {
       return state.countryCode;
     },
+    hasPermission: (state) => {
+      return function (permissionKey) {
+        return (
+          state.auth.user.permissions.find((e) => e.key == permissionKey) ||
+          state.auth.user.role.role == 0
+        );
+      };
+    },
   },
   mutations: {
     setGlobalErrorHandler: (state, payload) => {

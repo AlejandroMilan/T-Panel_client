@@ -24,7 +24,7 @@
           :loading="loading"
           @click="deleteBranch"
         >
-          <v-icon small>mdi-delete</v-icon>
+          <v-icon small class="mr-2">mdi-delete</v-icon>
           <span>Sí, eliminar</span>
         </v-btn>
       </v-card-actions>

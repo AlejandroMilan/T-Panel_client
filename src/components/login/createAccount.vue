@@ -5,7 +5,13 @@
         <span class="text-body-2">¿No tienes cuenta?</span>
       </v-col>
       <v-col cols="auto">
-        <v-btn text small color="primary" @click="showRegister = true"
+        <v-btn
+          outlined
+          x-small
+          tile
+          color="secondary"
+          class="ml-2"
+          @click="showRegister = true"
           >Crea una</v-btn
         >
       </v-col>

@@ -1,7 +1,7 @@
 <template>
   <v-dialog persistent width="600" v-model="show">
     <v-card>
-      <v-card-title>Envíar WhatsApp al cliente</v-card-title>
+      <v-card-title>Enviar WhatsApp al cliente</v-card-title>
       <v-card-text>
         <v-row dense>
           <v-col cols="12" md="4">
@@ -14,6 +14,7 @@
               label="País"
               outlined
               dense
+              color="secondary"
               @input="validateCountryCode()"
               @blur="validateCountryCode()"
             ></v-autocomplete>
@@ -24,6 +25,7 @@
               dense
               outlined
               label="Número telefónico"
+              color="secondary"
               :error-messages="errors.phoneNumber"
               @input="validatePhoneNumber()"
               @blur="validatePhoneNumber()"
@@ -33,7 +35,8 @@
             <v-textarea
               rows="4"
               v-model="message"
-              outlined
+              filled
+              color="secondary"
               label="Mensaje"
               :error-messages="errors.message"
               @input="validateMessage()"
@@ -43,12 +46,14 @@
         </v-row>
       </v-card-text>
       <v-card-actions>
-        <v-btn color="secondary" outlined @click="$emit('cancel')"
-          >Cancelar</v-btn
-        >
-        <v-btn color="primary" :disabled="!isFormValid" @click="submit"
-          >Enviar</v-btn
-        >
+        <v-btn color="secondary" outlined @click="$emit('cancel')">
+          <v-icon small class="mr-2">mdi-close</v-icon>
+          <span>Cancelar</span>
+        </v-btn>
+        <v-btn color="primary" :disabled="!isFormValid" @click="submit">
+          <v-icon small class="mr-2" color="secondary">mdi-send</v-icon>
+          <span class="secondary--text">Enviar</span>
+        </v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -86,7 +91,9 @@ export default {
     },
 
     messageFormatted() {
-      return this.message.replaceAll(" ", "%20");
+      return this.message
+        .replaceAll(" ", "%20")
+        .replaceAll(/(?:\r\n|\r|\n)/g, "%0a");
     },
 
     isFormValid() {

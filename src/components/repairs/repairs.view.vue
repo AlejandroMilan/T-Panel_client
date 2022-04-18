@@ -8,9 +8,9 @@
         >
           <div :class="{ 'mt-3': !$vuetify.breakpoint.mdAndUp }">
             <v-btn
-              outlined
+              color="secondary"
+              tile
               small
-              text
               class="mr-1"
               :disabled="validPage === 1"
               @click="prevPage()"
@@ -18,40 +18,45 @@
             >
             <v-btn
               v-if="validPage !== 1"
+              tile
+              color="secondary"
               outlined
-              text
               small
               class="mr-1"
               @click="goToPage(1)"
               ><span>1</span></v-btn
             >
-            <v-btn color="primary" small class="mr-1"
+            <v-btn color="primary" dark tile small class="mr-1"
               ><span>{{ validPage }}</span></v-btn
             >
             <v-btn
               v-if="validPage !== lastPage && lastPage > 1"
+              color="secondary"
               small
+              tile
               outlined
-              text
-              class="mr-2"
+              class="mr-1"
               @click="goToPage(lastPage)"
             >
-              <span>{{ lastPage }}</span>
+              <span class="secondary--text">{{ lastPage }}</span>
             </v-btn>
             <v-btn
-              outlined
+              color="secondary"
+              tile
               small
-              text
               :disabled="validPage === lastPage"
               @click="nextPage()"
               ><v-icon>mdi-chevron-right</v-icon></v-btn
+            >
+            <span v-if="!$vuetify.breakpoint.smAndDown" class="ml-2"
+              >Resultados: {{ repairsCount }}</span
             >
           </div>
           <div>
             <v-btn
               :disabled="loading"
               :loading="loading"
-              color="primary"
+              color="secondary"
               outlined
               @click="getRepairs"
               class="mr-2"
@@ -66,12 +71,12 @@
                   .length > 0
               "
               :disabled="loading"
-              :loading="loading"
               color="primary"
+              dark
               @click="showRepairDialog = true"
             >
-              <v-icon>mdi-plus</v-icon>
-              Nueva reparación</v-btn
+              <v-icon small class="mr-2">mdi-plus</v-icon>
+              <span>Nueva reparación</span></v-btn
             >
             <repairDialog
               v-if="showRepairDialog"
@@ -86,13 +91,9 @@
         <filters-card
           class="my-3"
           :isLoading="loading"
-          :currentSearch="validTextSearch"
+          :currentQuery="$route.query"
           :isFullWidth="viewFiltersWithFullWith"
-          :currentSort="validSortValue"
-          :currentOrder="validOrderValue"
-          @searchChanged="searchChanged"
-          @sortChanged="sortChanged"
-          @orderChanged="orderChanged"
+          @queryChanged="queryChanged"
         ></filters-card>
       </v-col>
       <v-col cols="12" :md="viewFiltersWithFullWith ? '12' : '9'">
@@ -217,7 +218,21 @@ export default {
       this.error = "";
       this.loading = true;
       try {
-        const response = await this.getRequest(this.getRepairsString);
+        const routeQuery = this.$route.query;
+        const query = {
+          ...(routeQuery.page && { page: routeQuery.page }),
+          ...(routeQuery.textSearch && { textSearch: routeQuery.textSearch }),
+          ...(routeQuery.order && { order: routeQuery.order }),
+          ...(routeQuery.sortBy && { sortBy: routeQuery.sortBy }),
+          ...(routeQuery.status && { status: routeQuery.status }),
+          ...(routeQuery.itemsPerPage && {
+            itemsPerPage: routeQuery.itemsPerPage,
+          }),
+          ...(routeQuery.branchOffice && {
+            branchOffice: routeQuery.branchOffice,
+          }),
+        };
+        const response = await this.getRequest("/repairs", true, query);
         this.loading = false;
 
         this.repairs = response.repairs;
@@ -265,6 +280,7 @@ export default {
           query: {
             page: this.validPage - 1,
             itemsPerPage: this.validItemsPerPage,
+            textSearch: this.validTextSearch,
             sortBy: this.validSortValue,
             order: this.validOrderValue,
           },
@@ -336,6 +352,28 @@ export default {
           sortBy: this.validSortValue,
           ...(payload && { order: payload }),
         },
+      });
+    },
+
+    queryChanged(query) {
+      const haveSameData = function (obj1, obj2) {
+        const obj1Length = Object.keys(obj1).length;
+        const obj2Length = Object.keys(obj2).length;
+
+        if (obj1Length === obj2Length) {
+          return Object.keys(obj1).every(
+            // eslint-disable-next-line no-prototype-builtins
+            (key) => obj2.hasOwnProperty(key) && obj2[key] === obj1[key]
+          );
+        }
+        return false;
+      };
+
+      if (haveSameData(query, this.$route.query)) return;
+
+      this.$router.push({
+        name: "Reparaciones",
+        query,
       });
     },
   },

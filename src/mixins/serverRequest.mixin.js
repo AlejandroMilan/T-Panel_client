@@ -21,13 +21,14 @@ const serverRequestMixin = {
       }
     },
 
-    async getRequest(url, requireToken = true) {
+    async getRequest(url, requireToken = true, query) {
       try {
         const response = requireToken
           ? await axios.get(url, {
               headers: { token: this.sessionToken },
+              params: query,
             })
-          : await axios.get(url);
+          : await axios.get(url, { params: query });
         return response.data;
       } catch (error) {
         if (error.response.data.tokenExpired) this.expiredSession();

@@ -52,10 +52,12 @@ export default {
       try {
         await this.validateSession(this.sessionToken);
       } catch (error) {
+        const message = error.response
+          ? error.response.data.message
+          : "Error inesperado, favor de contactar con los desarrolladores.";
         this.setGlobalError({
-          title: "Sesión caducada",
-          message:
-            "La sesión ha caducado, por favor, vuelva a iniciar sesión con su cuenta.",
+          title: "Upps",
+          message,
         });
         this.logOut();
         this.$router.push("/login");
@@ -70,6 +72,10 @@ export default {
 </script>
 
 <style lang="scss">
+#app {
+  background-color: var(--v-background-base);
+}
+
 .v-card__text,
 .v-card__title {
   word-break: normal; /* maybe !important  */

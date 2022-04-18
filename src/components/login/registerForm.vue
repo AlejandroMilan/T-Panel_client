@@ -8,7 +8,7 @@
             label="Nombre completo"
             outlined
             dense
-            color="primary"
+            color="secondary"
             :disabled="loading"
             :error-messages="errors.name"
             @input="validateName()"
@@ -22,7 +22,7 @@
             label="Correo electrónico"
             outlined
             dense
-            color="primary"
+            color="secondary"
             :disabled="loading"
             :error-messages="errors.email"
             @input="validateEmail()"
@@ -37,7 +37,7 @@
             outlined
             type="password"
             dense
-            color="primary"
+            color="secondary"
             :disabled="loading"
             :error-messages="errors.firstPassword"
             @input="validateFirstPassword()"
@@ -52,7 +52,7 @@
             outlined
             type="password"
             dense
-            color="primary"
+            color="secondary"
             :disabled="loading"
             :error-messages="errors.secondPassword"
             @input="validateSecondPassword()"
@@ -66,6 +66,7 @@
             <a
               href="https://www.privacypolicies.com/live/6952b9f1-3a74-409a-b76c-5a9f0da22934"
               target="_blank"
+              class="secondary--text"
               >política de privacidad.</a
             ></span
           >
@@ -80,12 +81,14 @@
           >
           <v-btn
             color="primary"
+            dark
             :disabled="!isFormValid || loading"
             :loading="loading"
             class="ml-2"
             @click="submit"
-            >Crear cuenta</v-btn
           >
+            <span>Crear cuenta</span>
+          </v-btn>
         </v-col>
         <v-col cols="12" v-if="signupError" class="my-5">
           <v-alert type="error" dense outlined>{{ signupError }}</v-alert>

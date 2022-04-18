@@ -3,7 +3,7 @@
     <v-progress-linear
       v-if="loadingPrint"
       indeterminate
-      color="primary"
+      color="secondary"
     ></v-progress-linear>
     <v-alert type="error" outlined v-if="!loadingPrint && errorPrint">
       <v-row align="center">
@@ -13,7 +13,7 @@
     <v-progress-linear
       v-if="loading"
       indeterminate
-      color="primary"
+      color="accent"
     ></v-progress-linear>
     <v-alert type="error" v-if="!loading && error">
       <v-row align="center">
@@ -30,7 +30,13 @@
       </v-row>
     </v-alert>
     <div v-if="!loading && !error && repair">
-      <v-tabs v-model="tab" class="mb-2">
+      <v-tabs
+        v-model="tab"
+        color="primary"
+        background-color="secondary"
+        dark
+        class="mb-2"
+      >
         <v-tabs-slider color="primary"></v-tabs-slider>
         <v-tab>Detalles de la reparación</v-tab>
         <v-tab>Comentarios</v-tab>

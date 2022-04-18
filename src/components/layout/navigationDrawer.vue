@@ -2,14 +2,19 @@
   <v-navigation-drawer app v-model="isNavigating">
     <div class="user-details">
       <v-card tile color="secondary" dark class="pt-10">
+        <div v-if="false" class="px-5">
+          <v-img :src="require('../../assets/logo.jpeg')" width="100%"></v-img>
+        </div>
         <v-list-item>
           <v-list-item-content>
             <v-list-item-title> {{ user.name }} </v-list-item-title>
             <v-list-item-subtitle>{{ user.role.name }}</v-list-item-subtitle>
             <v-list-item-subtitle v-if="user.branchOffice">
-              <v-chip color="primary">{{
-                user.branchOffice.name
-              }}</v-chip></v-list-item-subtitle
+              <v-chip color="primary" small class="mt-2">
+                <span class="secondary--text">{{
+                  user.branchOffice.name
+                }}</span>
+              </v-chip></v-list-item-subtitle
             >
           </v-list-item-content>
         </v-list-item>
@@ -35,32 +40,14 @@
         </v-list-item-group>
       </v-list>
     </div>
-
-    <template v-slot:append>
-      <div class="pa-2">
-        <v-btn color="secondary" small block @click="showDonationDialog = true">
-          <v-icon small>mdi-currency-usd</v-icon>
-          <span>Realizar donación</span>
-        </v-btn>
-      </div>
-    </template>
-
-    <donation-dialog
-      v-if="showDonationDialog"
-      :show="showDonationDialog"
-      @cancel="showDonationDialog = false"
-    ></donation-dialog>
   </v-navigation-drawer>
 </template>
 
 <script>
-import donationDialog from "./donationDialog.vue";
 import { mapGetters } from "vuex";
 
 export default {
   name: "navigationDrawer",
-
-  components: { "donation-dialog": donationDialog },
 
   computed: {
     ...mapGetters(["user"]),
@@ -105,8 +92,6 @@ export default {
         route: "/panel/sucursales",
       },
     ],
-
-    showDonationDialog: false,
   }),
 
   methods: {
