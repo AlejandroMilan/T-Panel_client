@@ -89,6 +89,22 @@
         ></v-select>
       </v-col>
       <v-col cols="12">
+        <v-select
+          label="Técnico asignado"
+          v-model="technician"
+          :items="technicians"
+          item-value="_id"
+          item-text="name"
+          hint="Aún con técnico asignado, los demás técnicos podrán ver y modificar la reparación. Este campo solo ayuda a que el técnico pueda filtrar mejor sus reparaciones"
+          persistent-hint
+          :disabled="loading"
+          outlined
+          dense
+          color="secondary"
+          item-color="secondary"
+        ></v-select>
+      </v-col>
+      <v-col cols="12">
         <div class="d-flex">
           <v-btn
             color="secondary"
@@ -173,6 +189,8 @@ export default {
     },
     branchOffices: [],
     branchOffice: "",
+    technicians: [],
+    technician: "",
     errors: {
       invoiceId: [],
       estimatedCost: [],
@@ -188,9 +206,10 @@ export default {
     },
   },
 
-  mounted() {
+  async mounted() {
     if (this.currentData) this.setCurrentData();
-    this.getBranchOffices();
+    await this.getBranchOffices();
+    await this.getTechnicians();
   },
 
   methods: {
@@ -261,6 +280,7 @@ export default {
         branchOffice: this.canAddBranchOffice
           ? this.branchOffice
           : this.user.branchOffice._id,
+        ...(this.technician && { technician: this.technician }),
       };
 
       this.$emit("stepValid", emitData);
@@ -278,6 +298,24 @@ export default {
           )
             this[key] = this.currentData[key];
         });
+      }
+    },
+
+    async getTechnicians() {
+      this.loading = true;
+      try {
+        const response = await this.getRequest(
+          `/users/byBusiness/${this.user.businessId}`,
+          true,
+          { role: 3 }
+        );
+        this.loading = false;
+
+        this.technicians = response.users;
+      } catch (error) {
+        this.loading = false;
+        this.getterError = error.data.message;
+        if (error.status >= 500) console.error(error);
       }
     },
 
