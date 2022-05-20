@@ -88,9 +88,9 @@
           item-color="secondary"
         ></v-select>
       </v-col>
-      <v-col cols="12">
+      <v-col v-if="!currentData" cols="12">
         <v-select
-          label="Técnico asignado"
+          label="Técnico asignado (opcional)"
           v-model="technician"
           :items="technicians"
           item-value="_id"

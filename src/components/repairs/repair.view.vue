@@ -59,6 +59,23 @@
           </div>
         </v-col>
         <v-col cols="12" md="4" lg="3">
+          <v-card flat tile class="my-2">
+            <div v-if="repair.technician">
+              <v-list-item>
+                <v-list-item-avatar>
+                  <v-icon color="secondary">mdi-account</v-icon>
+                </v-list-item-avatar>
+                <v-list-item-content>
+                  <v-list-item-title>
+                    <span>{{ repair.technician.name }}</span>
+                  </v-list-item-title>
+                  <v-list-item-subtitle>
+                    <span>Técnico asignado</span>
+                  </v-list-item-subtitle>
+                </v-list-item-content>
+              </v-list-item>
+            </div>
+          </v-card>
           <actionsCard
             @editRepairInfo="editRepairInfo"
             @editRepairStatus="editRepairStatus"
@@ -67,6 +84,7 @@
             @printRepair="printRepair"
             @downloadRepairPdf="downloadRepairPdf"
             @sendWhatsApp="sendWhatsappDialog = true"
+            @showTechnician="showTechnicianDialog"
           ></actionsCard>
 
           <commentCard
@@ -117,6 +135,14 @@
       :currentNumber="repair.customer.phoneNumber || ''"
       @cancel="sendWhatsappDialog = false"
     ></sendWhatsApp>
+
+    <technician-dialog
+      v-if="showTechnician"
+      :show="showTechnician"
+      :invoiceId="repair.invoiceId"
+      @cancel="showTechnician = false"
+      @technicianSelected="technicianSelected"
+    ></technician-dialog>
   </div>
 </template>
 
@@ -151,6 +177,7 @@ export default {
     commentDialog,
     sendWhatsApp,
     repairLogs,
+    "technician-dialog": () => import("./setTechnicianDialog.vue"),
   },
 
   data: () => ({
@@ -160,6 +187,7 @@ export default {
     showEditRepairStatus: false,
     showDeleteRepair: false,
     showCommentDialog: false,
+    showTechnician: false,
     sendWhatsappDialog: false,
     tab: null,
     error: null,
@@ -270,6 +298,16 @@ export default {
         else this.errorPrint = error.message;
         if (error.status >= 500) console.error(error);
       }
+    },
+
+    showTechnicianDialog() {
+      this.showTechnician = true;
+    },
+
+    technicianSelected({ technicianSelected, logs }) {
+      this.repair.technician = technicianSelected;
+      this.repair.logs = logs;
+      this.showTechnician = false;
     },
   },
 };
