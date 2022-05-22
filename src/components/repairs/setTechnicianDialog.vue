@@ -10,6 +10,8 @@
             <v-select
               v-model="technician"
               :items="technicians"
+              color="secondary"
+              item-color="secondary"
               item-value="_id"
               item-text="name"
               outlined

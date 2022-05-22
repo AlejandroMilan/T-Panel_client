@@ -231,6 +231,8 @@ export default {
           ...(routeQuery.branchOffice && {
             branchOffice: routeQuery.branchOffice,
           }),
+          ...(routeQuery.onlyMyRepairs && { onlyMyRepairs: true }),
+          ...(routeQuery.technician && { technician: routeQuery.technician }),
         };
         const response = await this.getRequest("/repairs", true, query);
         this.loading = false;
@@ -240,6 +242,7 @@ export default {
 
         if (!this.repairs.length) this.goToPage(1);
       } catch (error) {
+        console.error(error);
         this.loading = false;
         this.error = error.data.message;
         if (error.status >= 500) console.error(error.data);
@@ -283,6 +286,10 @@ export default {
             textSearch: this.validTextSearch,
             sortBy: this.validSortValue,
             order: this.validOrderValue,
+            ...(this.$route.query.onlyMyRepairs && { onlyMyRepairs: true }),
+            ...(this.$route.query.technician && {
+              technician: this.$route.query.technician,
+            }),
           },
         });
     },
@@ -297,6 +304,10 @@ export default {
             textSearch: this.validTextSearch,
             sortBy: this.validSortValue,
             order: this.validOrderValue,
+            ...(this.$route.query.onlyMyRepairs && { onlyMyRepairs: true }),
+            ...(this.$route.query.technician && {
+              technician: this.$route.query.technician,
+            }),
           },
         });
     },
@@ -311,6 +322,10 @@ export default {
             textSearch: this.validTextSearch,
             sortBy: this.validSortValue,
             order: this.validOrderValue,
+            ...(this.$route.query.onlyMyRepairs && { onlyMyRepairs: true }),
+            ...(this.$route.query.technician && {
+              technician: this.$route.query.technician,
+            }),
           },
         });
     },
@@ -324,6 +339,7 @@ export default {
           itemsPerPage: this.validItemsPerPage,
           sortBy: this.validSortValue,
           order: this.validOrderValue,
+          ...(newSearch.onlyMyRepairs && { onlyMyRepairs: true }),
           ...(newSearch && { textSearch: newSearch }),
         },
       });
@@ -337,6 +353,10 @@ export default {
           itemsPerPage: this.validItemsPerPage,
           textSearch: this.validTextSearch,
           order: this.validOrderValue,
+          ...(this.$route.query.onlyMyRepairs && { onlyMyRepairs: true }),
+          ...(this.$route.query.technician && {
+            technician: this.$route.query.technician,
+          }),
           ...(payload && { sortBy: payload }),
         },
       });
@@ -350,6 +370,10 @@ export default {
           itemsPerPage: this.validItemsPerPage,
           textSearch: this.validTextSearch,
           sortBy: this.validSortValue,
+          ...(this.$route.query.onlyMyRepairs && { onlyMyRepairs: true }),
+          ...(this.$route.query.technician && {
+            technician: this.$route.query.technician,
+          }),
           ...(payload && { order: payload }),
         },
       });
