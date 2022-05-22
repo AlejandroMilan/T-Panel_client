@@ -86,6 +86,7 @@ export default {
     payment: {},
     invoiceId: "",
     branchOffice: "",
+    technician: "",
   }),
 
   mounted() {
@@ -113,6 +114,7 @@ export default {
       this.payment = generalData.payment;
       this.invoiceId = generalData.invoiceId;
       this.branchOffice = generalData.branchOffice;
+      if (generalData.technician) this.technician = generalData.technician;
       this.submit();
     },
 
@@ -133,6 +135,7 @@ export default {
               invoiceId: this.invoiceId,
               status: 100,
               branchOffice: this.branchOffice,
+              technician: this.technician,
             };
         submitData.payment = {};
         if (this.payment.estimatedCost)

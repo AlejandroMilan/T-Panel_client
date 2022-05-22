@@ -22,6 +22,18 @@
             cols="12"
             v-if="
               user.role.role === 0 ||
+              user.permissions.filter((e) => e.key === 330).length > 0
+            "
+          >
+            <v-btn color="secondary" small @click="$emit('showTechnician')" text
+              ><v-icon small class="mr-2">mdi-account-arrow-right</v-icon>
+              <span>Asignar a técnico</span></v-btn
+            >
+          </v-col>
+          <v-col
+            cols="12"
+            v-if="
+              user.role.role === 0 ||
               user.permissions.filter((e) => e.key === 331).length > 0
             "
           >

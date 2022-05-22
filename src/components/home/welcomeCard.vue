@@ -1,7 +1,7 @@
 <template>
   <v-card tile>
     <v-card-title class="secondary--text"
-      >Bienvenid@ {{ user.name.split(" ")[0] }}</v-card-title
+      >Buen día {{ user.name.split(" ")[0] }}</v-card-title
     >
     <v-card-text>
       <update-promise></update-promise>
