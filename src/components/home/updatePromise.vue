@@ -6,10 +6,10 @@
       >
     </v-card-subtitle>
     <v-card-title class="pt-0"
-      >Asignación de reparación a un técnico específico</v-card-title
+      >Notificaciones de acciones en reparaciones.</v-card-title
     >
     <v-card-text>
-      <span>Fecha de actualización aproximada: 15 de mayo de 2022</span>
+      <span>Fecha de actualización aproximada: 30 de junio de 2022</span>
     </v-card-text>
   </v-card>
 </template>
