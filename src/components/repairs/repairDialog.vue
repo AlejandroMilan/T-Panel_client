@@ -86,7 +86,7 @@ export default {
     payment: {},
     invoiceId: "",
     branchOffice: "",
-    technician: "",
+    technician: null,
   }),
 
   mounted() {
@@ -135,13 +135,15 @@ export default {
               invoiceId: this.invoiceId,
               status: 100,
               branchOffice: this.branchOffice,
-              technician: this.technician,
+              ...(this.technician && { technician: this.technician }),
             };
         submitData.payment = {};
         if (this.payment.estimatedCost)
           submitData.payment.estimatedCost = this.payment.estimatedCost;
         if (this.payment.prePayment)
           submitData.payment.prePayment = this.payment.prePayment;
+
+        console.log({ submitData });
 
         const response = this.repair
           ? await this.putRequest(
@@ -153,6 +155,7 @@ export default {
 
         this.$emit("repairSaved", response.repair);
       } catch (error) {
+        console.log(error.data);
         this.loading = false;
         this.submitError = error.data.message;
         if (error.status >= 500) console.error(error.data);

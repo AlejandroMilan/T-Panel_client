@@ -190,7 +190,7 @@ export default {
     branchOffices: [],
     branchOffice: "",
     technicians: [],
-    technician: "",
+    technician: null,
     errors: {
       invoiceId: [],
       estimatedCost: [],
@@ -283,6 +283,7 @@ export default {
         ...(this.technician && { technician: this.technician }),
       };
 
+      console.log({ emitData });
       this.$emit("stepValid", emitData);
     },
 
