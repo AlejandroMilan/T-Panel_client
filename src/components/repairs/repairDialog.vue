@@ -143,8 +143,6 @@ export default {
         if (this.payment.prePayment)
           submitData.payment.prePayment = this.payment.prePayment;
 
-        console.log({ submitData });
-
         const response = this.repair
           ? await this.putRequest(
               `/repairs/${this.repair.invoiceId}`,
