@@ -8,9 +8,6 @@
     <v-card-title class="pt-0"
       >Notificaciones de acciones en reparaciones.</v-card-title
     >
-    <v-card-text>
-      <span>Fecha de actualización aproximada: 30 de junio de 2022</span>
-    </v-card-text>
   </v-card>
 </template>
 

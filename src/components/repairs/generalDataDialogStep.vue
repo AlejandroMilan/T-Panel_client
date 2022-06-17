@@ -283,7 +283,6 @@ export default {
         ...(this.technician && { technician: this.technician }),
       };
 
-      console.log({ emitData });
       this.$emit("stepValid", emitData);
     },
 
