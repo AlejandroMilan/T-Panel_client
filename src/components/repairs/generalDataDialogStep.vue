@@ -104,7 +104,7 @@
           item-color="secondary"
         ></v-select>
       </v-col>
-      <v-col class="pt-3">
+      <v-col v-if="!currentData" class="pt-3">
         <v-checkbox
           v-model="printTicket"
           color="primary"
