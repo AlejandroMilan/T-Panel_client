@@ -87,6 +87,7 @@ export default {
     invoiceId: "",
     branchOffice: "",
     technician: null,
+    printTicket: false,
   }),
 
   mounted() {
@@ -114,6 +115,7 @@ export default {
       this.payment = generalData.payment;
       this.invoiceId = generalData.invoiceId;
       this.branchOffice = generalData.branchOffice;
+      this.printTicket = generalData.printTicket;
       if (generalData.technician) this.technician = generalData.technician;
       this.submit();
     },
@@ -151,7 +153,10 @@ export default {
           : await this.postRequest("/repairs", submitData);
         this.loading = false;
 
-        this.$emit("repairSaved", response.repair);
+        this.$emit("repairSaved", {
+          ...response.repair,
+          printTicket: this.printTicket,
+        });
       } catch (error) {
         console.log(error.data);
         this.loading = false;

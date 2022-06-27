@@ -252,6 +252,30 @@ export default {
     repairSaved(newRepair) {
       this.showRepairDialog = false;
       this.repairs = [newRepair, ...this.repairs];
+      if (newRepair.printTicket)
+        this.printRepair({ isTicket: true, repairId: newRepair.invoiceId });
+    },
+
+    async printRepair({ isTicket = true, repairId }) {
+      this.loading = true;
+      this.errorPrint = null;
+
+      try {
+        let urlString = `/repairs/repair/${repairId}/pdf`;
+        if (isTicket) urlString = urlString + "?type=ticket";
+
+        const serverResponse = await this.getFileRequest(urlString);
+        this.loading = false;
+
+        var file = new Blob([serverResponse.file], { type: "application/pdf" });
+        let fileURL = URL.createObjectURL(file);
+        window.open(fileURL);
+      } catch (error) {
+        this.loading = false;
+        if (error.data) this.errorPrint = error.data.message;
+        else this.errorPrint = error.message;
+        if (error.status >= 500) console.error(error);
+      }
     },
 
     repairUpdated(repair) {

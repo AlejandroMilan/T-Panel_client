@@ -104,6 +104,13 @@
           item-color="secondary"
         ></v-select>
       </v-col>
+      <v-col class="pt-3">
+        <v-checkbox
+          v-model="printTicket"
+          color="primary"
+          label="Imprimir ticket después de guardar"
+        ></v-checkbox>
+      </v-col>
       <v-col cols="12">
         <div class="d-flex">
           <v-btn
@@ -191,6 +198,7 @@ export default {
     branchOffice: "",
     technicians: [],
     technician: null,
+    printTicket: false,
     errors: {
       invoiceId: [],
       estimatedCost: [],
@@ -281,6 +289,7 @@ export default {
           ? this.branchOffice
           : this.user.branchOffice._id,
         ...(this.technician && { technician: this.technician }),
+        printTicket: this.printTicket,
       };
 
       this.$emit("stepValid", emitData);
