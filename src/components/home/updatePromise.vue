@@ -8,6 +8,15 @@
     <v-card-title class="pt-0"
       >Notificaciones de acciones en reparaciones.</v-card-title
     >
+    <v-card-text
+      ><v-alert type="warning">
+        <span
+          >Nos encontramos realizando una actualización completa en nuestro
+          servidor, por lo que la promesa puede demorar más de lo
+          previsto.</span
+        >
+      </v-alert></v-card-text
+    >
   </v-card>
 </template>
 
