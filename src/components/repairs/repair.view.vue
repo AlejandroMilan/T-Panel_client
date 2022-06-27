@@ -81,7 +81,8 @@
             @editRepairStatus="editRepairStatus"
             @deleteRepair="showDeleteRepairDialog"
             @addComment="addComment"
-            @printRepair="printRepair"
+            @printRepair="printRepair({})"
+            @printRepairTicket="printRepair({ isTicket: true })"
             @downloadRepairPdf="downloadRepairPdf"
             @sendWhatsApp="sendWhatsappDialog = true"
             @showTechnician="showTechnicianDialog"
@@ -255,14 +256,15 @@ export default {
       this.comments = [newComment, ...this.comments];
     },
 
-    async printRepair() {
+    async printRepair({ isTicket = false }) {
       this.loadingPrint = true;
       this.errorPrint = null;
 
       try {
-        const serverResponse = await this.getFileRequest(
-          `/repairs/repair/${this.repairId}/pdf`
-        );
+        let urlString = `/repairs/repair/${this.repairId}/pdf`;
+        if (isTicket) urlString = urlString + "?type=ticket";
+
+        const serverResponse = await this.getFileRequest(urlString);
         this.loadingPrint = false;
 
         var file = new Blob([serverResponse.file], { type: "application/pdf" });

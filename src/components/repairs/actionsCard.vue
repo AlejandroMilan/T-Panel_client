@@ -82,6 +82,29 @@
               user.permissions.filter((e) => e.key === 322).length > 0
             "
           >
+            <v-tooltip left>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                  v-bind="attrs"
+                  v-on="on"
+                  color="secondary"
+                  small
+                  text
+                  @click="$emit('printRepairTicket')"
+                  ><v-icon small class="mr-2"> mdi-ticket-confirmation</v-icon
+                  >Imprimir Ticket</v-btn
+                >
+              </template>
+              <span>No compatible con Mozilla Firefox</span>
+            </v-tooltip>
+          </v-col>
+          <v-col
+            cols="12"
+            v-if="
+              user.role.role === 0 ||
+              user.permissions.filter((e) => e.key === 322).length > 0
+            "
+          >
             <v-btn
               color="secondary"
               small
