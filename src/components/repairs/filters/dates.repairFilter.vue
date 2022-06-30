@@ -1,6 +1,6 @@
 <template>
   <v-row dense>
-    <v-col cols="12">
+    <v-col cols="12" :md="isFullWidth ? '4' : '12'">
       <v-menu v-model="menuSince" bottom>
         <template #activator="{ on, attrs }">
           <v-text-field
@@ -21,6 +21,7 @@
           locale="es"
           no-title
           scrollable
+          :max="untilLocal ? untilLocal : null"
           @change="emitSince()"
         >
           <v-spacer></v-spacer>
@@ -28,7 +29,7 @@
         </v-date-picker>
       </v-menu>
     </v-col>
-    <v-col cols="12">
+    <v-col cols="12" :md="isFullWidth ? '4' : '12'">
       <v-menu v-model="menuUntil" bottom>
         <template #activator="{ on, attrs }">
           <v-text-field
@@ -49,6 +50,7 @@
           locale="es"
           no-title
           scrollable
+          :min="sinceLocal ? sinceLocal : null"
           @change="emitUntil()"
         >
           <v-spacer></v-spacer>
@@ -64,6 +66,7 @@ export default {
   props: {
     since: { type: String, default: null },
     until: { type: String, default: null },
+    isFullWidth: { type: Boolean, default: false },
   },
 
   data() {

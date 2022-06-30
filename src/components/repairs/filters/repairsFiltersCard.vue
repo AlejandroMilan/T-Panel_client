@@ -166,6 +166,7 @@
       <dates-filters
         :since="since"
         :until="until"
+        :isFullWidth="isFullWidth"
         @queryPropChanged="dateChanged"
       ></dates-filters>
     </v-card-text>
