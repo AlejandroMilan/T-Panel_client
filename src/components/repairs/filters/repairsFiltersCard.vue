@@ -2,7 +2,10 @@
   <v-card tile flat>
     <v-card-title v-if="false">Filtros</v-card-title>
     <v-toolbar color="secondary" dark dense flat>
-      <v-toolbar-title>Filtros</v-toolbar-title>
+      <v-toolbar-title class="d-flex align-items-center">
+        <v-icon class="mr-2">mdi-tune</v-icon>
+        <span>Filtros</span>
+      </v-toolbar-title>
     </v-toolbar>
     <v-card-text class="pt-5">
       <v-row dense>
@@ -15,7 +18,7 @@
             hint="Busca por folio, IMEI, dispositivo o cliente."
             color="secondary"
             :disabled="isLoading || loading"
-            @keyup.enter="queryChanged()"
+            @keyup.enter="changeQuery({ textSearch: search })"
           >
             <template #append class="ma-0 pa-0">
               <div class="d-flex align-center" style="height: 100%">
@@ -26,7 +29,7 @@
                   class="mt-1"
                   :class="{ 'ml-2': !isMobile }"
                   :disabled="isLoading || loading"
-                  @click="queryChanged()"
+                  @click="changeQuery({ textSearch: search })"
                 >
                   <v-icon small>mdi-magnify</v-icon>
                 </v-btn>
@@ -35,7 +38,10 @@
                   color="secondary"
                   x-small
                   class="ml-2 mt-1"
-                  @click="clearSearch()"
+                  @click="
+                    changeQuery({ textSearch: '' });
+                    search = '';
+                  "
                 >
                   <v-icon small>mdi-close</v-icon>
                 </v-btn>
@@ -48,6 +54,7 @@
             v-model="sortBy"
             dense
             label="Ordenar por"
+            prepend-inner-icon="mdi-sort"
             :items="sortValues"
             item-text="text"
             item-value="value"
@@ -55,7 +62,7 @@
             item-color="secondary"
             :disabled="isLoading || loading"
             outlined
-            @change="queryChanged()"
+            @change="changeQuery({ sortBy })"
           ></v-select>
         </v-col>
         <v-col cols="12" :md="!isFullWidth ? '12' : '3'">
@@ -63,6 +70,7 @@
             v-model="order"
             dense
             label="Tipo de orden"
+            prepend-inner-icon="mdi-sort-variant"
             :items="orderValues"
             item-text="text"
             item-value="value"
@@ -71,7 +79,7 @@
             :class="{ 'ml-2': isFullWidth && !isMobile }"
             :disabled="isLoading || loading"
             outlined
-            @change="queryChanged()"
+            @change="changeQuery({ order })"
           ></v-select>
         </v-col>
       </v-row>
@@ -88,7 +96,8 @@
             item-color="secondary"
             dense
             label="Estado"
-            @change="queryChanged()"
+            prepend-inner-icon="mdi-devices"
+            @change="changeQuery({ status })"
             :disabled="isLoading || loading"
             outlined
           ></v-select>
@@ -108,11 +117,15 @@
             item-color="secondary"
             dense
             label="Sucursal"
+            prepend-inner-icon="mdi-store"
             :disabled="isLoading || loading"
             outlined
             :append-icon="branchOffice ? 'mdi-close' : 'mdi-chevron-down'"
-            @click:append="clearBranchOffice()"
-            @change="queryChanged()"
+            @click:append="
+              branchOffice = '';
+              changeQuery({ branchOffice });
+            "
+            @change="changeQuery({ branchOffice })"
           ></v-select>
         </v-col>
         <v-col
@@ -126,7 +139,7 @@
             dense
             color="primary"
             label="Solo asignadas a mí"
-            @change="queryChanged()"
+            @change="changeQuery({ onlyMyRepairs })"
           ></v-checkbox>
         </v-col>
         <v-col
@@ -144,17 +157,24 @@
             item-color="secondary"
             dense
             label="Técnico asignado"
+            prepend-inner-icon="mdi-account"
             :disabled="isLoading || loading"
             outlined
             :append-icon="technician ? 'mdi-close' : 'mdi-chevron-down'"
             @click:append="
               technician = '';
-              queryChanged();
+              changeQuery({ technician });
             "
-            @change="queryChanged()"
+            @change="changeQuery({ technician })"
           ></v-select>
         </v-col>
       </v-row>
+      <dates-filters
+        :since="since"
+        :until="until"
+        :isFullWidth="isFullWidth"
+        @queryPropChanged="dateChanged"
+      ></dates-filters>
     </v-card-text>
   </v-card>
 </template>
@@ -162,11 +182,18 @@
 <script>
 import { mapGetters } from "vuex";
 import serverRequestMixin from "@/mixins/serverRequest.mixin";
+import routeQueryMixin from "@/mixins/routeQuery.mixin.js";
+
+import datesFilters from "./dates.repairFilter.vue";
 
 export default {
   name: "repairsFiltersCard",
 
-  mixins: [serverRequestMixin],
+  mixins: [serverRequestMixin, routeQueryMixin],
+
+  components: {
+    "dates-filters": datesFilters,
+  },
 
   props: {
     isLoading: { type: Boolean, default: false },
@@ -206,6 +233,8 @@ export default {
     onlyMyRepairs: false,
     technicians: [],
     technician: "",
+    since: "",
+    until: "",
   }),
 
   computed: {
@@ -250,6 +279,9 @@ export default {
         if (this.currentQuery.technician)
           this.technician = this.currentQuery.technician;
         else this.technician = "";
+
+        if (this.currentQuery.since) this.since = this.currentQuery.since;
+        if (this.currentQuery.until) this.until = this.currentQuery.until;
       } else {
         this.search = "";
         this.order = this.orderValues[0].value;
@@ -280,6 +312,8 @@ export default {
         }),
         ...(this.onlyMyRepairs && { onlyMyRepairs: this.onlyMyRepairs }),
         technician: this.technician,
+        ...(this.since && { since: this.since }),
+        ...(this.until && { until: this.until }),
       };
       if (this.status) {
         query.status = this.status.length > 1 ? this.status : this.status[0];
@@ -330,6 +364,12 @@ export default {
       } catch (error) {
         console.error(error);
       }
+    },
+
+    dateChanged(propChanged) {
+      if (propChanged.since) this.since = propChanged.since;
+      if (propChanged.until) this.until = propChanged.until;
+      this.queryChanged();
     },
   },
 };

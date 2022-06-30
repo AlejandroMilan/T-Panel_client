@@ -2,7 +2,10 @@
   <div class="py-3">
     <v-card flat tile>
       <v-toolbar color="secondary" dark flat dense>
-        <v-toolbar-title>Listado de reparaciones</v-toolbar-title>
+        <v-toolbar-title class="d-flex align-items-center">
+          <v-icon class="mr-2">mdi-format-list-bulleted</v-icon>
+          <span>Listado de reparaciones</span>
+        </v-toolbar-title>
       </v-toolbar>
       <v-card-text>
         <v-container v-if="selectedRepairs.length" class="pt-0">

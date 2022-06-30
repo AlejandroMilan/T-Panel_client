@@ -1,6 +1,9 @@
 <template>
   <div>
     <v-row dense>
+      <v-col v-if="error" cols="12">
+        <v-alert type="error" outlined>{{ error }}</v-alert>
+      </v-col>
       <v-col cols="12">
         <div
           class="d-flex justify-space-between align-end"
@@ -107,9 +110,6 @@
           @manyRepairsDeleted="manyRepairsDeleted"
         ></repairList>
       </v-col>
-      <v-col v-if="error" cols="12">
-        <v-alert type="error" outlined>{{ error }}</v-alert>
-      </v-col>
     </v-row>
   </div>
 </template>
@@ -119,7 +119,7 @@ import { mapGetters } from "vuex";
 import serverRequestMixin from "@/mixins/serverRequest.mixin";
 import repairDialog from "./repairDialog";
 import repairList from "./repairList";
-import repairsFiltersCard from "./repairsFiltersCard.vue";
+import repairsFiltersCard from "./filters/repairsFiltersCard.vue";
 
 export default {
   name: "repairsView",
@@ -163,24 +163,13 @@ export default {
       return this.$route.query.order || "desc";
     },
 
-    getRepairsString() {
-      let result = "/repairs";
+    parsedQuery() {
+      let query = this.$route.query;
+      Object.keys(query).forEach((key) => {
+        if (!query[key]) delete query[key];
+      });
 
-      if (this.validPage) result = `${result}?page=${this.validPage}`;
-
-      if (this.validItemsPerPage)
-        result = `${result}&itemsPerPage=${this.validItemsPerPage}`;
-
-      if (this.validTextSearch)
-        result = `${result}&textSearch=${this.validTextSearch}`;
-
-      if (this.validSortValue)
-        result = `${result}&sortBy=${this.validSortValue}`;
-
-      if (this.validOrderValue)
-        result = `${result}&order=${this.validOrderValue}`;
-
-      return result;
+      return query;
     },
 
     viewFiltersWithFullWith() {
@@ -218,23 +207,12 @@ export default {
       this.error = "";
       this.loading = true;
       try {
-        const routeQuery = this.$route.query;
-        const query = {
-          ...(routeQuery.page && { page: routeQuery.page }),
-          ...(routeQuery.textSearch && { textSearch: routeQuery.textSearch }),
-          ...(routeQuery.order && { order: routeQuery.order }),
-          ...(routeQuery.sortBy && { sortBy: routeQuery.sortBy }),
-          ...(routeQuery.status && { status: routeQuery.status }),
-          ...(routeQuery.itemsPerPage && {
-            itemsPerPage: routeQuery.itemsPerPage,
-          }),
-          ...(routeQuery.branchOffice && {
-            branchOffice: routeQuery.branchOffice,
-          }),
-          ...(routeQuery.onlyMyRepairs && { onlyMyRepairs: true }),
-          ...(routeQuery.technician && { technician: routeQuery.technician }),
-        };
-        const response = await this.getRequest("/repairs", true, query);
+        console.log({ query: this.parsedQuery });
+        const response = await this.getRequest(
+          "/repairs",
+          true,
+          this.parsedQuery
+        );
         this.loading = false;
 
         this.repairs = response.repairs;
@@ -305,11 +283,8 @@ export default {
         this.$router.push({
           name: "Reparaciones",
           query: {
+            ...this.$route.query,
             page: this.validPage - 1,
-            itemsPerPage: this.validItemsPerPage,
-            textSearch: this.validTextSearch,
-            sortBy: this.validSortValue,
-            order: this.validOrderValue,
             ...(this.$route.query.onlyMyRepairs && { onlyMyRepairs: true }),
             ...(this.$route.query.technician && {
               technician: this.$route.query.technician,
@@ -323,11 +298,8 @@ export default {
         this.$router.push({
           name: "Reparaciones",
           query: {
+            ...this.$route.query,
             page: this.validPage + 1,
-            itemsPerPage: this.validItemsPerPage,
-            textSearch: this.validTextSearch,
-            sortBy: this.validSortValue,
-            order: this.validOrderValue,
             ...(this.$route.query.onlyMyRepairs && { onlyMyRepairs: true }),
             ...(this.$route.query.technician && {
               technician: this.$route.query.technician,
@@ -341,66 +313,14 @@ export default {
         this.$router.push({
           name: "Reparaciones",
           query: {
+            ...this.$route.query,
             page: number,
-            itemsPerPage: this.validItemsPerPage,
-            textSearch: this.validTextSearch,
-            sortBy: this.validSortValue,
-            order: this.validOrderValue,
             ...(this.$route.query.onlyMyRepairs && { onlyMyRepairs: true }),
             ...(this.$route.query.technician && {
               technician: this.$route.query.technician,
             }),
           },
         });
-    },
-
-    searchChanged(newSearch) {
-      if (this.validTextSearch === newSearch) return;
-      this.$router.push({
-        name: "Reparaciones",
-        query: {
-          page: this.validPage,
-          itemsPerPage: this.validItemsPerPage,
-          sortBy: this.validSortValue,
-          order: this.validOrderValue,
-          ...(newSearch.onlyMyRepairs && { onlyMyRepairs: true }),
-          ...(newSearch && { textSearch: newSearch }),
-        },
-      });
-    },
-
-    sortChanged(payload) {
-      this.$router.push({
-        name: "Reparaciones",
-        query: {
-          page: this.validPage,
-          itemsPerPage: this.validItemsPerPage,
-          textSearch: this.validTextSearch,
-          order: this.validOrderValue,
-          ...(this.$route.query.onlyMyRepairs && { onlyMyRepairs: true }),
-          ...(this.$route.query.technician && {
-            technician: this.$route.query.technician,
-          }),
-          ...(payload && { sortBy: payload }),
-        },
-      });
-    },
-
-    orderChanged(payload) {
-      this.$router.push({
-        name: "Reparaciones",
-        query: {
-          page: this.validPage,
-          itemsPerPage: this.validItemsPerPage,
-          textSearch: this.validTextSearch,
-          sortBy: this.validSortValue,
-          ...(this.$route.query.onlyMyRepairs && { onlyMyRepairs: true }),
-          ...(this.$route.query.technician && {
-            technician: this.$route.query.technician,
-          }),
-          ...(payload && { order: payload }),
-        },
-      });
     },
 
     queryChanged(query) {
