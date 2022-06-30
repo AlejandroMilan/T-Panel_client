@@ -18,7 +18,7 @@
             hint="Busca por folio, IMEI, dispositivo o cliente."
             color="secondary"
             :disabled="isLoading || loading"
-            @keyup.enter="queryChanged()"
+            @keyup.enter="changeQuery({ textSearch: search })"
           >
             <template #append class="ma-0 pa-0">
               <div class="d-flex align-center" style="height: 100%">
@@ -29,7 +29,7 @@
                   class="mt-1"
                   :class="{ 'ml-2': !isMobile }"
                   :disabled="isLoading || loading"
-                  @click="queryChanged()"
+                  @click="changeQuery({ textSearch: search })"
                 >
                   <v-icon small>mdi-magnify</v-icon>
                 </v-btn>
@@ -38,7 +38,10 @@
                   color="secondary"
                   x-small
                   class="ml-2 mt-1"
-                  @click="clearSearch()"
+                  @click="
+                    changeQuery({ textSearch: '' });
+                    search = '';
+                  "
                 >
                   <v-icon small>mdi-close</v-icon>
                 </v-btn>
@@ -59,7 +62,7 @@
             item-color="secondary"
             :disabled="isLoading || loading"
             outlined
-            @change="queryChanged()"
+            @change="changeQuery({ sortBy })"
           ></v-select>
         </v-col>
         <v-col cols="12" :md="!isFullWidth ? '12' : '3'">
@@ -76,7 +79,7 @@
             :class="{ 'ml-2': isFullWidth && !isMobile }"
             :disabled="isLoading || loading"
             outlined
-            @change="queryChanged()"
+            @change="changeQuery({ order })"
           ></v-select>
         </v-col>
       </v-row>
@@ -94,7 +97,7 @@
             dense
             label="Estado"
             prepend-inner-icon="mdi-devices"
-            @change="queryChanged()"
+            @change="changeQuery({ status })"
             :disabled="isLoading || loading"
             outlined
           ></v-select>
@@ -118,8 +121,11 @@
             :disabled="isLoading || loading"
             outlined
             :append-icon="branchOffice ? 'mdi-close' : 'mdi-chevron-down'"
-            @click:append="clearBranchOffice()"
-            @change="queryChanged()"
+            @click:append="
+              branchOffice = '';
+              changeQuery({ branchOffice });
+            "
+            @change="changeQuery({ branchOffice })"
           ></v-select>
         </v-col>
         <v-col
@@ -133,7 +139,7 @@
             dense
             color="primary"
             label="Solo asignadas a mí"
-            @change="queryChanged()"
+            @change="changeQuery({ onlyMyRepairs })"
           ></v-checkbox>
         </v-col>
         <v-col
@@ -157,9 +163,9 @@
             :append-icon="technician ? 'mdi-close' : 'mdi-chevron-down'"
             @click:append="
               technician = '';
-              queryChanged();
+              changeQuery({ technician });
             "
-            @change="queryChanged()"
+            @change="changeQuery({ technician })"
           ></v-select>
         </v-col>
       </v-row>
@@ -176,13 +182,14 @@
 <script>
 import { mapGetters } from "vuex";
 import serverRequestMixin from "@/mixins/serverRequest.mixin";
+import routeQueryMixin from "@/mixins/routeQuery.mixin.js";
 
 import datesFilters from "./dates.repairFilter.vue";
 
 export default {
   name: "repairsFiltersCard",
 
-  mixins: [serverRequestMixin],
+  mixins: [serverRequestMixin, routeQueryMixin],
 
   components: {
     "dates-filters": datesFilters,

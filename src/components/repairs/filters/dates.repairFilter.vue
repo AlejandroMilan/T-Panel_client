@@ -12,7 +12,12 @@
             outlined
             dense
             color="secondary"
+            :append-icon="sinceLocal ? 'mdi-close' : null"
             prepend-inner-icon="mdi-calendar-range"
+            @click:append="
+              sinceLocal = '';
+              changeQuery({ since: '' });
+            "
           ></v-text-field>
         </template>
         <v-date-picker
@@ -42,6 +47,11 @@
             dense
             color="secondary"
             prepend-inner-icon="mdi-calendar-range"
+            :append-icon="untilLocal ? 'mdi-close' : null"
+            @click:append="
+              untilLocal = '';
+              changeQuery({ until: '' });
+            "
           ></v-text-field>
         </template>
         <v-date-picker
@@ -58,11 +68,33 @@
         </v-date-picker>
       </v-menu>
     </v-col>
+    <v-col
+      v-if="sinceLocal || untilLocal"
+      cols="12"
+      :md="isFullWidth ? '4' : '12'"
+    >
+      <v-select
+        v-model="useDatesForLocal"
+        :items="useDatesForValues"
+        item-text="text"
+        item-value="value"
+        color="secondary"
+        item-color="secondary"
+        outlined
+        dense
+        label="Usar filtros de fechas para"
+        @change="emitUseDatesFor()"
+      ></v-select>
+    </v-col>
   </v-row>
 </template>
 
 <script>
+import routeQueryMixin from "@/mixins/routeQuery.mixin.js";
+
 export default {
+  mixins: [routeQueryMixin],
+
   props: {
     since: { type: String, default: null },
     until: { type: String, default: null },
@@ -75,6 +107,17 @@ export default {
       untilLocal: this.until,
       menuSince: false,
       menuUntil: false,
+      useDatesForLocal: "admissionDate",
+      useDatesForValues: [
+        {
+          text: "Fecha de recibido",
+          value: "admissionDate",
+        },
+        {
+          text: "Fecha de entregado al cliente",
+          value: "deliveryDate",
+        },
+      ],
     };
   },
 
@@ -92,13 +135,26 @@ export default {
     },
   },
 
+  mounted() {
+    this.setCurrentData();
+  },
+
   methods: {
+    setCurrentData() {
+      if (this.$route.query.useDatesFor)
+        this.useDatesForLocal = this.$route.query.useDatesFor;
+    },
+
     emitSince() {
-      this.$emit("queryPropChanged", { since: this.sinceLocal });
+      this.changeQuery({ since: this.sinceLocal });
     },
 
     emitUntil() {
-      this.$emit("queryPropChanged", { until: this.untilLocal });
+      this.changeQuery({ until: this.untilLocal });
+    },
+
+    emitUseDatesFor() {
+      this.changeQuery({ useDatesFor: this.useDatesForLocal });
     },
 
     resetQuery() {
