@@ -1,6 +1,9 @@
 <template>
   <div>
     <v-row dense>
+      <v-col v-if="error" cols="12">
+        <v-alert type="error" outlined>{{ error }}</v-alert>
+      </v-col>
       <v-col cols="12">
         <div
           class="d-flex justify-space-between align-end"
@@ -107,9 +110,6 @@
           @manyRepairsDeleted="manyRepairsDeleted"
         ></repairList>
       </v-col>
-      <v-col v-if="error" cols="12">
-        <v-alert type="error" outlined>{{ error }}</v-alert>
-      </v-col>
     </v-row>
   </div>
 </template>
@@ -119,7 +119,7 @@ import { mapGetters } from "vuex";
 import serverRequestMixin from "@/mixins/serverRequest.mixin";
 import repairDialog from "./repairDialog";
 import repairList from "./repairList";
-import repairsFiltersCard from "./repairsFiltersCard.vue";
+import repairsFiltersCard from "./filters/repairsFiltersCard.vue";
 
 export default {
   name: "repairsView",
@@ -233,6 +233,8 @@ export default {
           }),
           ...(routeQuery.onlyMyRepairs && { onlyMyRepairs: true }),
           ...(routeQuery.technician && { technician: routeQuery.technician }),
+          ...(routeQuery.since && { since: routeQuery.since }),
+          ...(routeQuery.until && { until: routeQuery.until }),
         };
         const response = await this.getRequest("/repairs", true, query);
         this.loading = false;
@@ -305,11 +307,8 @@ export default {
         this.$router.push({
           name: "Reparaciones",
           query: {
+            ...this.$route.query,
             page: this.validPage - 1,
-            itemsPerPage: this.validItemsPerPage,
-            textSearch: this.validTextSearch,
-            sortBy: this.validSortValue,
-            order: this.validOrderValue,
             ...(this.$route.query.onlyMyRepairs && { onlyMyRepairs: true }),
             ...(this.$route.query.technician && {
               technician: this.$route.query.technician,
@@ -323,11 +322,8 @@ export default {
         this.$router.push({
           name: "Reparaciones",
           query: {
+            ...this.$route.query,
             page: this.validPage + 1,
-            itemsPerPage: this.validItemsPerPage,
-            textSearch: this.validTextSearch,
-            sortBy: this.validSortValue,
-            order: this.validOrderValue,
             ...(this.$route.query.onlyMyRepairs && { onlyMyRepairs: true }),
             ...(this.$route.query.technician && {
               technician: this.$route.query.technician,
@@ -341,11 +337,8 @@ export default {
         this.$router.push({
           name: "Reparaciones",
           query: {
+            ...this.$route.query,
             page: number,
-            itemsPerPage: this.validItemsPerPage,
-            textSearch: this.validTextSearch,
-            sortBy: this.validSortValue,
-            order: this.validOrderValue,
             ...(this.$route.query.onlyMyRepairs && { onlyMyRepairs: true }),
             ...(this.$route.query.technician && {
               technician: this.$route.query.technician,
@@ -359,10 +352,7 @@ export default {
       this.$router.push({
         name: "Reparaciones",
         query: {
-          page: this.validPage,
-          itemsPerPage: this.validItemsPerPage,
-          sortBy: this.validSortValue,
-          order: this.validOrderValue,
+          ...this.$route.query,
           ...(newSearch.onlyMyRepairs && { onlyMyRepairs: true }),
           ...(newSearch && { textSearch: newSearch }),
         },

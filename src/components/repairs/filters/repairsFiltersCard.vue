@@ -2,7 +2,10 @@
   <v-card tile flat>
     <v-card-title v-if="false">Filtros</v-card-title>
     <v-toolbar color="secondary" dark dense flat>
-      <v-toolbar-title>Filtros</v-toolbar-title>
+      <v-toolbar-title class="d-flex align-items-center">
+        <v-icon class="mr-2">mdi-tune</v-icon>
+        <span>Filtros</span>
+      </v-toolbar-title>
     </v-toolbar>
     <v-card-text class="pt-5">
       <v-row dense>
@@ -48,6 +51,7 @@
             v-model="sortBy"
             dense
             label="Ordenar por"
+            prepend-inner-icon="mdi-sort"
             :items="sortValues"
             item-text="text"
             item-value="value"
@@ -63,6 +67,7 @@
             v-model="order"
             dense
             label="Tipo de orden"
+            prepend-inner-icon="mdi-sort-variant"
             :items="orderValues"
             item-text="text"
             item-value="value"
@@ -88,6 +93,7 @@
             item-color="secondary"
             dense
             label="Estado"
+            prepend-inner-icon="mdi-devices"
             @change="queryChanged()"
             :disabled="isLoading || loading"
             outlined
@@ -108,6 +114,7 @@
             item-color="secondary"
             dense
             label="Sucursal"
+            prepend-inner-icon="mdi-store"
             :disabled="isLoading || loading"
             outlined
             :append-icon="branchOffice ? 'mdi-close' : 'mdi-chevron-down'"
@@ -144,6 +151,7 @@
             item-color="secondary"
             dense
             label="Técnico asignado"
+            prepend-inner-icon="mdi-account"
             :disabled="isLoading || loading"
             outlined
             :append-icon="technician ? 'mdi-close' : 'mdi-chevron-down'"
@@ -155,6 +163,11 @@
           ></v-select>
         </v-col>
       </v-row>
+      <dates-filters
+        :since="since"
+        :until="until"
+        @queryPropChanged="dateChanged"
+      ></dates-filters>
     </v-card-text>
   </v-card>
 </template>
@@ -163,10 +176,16 @@
 import { mapGetters } from "vuex";
 import serverRequestMixin from "@/mixins/serverRequest.mixin";
 
+import datesFilters from "./dates.repairFilter.vue";
+
 export default {
   name: "repairsFiltersCard",
 
   mixins: [serverRequestMixin],
+
+  components: {
+    "dates-filters": datesFilters,
+  },
 
   props: {
     isLoading: { type: Boolean, default: false },
@@ -206,6 +225,8 @@ export default {
     onlyMyRepairs: false,
     technicians: [],
     technician: "",
+    since: "",
+    until: "",
   }),
 
   computed: {
@@ -250,6 +271,9 @@ export default {
         if (this.currentQuery.technician)
           this.technician = this.currentQuery.technician;
         else this.technician = "";
+
+        if (this.currentQuery.since) this.since = this.currentQuery.since;
+        if (this.currentQuery.until) this.until = this.currentQuery.until;
       } else {
         this.search = "";
         this.order = this.orderValues[0].value;
@@ -280,6 +304,8 @@ export default {
         }),
         ...(this.onlyMyRepairs && { onlyMyRepairs: this.onlyMyRepairs }),
         technician: this.technician,
+        ...(this.since && { since: this.since }),
+        ...(this.until && { until: this.until }),
       };
       if (this.status) {
         query.status = this.status.length > 1 ? this.status : this.status[0];
@@ -330,6 +356,12 @@ export default {
       } catch (error) {
         console.error(error);
       }
+    },
+
+    dateChanged(propChanged) {
+      if (propChanged.since) this.since = propChanged.since;
+      if (propChanged.until) this.until = propChanged.until;
+      this.queryChanged();
     },
   },
 };
