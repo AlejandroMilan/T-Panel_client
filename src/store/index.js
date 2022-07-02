@@ -6,6 +6,14 @@ Vue.use(Vuex);
 
 import auth from "./modules/auth.module";
 
+const repairsColors = {
+  100: "red darken-4",
+  200: "amber darken-4",
+  300: "green darken-3",
+  310: "#1976d2",
+  400: "indigo",
+};
+
 const initialState = {
   enviroment: process.env.VUE_APP_ENVIROMENT,
   masterToken: process.env.VUE_APP_MASTER_TOKEN,
@@ -35,6 +43,11 @@ export default new Vuex.Store({
           state.auth.user.permissions.find((e) => e.key == permissionKey) ||
           state.auth.user.role.role == 0
         );
+      };
+    },
+    getRepairStatusColor() {
+      return function (statusKey) {
+        return repairsColors[statusKey];
       };
     },
   },
