@@ -46,6 +46,22 @@
               estado</v-btn
             >
           </v-col>
+          <v-col
+            cols="12"
+            v-if="
+              user.role.role === 0 ||
+              user.permissions.filter((e) => e.key === 330).length > 0
+            "
+          >
+            <v-btn
+              color="secondary"
+              small
+              text
+              @click="$emit('openMovementDialog')"
+              ><v-icon small class="mr-2">mdi-swap-vertical</v-icon>
+              <span>Agregar movimiento</span></v-btn
+            >
+          </v-col>
           <v-col cols="12">
             <v-btn color="secondary" small text @click="$emit('addComment')"
               ><v-icon small class="mr-2"> mdi-message-reply-text</v-icon>Nuevo

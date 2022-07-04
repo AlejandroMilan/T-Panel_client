@@ -38,9 +38,22 @@
         class="mb-2"
       >
         <v-tabs-slider color="primary"></v-tabs-slider>
-        <v-tab>Detalles de la reparación</v-tab>
-        <v-tab>Comentarios</v-tab>
-        <v-tab>Actividad</v-tab>
+        <v-tab>
+          <v-icon class="mr-1">mdi-text-box-outline</v-icon>
+          <span>Detalles de la reparación</span>
+        </v-tab>
+        <v-tab>
+          <v-icon class="mr-2">mdi-comment</v-icon>
+          <span>Comentarios</span>
+        </v-tab>
+        <v-tab>
+          <v-icon class="mr-2">mdi-swap-vertical</v-icon>
+          <span>Movimientos</span>
+        </v-tab>
+        <v-tab>
+          <v-icon class="mr-2">mdi-clock-outline</v-icon>
+          <span>Actividad</span>
+        </v-tab>
       </v-tabs>
       <v-row>
         <v-col cols="12" md="8" lg="9">
@@ -51,6 +64,9 @@
               </v-tab-item>
               <v-tab-item>
                 <commentsList :comments="comments"></commentsList>
+              </v-tab-item>
+              <v-tab-item>
+                <movements-list :movements="movements"></movements-list>
               </v-tab-item>
               <v-tab-item>
                 <repairLogs :logs="repair.logs" />
@@ -86,6 +102,7 @@
             @downloadRepairPdf="downloadRepairPdf"
             @sendWhatsApp="sendWhatsappDialog = true"
             @showTechnician="showTechnicianDialog"
+            @openMovementDialog="showMovementDialog = true"
           ></actionsCard>
 
           <commentCard
@@ -144,6 +161,13 @@
       @cancel="showTechnician = false"
       @technicianSelected="technicianSelected"
     ></technician-dialog>
+
+    <movement-dialog
+      v-if="showMovementDialog"
+      :show="showMovementDialog"
+      @cancel="showMovementDialog = false"
+      @movementSaved="movementSaved"
+    ></movement-dialog>
   </div>
 </template>
 
@@ -153,6 +177,7 @@ import serverRequestMixin from "@/mixins/serverRequest.mixin";
 
 import repairDialog from "./repairDialog";
 import repairData from "./repairData";
+import repairMovements from "./movements/repairMovements.vue";
 import commentsList from "@/components/comments/commentsList";
 import actionsCard from "./actionsCard";
 import updateStatusDialog from "./updateStatusDialog";
@@ -178,7 +203,9 @@ export default {
     commentDialog,
     sendWhatsApp,
     repairLogs,
+    "movements-list": repairMovements,
     "technician-dialog": () => import("./setTechnicianDialog.vue"),
+    "movement-dialog": () => import("./movements/addRepairMovement.vue"),
   },
 
   data: () => ({
@@ -190,13 +217,41 @@ export default {
     showCommentDialog: false,
     showTechnician: false,
     sendWhatsappDialog: false,
+    showMovementDialog: false,
     tab: null,
     error: null,
     errorPrint: null,
     repairId: "",
     repair: null,
     comments: null,
+    movements: [],
   }),
+
+  computed: {
+    gain() {
+      if (!this.repair) return 0;
+      const gainMovements = this.movements.filter(
+        (e) => e.movementType === "entry"
+      );
+      const billMovements = this.movements.filter(
+        (e) => e.movementType === "bill"
+      );
+
+      let gainAmount = 0;
+      gainMovements.forEach((e) => {
+        gainAmount = gainAmount + e.amount;
+      });
+      let billAmount = 0;
+      billMovements.forEach((e) => {
+        billAmount = billAmount + e.amount;
+      });
+
+      const prePayment = this.repair.payment.prePayment || 0;
+
+      const gain = gainAmount + prePayment - billAmount;
+      return gain;
+    },
+  },
 
   mounted() {
     this.repairId = this.$route.params.repairId;
@@ -213,10 +268,14 @@ export default {
         const commentsResponse = await this.getRequest(
           `/comments/${this.repairId}`
         );
+        const movementsResponse = await this.getRequest(
+          `/repairMovements/repair/${this.repairId}`
+        );
 
         this.loading = false;
         this.repair = response.repair;
         this.comments = commentsResponse.comments.reverse();
+        this.movements = movementsResponse.movements;
       } catch (error) {
         this.loading = false;
         this.error = error.data.message;
@@ -310,6 +369,11 @@ export default {
       this.repair.technician = technicianSelected;
       this.repair.logs = logs;
       this.showTechnician = false;
+    },
+
+    movementSaved(movement) {
+      this.movements = [movement, ...this.movements];
+      this.showMovementDialog = false;
     },
   },
 };
