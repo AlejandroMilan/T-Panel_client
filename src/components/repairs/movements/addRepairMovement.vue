@@ -62,7 +62,7 @@
               @keyup.enter="submit()"
             ></v-text-field>
           </v-col>
-          <v-col v-if="hasPermission(322)" cols="12">
+          <v-col v-if="hasPermission(322) && type === 'entry'" cols="12">
             <v-checkbox
               v-model="printTicket"
               label="Imprimir ticket"

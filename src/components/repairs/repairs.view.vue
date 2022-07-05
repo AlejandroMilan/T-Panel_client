@@ -207,7 +207,6 @@ export default {
       this.error = "";
       this.loading = true;
       try {
-        console.log({ query: this.parsedQuery });
         const response = await this.getRequest(
           "/repairs",
           true,

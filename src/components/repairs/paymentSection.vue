@@ -27,17 +27,6 @@
           </v-list-item-content>
         </v-list-item>
       </v-col>
-      <v-col
-        cols="12"
-        v-if="paymentData.prePayment < paymentData.estimatedCost"
-      >
-        <v-alert dense type="warning" text
-          >Al cliente aún le falta por pagar
-          {{
-            toCurrency(paymentData.estimatedCost - paymentData.prePayment)
-          }}</v-alert
-        >
-      </v-col>
     </v-row>
   </div>
 </template>
