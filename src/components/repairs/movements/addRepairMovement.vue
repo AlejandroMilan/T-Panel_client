@@ -62,6 +62,13 @@
               @keyup.enter="submit()"
             ></v-text-field>
           </v-col>
+          <v-col v-if="hasPermission(322)" cols="12">
+            <v-checkbox
+              v-model="printTicket"
+              label="Imprimir ticket"
+              class="ma-0"
+            ></v-checkbox>
+          </v-col>
           <v-col cols="12">
             <div class="d-flex">
               <v-spacer></v-spacer>
@@ -88,6 +95,7 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import { validationMixin } from "vuelidate";
 import serverRequestMixin from "@/mixins/serverRequest.mixin";
 import { required, numeric, minValue } from "vuelidate/lib/validators";
@@ -101,6 +109,7 @@ export default {
 
   data: () => ({
     loading: false,
+    printTicket: false,
     error: "",
     type: "bill",
     description: "",
@@ -127,6 +136,8 @@ export default {
   },
 
   computed: {
+    ...mapGetters(["hasPermission"]),
+
     descriptionPlaceholder() {
       return this.type === "bill"
         ? "Ej. Display nuevo"
@@ -182,6 +193,7 @@ export default {
         };
 
         const serverResponse = await this.postRequest("/repairMovements", body);
+        if (this.printTicket) await this.doPrintTicket(serverResponse.movement);
         this.loading = false;
 
         this.$emit("movementSaved", serverResponse.movement);
@@ -192,6 +204,27 @@ export default {
           this.error = "Error inesperado, favor de contactar con soporte";
           console.error(error);
         }
+      }
+    },
+
+    async doPrintTicket(movement) {
+      this.loading = true;
+      this.error = null;
+
+      try {
+        let urlString = `/repairMovements/${movement._id}/ticket`;
+
+        const serverResponse = await this.getFileRequest(urlString);
+        this.loading = false;
+
+        var file = new Blob([serverResponse.file], { type: "application/pdf" });
+        let fileURL = URL.createObjectURL(file);
+        window.open(fileURL);
+      } catch (error) {
+        this.loadingPrint = false;
+        if (error.data) this.error = error.data.message;
+        else this.error = error.message;
+        if (error.status >= 500) console.error(error);
       }
     },
   },
