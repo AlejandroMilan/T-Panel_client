@@ -28,6 +28,11 @@
         }}</span>
         <v-spacer> </v-spacer>
         <span>{{ `Sucursal: ${repairData.branchOffice.name}` }}</span>
+        <div v-if="isRole(0) || isRole(1)">
+          <v-chip :color="gainColor" small label
+            >Ganancia: {{ currencyFormat(repairData.gain) }}</v-chip
+          >
+        </div>
       </v-card-subtitle>
       <v-card-text>
         <deviceSection :deviceData="getDeviceData()"></deviceSection>
@@ -42,7 +47,10 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import { getFullDateWithHour } from "@/helpers/date.helper";
+import { currencyFormat } from "@/helpers/numbers.helper";
+
 import deviceSection from "./deviceSection";
 import customerSection from "./customerSection";
 import paymentSection from "./paymentSection";
@@ -56,7 +64,18 @@ export default {
     repairData: { type: Object, required: true },
   },
 
+  computed: {
+    ...mapGetters(["isRole"]),
+
+    gainColor() {
+      if (!this.repairData.gain) return null;
+      if (this.repairData.gain > 0) return "success";
+      else return "error";
+    },
+  },
   methods: {
+    currencyFormat,
+
     getDateString(ISODate) {
       return getFullDateWithHour(ISODate);
     },

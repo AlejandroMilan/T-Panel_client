@@ -60,7 +60,7 @@
           <div class="py-2">
             <v-tabs-items v-model="tab">
               <v-tab-item>
-                <repairData :repairData="repair"></repairData>
+                <repairData :repairData="{ ...repair, gain }"></repairData>
               </v-tab-item>
               <v-tab-item>
                 <commentsList :comments="comments"></commentsList>
@@ -246,7 +246,10 @@ export default {
         billAmount = billAmount + e.amount;
       });
 
-      const prePayment = this.repair.payment.prePayment || 0;
+      const prePayment =
+        this.repair.payment && this.repair.payment.prePayment
+          ? this.repair.payment.prePayment
+          : 0;
 
       const gain = gainAmount + prePayment - billAmount;
       return gain;
