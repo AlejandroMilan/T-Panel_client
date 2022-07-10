@@ -57,7 +57,15 @@ export default {
       this.loading = true;
 
       try {
-        const serverResponse = await this.getRequest("/business/dashboard");
+        const query = {
+          ...(this.$route.query.since && { since: this.$route.query.since }),
+          ...(this.$route.query.until && { until: this.$route.query.until }),
+        };
+        const serverResponse = await this.getRequest(
+          "/business/dashboard",
+          true,
+          query
+        );
         this.loading = false;
 
         this.repairsStatusCount = serverResponse.repairsStatusCount;
