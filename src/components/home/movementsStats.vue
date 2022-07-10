@@ -27,6 +27,7 @@
                     v-model="sinceDate"
                     color="secondary"
                     locale="es"
+                    :max="untilDate || null"
                     @change="addToQuery({ since: sinceDate })"
                   ></v-date-picker>
                 </v-menu>
@@ -52,6 +53,7 @@
                     v-model="untilDate"
                     color="secondary"
                     locale="es"
+                    :min="sinceDate || null"
                     @change="addToQuery({ until: untilDate })"
                   ></v-date-picker>
                 </v-menu>
