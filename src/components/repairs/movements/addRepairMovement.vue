@@ -105,6 +105,7 @@ export default {
   mixins: [serverRequestMixin, validationMixin],
   props: {
     show: { type: Boolean, default: false },
+    invoiceId: { type: String, required: false },
   },
 
   data: () => ({
@@ -189,7 +190,7 @@ export default {
           description: this.description,
           type: this.type,
           amount: this.amount,
-          invoiceId: this.$route.params.repairId,
+          invoiceId: this.invoiceId || this.$route.params.repairId,
         };
 
         const serverResponse = await this.postRequest("/repairMovements", body);

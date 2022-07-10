@@ -122,6 +122,27 @@
               left
               v-if="
                 user.role.role === 0 ||
+                user.permissions.filter((e) => e.key === 330).length > 0
+              "
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <v-icon
+                  small
+                  class="mr-2"
+                  v-bind="attrs"
+                  v-on="on"
+                  @click="openMovementDialog(item)"
+                >
+                  mdi-swap-vertical
+                </v-icon>
+              </template>
+              <span>Agregar movimiento</span>
+            </v-tooltip>
+
+            <v-tooltip
+              left
+              v-if="
+                user.role.role === 0 ||
                 user.permissions.filter((e) => e.key === 340).length > 0
               "
             >
@@ -162,12 +183,21 @@
       @repairDeleted="repairDeleted"
       @manyRepairsDeleted="manyRepairsDeleted"
     ></deleteRepairDialog>
+
+    <movement-dialog
+      v-if="showMovementDialog"
+      :show="showMovementDialog"
+      :invoiceId="invoiceIdToUpdate"
+      @cancel="closeMovementDialog()"
+      @movementSaved="closeMovementDialog()"
+    ></movement-dialog>
   </div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
 import { getShortDate } from "@/helpers/date.helper";
+
 import updateStatusDialog from "./updateStatusDialog";
 import deleteRepairDialog from "./deleteRepairDialog";
 
@@ -183,7 +213,11 @@ export default {
     count: { type: Number, default: 0 },
   },
 
-  components: { updateStatusDialog, deleteRepairDialog },
+  components: {
+    updateStatusDialog,
+    deleteRepairDialog,
+    "movement-dialog": () => import("./movements/addRepairMovement.vue"),
+  },
 
   computed: {
     ...mapGetters(["user"]),
@@ -239,6 +273,7 @@ export default {
     showEditRepairStatus: false,
     repairToAction: null,
     showDeleteRepair: false,
+    showMovementDialog: false,
 
     selectedRepairs: [],
     invoiceIdToUpdate: null,
@@ -283,6 +318,18 @@ export default {
 
     closeEditRepairStatusDialog() {
       this.showEditRepairStatus = false;
+      this.invoiceIdToUpdate = null;
+      this.repairToAction = null;
+    },
+
+    openMovementDialog(repair) {
+      this.repairToAction = repair;
+      this.invoiceIdToUpdate = repair.invoiceId;
+      this.showMovementDialog = true;
+    },
+
+    closeMovementDialog() {
+      this.showMovementDialog = false;
       this.invoiceIdToUpdate = null;
       this.repairToAction = null;
     },
