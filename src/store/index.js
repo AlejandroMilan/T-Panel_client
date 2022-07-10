@@ -37,6 +37,11 @@ export default new Vuex.Store({
     countryCode: (state) => {
       return state.countryCode;
     },
+    isRole: (state) => {
+      return function (roleKey) {
+        return state.auth.user.role && state.auth.user.role.role == roleKey;
+      };
+    },
     hasPermission: (state) => {
       return function (permissionKey) {
         return (

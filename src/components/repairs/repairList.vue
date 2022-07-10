@@ -89,11 +89,20 @@
           </template>
           <template v-slot:expanded-item="{ headers, item }">
             <td :colspan="headers.length" class="elevation-0">
-              <span class="text-body-2 font-weight-medium"
-                >Motivo de ingreso o falla: </span
-              ><span class="text-body-2">{{
-                item.device.reasonForAdmission
-              }}</span>
+              <v-row dense>
+                <v-col cols="12" md="6">
+                  <v-list-item>
+                    <v-list-item-content>
+                      <v-list-item-subtitle
+                        >Motivo de ingreso (falla):</v-list-item-subtitle
+                      >
+                      <v-list-item-title>{{
+                        item.device.reasonForAdmission
+                      }}</v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-col>
+              </v-row>
             </td>
           </template>
           <template v-slot:[`item.actions`]="{ item }">
@@ -116,6 +125,27 @@
                 </v-icon>
               </template>
               <span>Modificar estado</span>
+            </v-tooltip>
+
+            <v-tooltip
+              left
+              v-if="
+                user.role.role === 0 ||
+                user.permissions.filter((e) => e.key === 330).length > 0
+              "
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <v-icon
+                  small
+                  class="mr-2"
+                  v-bind="attrs"
+                  v-on="on"
+                  @click="openMovementDialog(item)"
+                >
+                  mdi-swap-vertical
+                </v-icon>
+              </template>
+              <span>Agregar movimiento</span>
             </v-tooltip>
 
             <v-tooltip
@@ -162,12 +192,21 @@
       @repairDeleted="repairDeleted"
       @manyRepairsDeleted="manyRepairsDeleted"
     ></deleteRepairDialog>
+
+    <movement-dialog
+      v-if="showMovementDialog"
+      :show="showMovementDialog"
+      :invoiceId="invoiceIdToUpdate"
+      @cancel="closeMovementDialog()"
+      @movementSaved="closeMovementDialog()"
+    ></movement-dialog>
   </div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
 import { getShortDate } from "@/helpers/date.helper";
+
 import updateStatusDialog from "./updateStatusDialog";
 import deleteRepairDialog from "./deleteRepairDialog";
 
@@ -183,7 +222,11 @@ export default {
     count: { type: Number, default: 0 },
   },
 
-  components: { updateStatusDialog, deleteRepairDialog },
+  components: {
+    updateStatusDialog,
+    deleteRepairDialog,
+    "movement-dialog": () => import("./movements/addRepairMovement.vue"),
+  },
 
   computed: {
     ...mapGetters(["user"]),
@@ -202,6 +245,7 @@ export default {
   data: () => ({
     expanded: [],
     headers: [
+      { text: "", value: "data-table-expand" },
       { text: "Folio", value: "invoiceId" },
       {
         text: "IMEI",
@@ -233,12 +277,12 @@ export default {
         value: "branchOffice.name",
       },
       { text: "Acciones", value: "actions", sortable: false },
-      { text: "", value: "data-table-expand" },
     ],
 
     showEditRepairStatus: false,
     repairToAction: null,
     showDeleteRepair: false,
+    showMovementDialog: false,
 
     selectedRepairs: [],
     invoiceIdToUpdate: null,
@@ -283,6 +327,18 @@ export default {
 
     closeEditRepairStatusDialog() {
       this.showEditRepairStatus = false;
+      this.invoiceIdToUpdate = null;
+      this.repairToAction = null;
+    },
+
+    openMovementDialog(repair) {
+      this.repairToAction = repair;
+      this.invoiceIdToUpdate = repair.invoiceId;
+      this.showMovementDialog = true;
+    },
+
+    closeMovementDialog() {
+      this.showMovementDialog = false;
       this.invoiceIdToUpdate = null;
       this.repairToAction = null;
     },

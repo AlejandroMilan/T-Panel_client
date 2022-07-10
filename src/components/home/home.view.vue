@@ -5,13 +5,23 @@
       :loading="loading"
       :repairsStatusCount="repairsStatusCount"
     ></welcome-card>
+
+    <div v-if="showMovements">
+      <movements-info
+        v-if="!loading"
+        :movementsInfo="movementsInfo"
+        class="mt-5"
+      ></movements-info>
+    </div>
   </div>
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import serverRequestMixin from "@/mixins/serverRequest.mixin.js";
 
 import welcomeCard from "./welcomeCard.vue";
+import movementsStats from "./movementsStats.vue";
 
 export default {
   name: "homeView",
@@ -20,13 +30,23 @@ export default {
 
   components: {
     "welcome-card": welcomeCard,
+    "movements-info": movementsStats,
   },
 
   data: () => ({
     error: "",
-    loading: false,
+    loading: true,
     repairsStatusCount: null,
+    movementsInfo: null,
   }),
+
+  computed: {
+    ...mapGetters(["isRole"]),
+
+    showMovements() {
+      return this.isRole(0) || this.isRole(1);
+    },
+  },
 
   mounted() {
     this.getDashboard();
@@ -37,10 +57,19 @@ export default {
       this.loading = true;
 
       try {
-        const serverResponse = await this.getRequest("/business/dashboard");
+        const query = {
+          ...(this.$route.query.since && { since: this.$route.query.since }),
+          ...(this.$route.query.until && { until: this.$route.query.until }),
+        };
+        const serverResponse = await this.getRequest(
+          "/business/dashboard",
+          true,
+          query
+        );
         this.loading = false;
 
         this.repairsStatusCount = serverResponse.repairsStatusCount;
+        this.movementsInfo = serverResponse.movementsInfo;
       } catch (error) {
         this.loading = false;
         if (error.data) this.error = error.data.message;

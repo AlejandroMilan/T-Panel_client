@@ -29,6 +29,12 @@
         </v-col>
       </v-row>
     </v-alert>
+    <div>
+      <v-btn text small color="#1976d2" @click="goBack()">
+        <v-icon small class="mr-2">mdi-arrow-left</v-icon>
+        <span>Volver</span>
+      </v-btn>
+    </div>
     <div v-if="!loading && !error && repair">
       <v-tabs
         v-model="tab"
@@ -38,19 +44,35 @@
         class="mb-2"
       >
         <v-tabs-slider color="primary"></v-tabs-slider>
-        <v-tab>Detalles de la reparación</v-tab>
-        <v-tab>Comentarios</v-tab>
-        <v-tab>Actividad</v-tab>
+        <v-tab>
+          <v-icon class="mr-1">mdi-text-box-outline</v-icon>
+          <span>Detalles de la reparación</span>
+        </v-tab>
+        <v-tab>
+          <v-icon class="mr-2">mdi-comment</v-icon>
+          <span>Comentarios</span>
+        </v-tab>
+        <v-tab>
+          <v-icon class="mr-2">mdi-swap-vertical</v-icon>
+          <span>Movimientos</span>
+        </v-tab>
+        <v-tab>
+          <v-icon class="mr-2">mdi-clock-outline</v-icon>
+          <span>Actividad</span>
+        </v-tab>
       </v-tabs>
       <v-row>
         <v-col cols="12" md="8" lg="9">
           <div class="py-2">
             <v-tabs-items v-model="tab">
               <v-tab-item>
-                <repairData :repairData="repair"></repairData>
+                <repairData :repairData="{ ...repair, gain }"></repairData>
               </v-tab-item>
               <v-tab-item>
                 <commentsList :comments="comments"></commentsList>
+              </v-tab-item>
+              <v-tab-item>
+                <movements-list :movements="movements"></movements-list>
               </v-tab-item>
               <v-tab-item>
                 <repairLogs :logs="repair.logs" />
@@ -83,9 +105,11 @@
             @addComment="addComment"
             @printRepair="printRepair({})"
             @printRepairTicket="printRepair({ isTicket: true })"
+            @printRepairSticker="printRepair({ isSticker: true })"
             @downloadRepairPdf="downloadRepairPdf"
             @sendWhatsApp="sendWhatsappDialog = true"
             @showTechnician="showTechnicianDialog"
+            @openMovementDialog="showMovementDialog = true"
           ></actionsCard>
 
           <commentCard
@@ -144,6 +168,13 @@
       @cancel="showTechnician = false"
       @technicianSelected="technicianSelected"
     ></technician-dialog>
+
+    <movement-dialog
+      v-if="showMovementDialog"
+      :show="showMovementDialog"
+      @cancel="showMovementDialog = false"
+      @movementSaved="movementSaved"
+    ></movement-dialog>
   </div>
 </template>
 
@@ -153,6 +184,7 @@ import serverRequestMixin from "@/mixins/serverRequest.mixin";
 
 import repairDialog from "./repairDialog";
 import repairData from "./repairData";
+import repairMovements from "./movements/repairMovements.vue";
 import commentsList from "@/components/comments/commentsList";
 import actionsCard from "./actionsCard";
 import updateStatusDialog from "./updateStatusDialog";
@@ -178,7 +210,9 @@ export default {
     commentDialog,
     sendWhatsApp,
     repairLogs,
+    "movements-list": repairMovements,
     "technician-dialog": () => import("./setTechnicianDialog.vue"),
+    "movement-dialog": () => import("./movements/addRepairMovement.vue"),
   },
 
   data: () => ({
@@ -190,13 +224,39 @@ export default {
     showCommentDialog: false,
     showTechnician: false,
     sendWhatsappDialog: false,
+    showMovementDialog: false,
     tab: null,
     error: null,
     errorPrint: null,
     repairId: "",
     repair: null,
     comments: null,
+    movements: [],
   }),
+
+  computed: {
+    gain() {
+      if (!this.repair) return 0;
+      const gainMovements = this.movements.filter(
+        (e) => e.movementType === "entry"
+      );
+      const billMovements = this.movements.filter(
+        (e) => e.movementType === "bill"
+      );
+
+      let gainAmount = 0;
+      gainMovements.forEach((e) => {
+        gainAmount = gainAmount + e.amount;
+      });
+      let billAmount = 0;
+      billMovements.forEach((e) => {
+        billAmount = billAmount + e.amount;
+      });
+
+      const gain = gainAmount - billAmount;
+      return gain;
+    },
+  },
 
   mounted() {
     this.repairId = this.$route.params.repairId;
@@ -213,10 +273,14 @@ export default {
         const commentsResponse = await this.getRequest(
           `/comments/${this.repairId}`
         );
+        const movementsResponse = await this.getRequest(
+          `/repairMovements/repair/${this.repairId}`
+        );
 
         this.loading = false;
         this.repair = response.repair;
         this.comments = commentsResponse.comments.reverse();
+        this.movements = movementsResponse.movements;
       } catch (error) {
         this.loading = false;
         this.error = error.data.message;
@@ -256,13 +320,14 @@ export default {
       this.comments = [newComment, ...this.comments];
     },
 
-    async printRepair({ isTicket = false }) {
+    async printRepair({ isTicket = false, isSticker = false }) {
       this.loadingPrint = true;
       this.errorPrint = null;
 
       try {
         let urlString = `/repairs/repair/${this.repairId}/pdf`;
         if (isTicket) urlString = urlString + "?type=ticket";
+        if (isSticker) urlString = urlString + "?type=sticker";
 
         const serverResponse = await this.getFileRequest(urlString);
         this.loadingPrint = false;
@@ -310,6 +375,15 @@ export default {
       this.repair.technician = technicianSelected;
       this.repair.logs = logs;
       this.showTechnician = false;
+    },
+
+    movementSaved(movement) {
+      this.movements = [movement, ...this.movements];
+      this.showMovementDialog = false;
+    },
+
+    goBack() {
+      window.history.back();
     },
   },
 };
