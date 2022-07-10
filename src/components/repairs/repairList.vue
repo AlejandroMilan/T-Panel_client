@@ -89,11 +89,20 @@
           </template>
           <template v-slot:expanded-item="{ headers, item }">
             <td :colspan="headers.length" class="elevation-0">
-              <span class="text-body-2 font-weight-medium"
-                >Motivo de ingreso o falla: </span
-              ><span class="text-body-2">{{
-                item.device.reasonForAdmission
-              }}</span>
+              <v-row dense>
+                <v-col cols="12" md="6">
+                  <v-list-item>
+                    <v-list-item-content>
+                      <v-list-item-subtitle
+                        >Motivo de ingreso (falla):</v-list-item-subtitle
+                      >
+                      <v-list-item-title>{{
+                        item.device.reasonForAdmission
+                      }}</v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-col>
+              </v-row>
             </td>
           </template>
           <template v-slot:[`item.actions`]="{ item }">
@@ -236,6 +245,7 @@ export default {
   data: () => ({
     expanded: [],
     headers: [
+      { text: "", value: "data-table-expand" },
       { text: "Folio", value: "invoiceId" },
       {
         text: "IMEI",
@@ -267,7 +277,6 @@ export default {
         value: "branchOffice.name",
       },
       { text: "Acciones", value: "actions", sortable: false },
-      { text: "", value: "data-table-expand" },
     ],
 
     showEditRepairStatus: false,
