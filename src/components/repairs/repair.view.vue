@@ -29,6 +29,12 @@
         </v-col>
       </v-row>
     </v-alert>
+    <div>
+      <v-btn text small color="#1976d2" @click="goBack()">
+        <v-icon small class="mr-2">mdi-arrow-left</v-icon>
+        <span>Volver</span>
+      </v-btn>
+    </div>
     <div v-if="!loading && !error && repair">
       <v-tabs
         v-model="tab"
@@ -99,6 +105,7 @@
             @addComment="addComment"
             @printRepair="printRepair({})"
             @printRepairTicket="printRepair({ isTicket: true })"
+            @printRepairSticker="printRepair({ isSticker: true })"
             @downloadRepairPdf="downloadRepairPdf"
             @sendWhatsApp="sendWhatsappDialog = true"
             @showTechnician="showTechnicianDialog"
@@ -313,13 +320,14 @@ export default {
       this.comments = [newComment, ...this.comments];
     },
 
-    async printRepair({ isTicket = false }) {
+    async printRepair({ isTicket = false, isSticker = false }) {
       this.loadingPrint = true;
       this.errorPrint = null;
 
       try {
         let urlString = `/repairs/repair/${this.repairId}/pdf`;
         if (isTicket) urlString = urlString + "?type=ticket";
+        if (isSticker) urlString = urlString + "?type=sticker";
 
         const serverResponse = await this.getFileRequest(urlString);
         this.loadingPrint = false;
@@ -372,6 +380,10 @@ export default {
     movementSaved(movement) {
       this.movements = [movement, ...this.movements];
       this.showMovementDialog = false;
+    },
+
+    goBack() {
+      window.history.back();
     },
   },
 };

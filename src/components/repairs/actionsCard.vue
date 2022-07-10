@@ -121,6 +121,29 @@
               user.permissions.filter((e) => e.key === 322).length > 0
             "
           >
+            <v-tooltip left>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                  v-bind="attrs"
+                  v-on="on"
+                  color="secondary"
+                  small
+                  text
+                  @click="$emit('printRepairSticker')"
+                  ><v-icon small class="mr-2"> mdi-sticker</v-icon>Imprimir
+                  Sticker</v-btn
+                >
+              </template>
+              <span>En pruebas (posibles fallos)</span>
+            </v-tooltip>
+          </v-col>
+          <v-col
+            cols="12"
+            v-if="
+              user.role.role === 0 ||
+              user.permissions.filter((e) => e.key === 322).length > 0
+            "
+          >
             <v-btn
               color="secondary"
               small
