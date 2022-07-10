@@ -246,12 +246,7 @@ export default {
         billAmount = billAmount + e.amount;
       });
 
-      const prePayment =
-        this.repair.payment && this.repair.payment.prePayment
-          ? this.repair.payment.prePayment
-          : 0;
-
-      const gain = gainAmount + prePayment - billAmount;
+      const gain = gainAmount - billAmount;
       return gain;
     },
   },
