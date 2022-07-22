@@ -6,7 +6,9 @@
       </v-card-title>
       <v-card-subtitle>
         <v-chip label>{{ currencyFormat(product.unitCost) }}</v-chip>
-        <v-chip label class="ml-2">{{ totalStock }} piezas totales</v-chip>
+        <v-chip label class="ml-2" color="secondary lighten-2"
+          >{{ totalStock }} piezas totales</v-chip
+        >
       </v-card-subtitle>
       <v-card-text>
         <v-btn
