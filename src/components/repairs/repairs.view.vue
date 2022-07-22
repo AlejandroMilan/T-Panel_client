@@ -219,7 +219,6 @@ export default {
 
         if (!this.repairs.length) this.goToPage(1);
       } catch (error) {
-        console.error(error);
         this.loading = false;
         this.error = error.data.message;
         if (error.status >= 500) console.error(error.data);

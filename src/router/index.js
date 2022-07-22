@@ -11,6 +11,7 @@ import usersView from "@/components/users/users.view";
 import repairsView from "@/components/repairs/repairs.view";
 import repairView from "@/components/repairs/repair.view";
 import branchOfficesView from "@/components/branchOffices/branchOffices.view";
+import productsView from "@/components/products/products.view";
 
 const routes = [
   {
@@ -67,6 +68,14 @@ const routes = [
     path: "/panel/sucursales",
     name: "Sucursales",
     component: branchOfficesView,
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: "/panel/productos",
+    name: "Productos",
+    component: productsView,
     meta: {
       requiresAuth: true,
     },

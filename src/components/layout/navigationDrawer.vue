@@ -81,6 +81,11 @@ export default {
         permission: 310,
       },
       {
+        title: "Productos",
+        icon: "mdi-package",
+        route: "/panel/productos",
+      },
+      {
         title: "Usuarios",
         icon: "mdi-account-multiple",
         route: "/panel/usuarios",
