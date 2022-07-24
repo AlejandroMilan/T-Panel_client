@@ -174,10 +174,16 @@ export default {
   },
 
   mounted() {
+    this.setCurrentData();
     this.getProducts();
   },
 
   methods: {
+    setCurrentData() {
+      const { query } = this.$route;
+      if (query.search) this.search = query.search;
+    },
+
     async getProducts() {
       this.loading = true;
 

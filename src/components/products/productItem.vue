@@ -2,10 +2,17 @@
   <div>
     <v-card outlined tile>
       <v-card-title>
-        <span class="secondary--text">{{ product.name }}</span>
+        <span class="secondary--text">{{ productLocal.name }}</span>
+        <v-spacer></v-spacer>
+        <product-menu
+          @updateProductInfo="showModificationDialog = true"
+        ></product-menu>
       </v-card-title>
       <v-card-subtitle>
-        <v-chip label>{{ currencyFormat(product.unitCost) }}</v-chip>
+        <div class="py-1">
+          <span>SKU: {{ productLocal.sku }}</span>
+        </div>
+        <v-chip label>{{ currencyFormat(productLocal.unitCost) }}</v-chip>
         <v-chip label class="ml-2" color="secondary lighten-2"
           >{{ totalStock }} piezas totales</v-chip
         >
@@ -27,9 +34,9 @@
         </v-btn>
 
         <div v-if="showStock">
-          <v-list v-if="product.stock.length">
+          <v-list v-if="productLocal.stock.length">
             <v-list-item
-              v-for="stockItem in product.stock"
+              v-for="stockItem in productLocal.stock"
               :key="stockItem._id"
             >
               <v-list-item-content>
@@ -46,20 +53,45 @@
         </div>
       </v-card-text>
     </v-card>
+
+    <product-modification
+      v-if="showModificationDialog"
+      :show="showModificationDialog"
+      :currentProduct="productLocal"
+      @cancel="showModificationDialog = false"
+      @productSaved="productSaved"
+    ></product-modification>
   </div>
 </template>
 
 <script>
 import { currencyFormat } from "@/helpers/numbers.helper";
 
+import productMenu from "./productMenu.vue";
+
 export default {
   props: {
     product: { type: Object, required: true },
   },
 
-  data: () => ({
-    showStock: false,
-  }),
+  components: {
+    "product-menu": productMenu,
+    "product-modification": () => import("./productCreation.vue"),
+  },
+
+  data() {
+    return {
+      showStock: false,
+      showModificationDialog: false,
+      productLocal: this.product,
+    };
+  },
+
+  watch: {
+    product(v) {
+      this.productLocal = v;
+    },
+  },
 
   computed: {
     totalStock() {
@@ -75,6 +107,11 @@ export default {
 
   methods: {
     currencyFormat,
+
+    productSaved(product) {
+      this.productLocal = product;
+      this.showModificationDialog = false;
+    },
   },
 };
 </script>

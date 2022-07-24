@@ -2,7 +2,9 @@
   <v-dialog v-model="show" persistent width="800" scrollable>
     <v-card :loading="loading">
       <v-card-title>
-        <span>Nuevo producto</span>
+        <span>{{
+          currentProduct ? currentProduct.name : "Nuevo producto"
+        }}</span>
         <v-spacer></v-spacer>
         <v-btn icon @click="$emit('cancel')">
           <v-icon>mdi-close</v-icon>
@@ -55,7 +57,7 @@
             ></v-text-field>
           </v-col>
         </v-row>
-        <v-row dense>
+        <v-row v-if="!currentProduct" dense>
           <v-col cols="12">
             <v-subheader class="ma-0 pa-0"
               >Existencias en sucursales</v-subheader
@@ -124,6 +126,7 @@ export default {
 
   props: {
     show: { type: Boolean, default: false },
+    currentProduct: { type: Object, default: () => null },
   },
 
   data() {
@@ -166,11 +169,20 @@ export default {
   },
 
   mounted() {
-    this.getBranchOffices();
+    if (this.currentProduct) this.setCurrentData();
+    else this.getBranchOffices();
   },
 
   methods: {
     currencyFormat,
+
+    setCurrentData() {
+      if (this.currentProduct) {
+        this.name = this.currentProduct.name;
+        this.sku = this.currentProduct.sku;
+        this.unitCost = this.currentProduct.unitCost;
+      }
+    },
 
     async getBranchOffices() {
       this.loading = true;
@@ -235,11 +247,17 @@ export default {
           sku: this.sku,
           unitCost: this.unitCost,
         };
-        const serverResponse = await this.postRequest("/products", body);
+        const serverResponse = this.currentProduct
+          ? await this.putRequest(
+              `/products/product/${this.currentProduct._id}/info`,
+              body
+            )
+          : await this.postRequest("/products", body);
         this.loading = false;
 
         this.product = serverResponse.product;
-        this.submitBranchOfficesExistences();
+        if (this.currentProduct) this.$emit("productSaved", this.product);
+        else this.submitBranchOfficesExistences();
       } catch (error) {
         this.loading = false;
         if (error.data) this.error = error.data.message;
