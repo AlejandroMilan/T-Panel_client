@@ -84,6 +84,18 @@ const serverRequestMixin = {
       }
     },
 
+    handleResponseError(
+      error,
+      fields = { loading: "loading", error: "error" }
+    ) {
+      this[fields.loading] = false;
+      if (error.data) this[fields.error] = error.data.message;
+      else {
+        this[fields.error] = "Error inesperado, favor de contactar con soporte";
+        console.error(error);
+      }
+    },
+
     expiredSession() {
       this.setGlobalError({
         title: "Sesión caducada",

@@ -6,6 +6,7 @@
         <v-spacer></v-spacer>
         <product-menu
           @updateProductInfo="showModificationDialog = true"
+          @addStockToBranchOffice="showStockDialog = true"
         ></product-menu>
       </v-card-title>
       <v-card-subtitle>
@@ -61,6 +62,14 @@
       @cancel="showModificationDialog = false"
       @productSaved="productSaved"
     ></product-modification>
+
+    <stock-adder
+      v-if="showStockDialog"
+      :show="showStockDialog"
+      :product="productLocal"
+      @cancel="showStockDialog = false"
+      @productSaved="productSaved"
+    ></stock-adder>
   </div>
 </template>
 
@@ -77,12 +86,14 @@ export default {
   components: {
     "product-menu": productMenu,
     "product-modification": () => import("./productCreation.vue"),
+    "stock-adder": () => import("./productStockAdder.vue"),
   },
 
   data() {
     return {
       showStock: false,
       showModificationDialog: false,
+      showStockDialog: false,
       productLocal: this.product,
     };
   },
@@ -111,6 +122,7 @@ export default {
     productSaved(product) {
       this.productLocal = product;
       this.showModificationDialog = false;
+      this.showStockDialog = false;
     },
   },
 };
