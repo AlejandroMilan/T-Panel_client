@@ -5,6 +5,17 @@
         <v-toolbar-title>
           <span>Listado de productos</span>
         </v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-btn
+          color="primary"
+          :disabled="loading"
+          @click="showProductDialog = true"
+        >
+          <v-icon :small="!isMobile" :class="{ isMobile: 'mr-2' }"
+            >mdi-plus</v-icon
+          >
+          <span v-if="!isMobile">Nuevo producto</span>
+        </v-btn>
       </v-toolbar>
       <v-card-title>
         <v-row dense>
@@ -12,6 +23,7 @@
             <v-text-field
               v-model="search"
               :label="`Buscar (${count} resultados)`"
+              hint="Buscar por nombre o SKU"
               outlined
               dense
               color="secondary"
@@ -100,6 +112,13 @@
         <span v-else>Sin productos agregados</span>
       </v-card-text>
     </v-card>
+
+    <product-dialog
+      v-if="showProductDialog"
+      :show="showProductDialog"
+      @cancel="showProductDialog = false"
+      @productSaved="productSaved"
+    ></product-dialog>
   </div>
 </template>
 
@@ -111,6 +130,7 @@ export default {
 
   components: {
     "product-item": () => import("./productItem.vue"),
+    "product-dialog": () => import("./productCreation.vue"),
   },
 
   data: () => ({
@@ -119,6 +139,7 @@ export default {
     products: [],
     search: "",
     count: 0,
+    showProductDialog: false,
   }),
 
   computed: {
@@ -139,6 +160,10 @@ export default {
 
     canGoNext() {
       return this.activePage < this.maxPage;
+    },
+
+    isMobile() {
+      return this.$vuetify.breakpoint.smAndDown;
     },
   },
 
@@ -188,6 +213,11 @@ export default {
 
     goToPage(page) {
       this.changeQuery({ page });
+    },
+
+    productSaved(product) {
+      this.products.push(product);
+      this.showProductDialog = false;
     },
   },
 };
