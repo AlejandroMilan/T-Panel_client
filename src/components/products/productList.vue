@@ -105,7 +105,10 @@
               v-for="product in products"
               :key="product._id"
             >
-              <product-item :product="product"></product-item>
+              <product-item
+                :product="product"
+                @productDeleted="productDeleted"
+              ></product-item>
             </v-col>
           </v-row>
         </div>
@@ -224,6 +227,10 @@ export default {
     productSaved(product) {
       this.products.push(product);
       this.showProductDialog = false;
+    },
+
+    productDeleted(product) {
+      this.products = this.products.filter((e) => e._id !== product._id);
     },
   },
 };

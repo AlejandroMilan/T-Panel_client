@@ -7,6 +7,7 @@
         <product-menu
           @updateProductInfo="showModificationDialog = true"
           @addStockToBranchOffice="showStockDialog = true"
+          @deleteProduct="showDeletionDialog = true"
         ></product-menu>
       </v-card-title>
       <v-card-subtitle>
@@ -94,6 +95,14 @@
       :stockItem="stockItemSelected"
       @cancel="closeExistencesDialog()"
     ></existences-changer>
+
+    <product-deletion
+      v-if="showDeletionDialog"
+      :show="showDeletionDialog"
+      :productId="productLocal._id"
+      @cancel="showDeletionDialog = false"
+      @productDeleted="$emit('productDeleted', productLocal)"
+    ></product-deletion>
   </div>
 </template>
 
@@ -112,6 +121,7 @@ export default {
     "product-modification": () => import("./productCreation.vue"),
     "stock-adder": () => import("./productStockAdder.vue"),
     "existences-changer": () => import("./productBOStockChanger.vue"),
+    "product-deletion": () => import("./productDeletion.vue"),
   },
 
   data() {
@@ -120,6 +130,7 @@ export default {
       showModificationDialog: false,
       showStockDialog: false,
       showExistencesDialog: false,
+      showDeletionDialog: false,
       productLocal: this.product,
       stockItemSelected: null,
     };
