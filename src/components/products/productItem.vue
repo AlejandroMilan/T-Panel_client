@@ -48,6 +48,22 @@
                   <span>{{ stockItem.existences }} existencias</span>
                 </v-list-item-subtitle>
               </v-list-item-content>
+              <v-list-item-action>
+                <v-tooltip left>
+                  <template #activator="{ on, attrs }">
+                    <v-btn
+                      v-on="on"
+                      v-bind="attrs"
+                      small
+                      icon
+                      @click="openExistencesDialog(stockItem)"
+                    >
+                      <v-icon small>mdi-pencil</v-icon>
+                    </v-btn>
+                  </template>
+                  <span>Cambiar existencias</span>
+                </v-tooltip>
+              </v-list-item-action>
             </v-list-item>
           </v-list>
           <span v-else>Sin stock en ninguna sucursal</span>
@@ -70,6 +86,14 @@
       @cancel="showStockDialog = false"
       @productSaved="productSaved"
     ></stock-adder>
+
+    <existences-changer
+      v-if="showExistencesDialog"
+      :show="showExistencesDialog"
+      :productId="productLocal._id"
+      :stockItem="stockItemSelected"
+      @cancel="closeExistencesDialog()"
+    ></existences-changer>
   </div>
 </template>
 
@@ -87,6 +111,7 @@ export default {
     "product-menu": productMenu,
     "product-modification": () => import("./productCreation.vue"),
     "stock-adder": () => import("./productStockAdder.vue"),
+    "existences-changer": () => import("./productBOStockChanger.vue"),
   },
 
   data() {
@@ -94,7 +119,9 @@ export default {
       showStock: false,
       showModificationDialog: false,
       showStockDialog: false,
+      showExistencesDialog: false,
       productLocal: this.product,
+      stockItemSelected: null,
     };
   },
 
@@ -109,7 +136,7 @@ export default {
       let result = 0;
 
       this.product.stock.forEach((e) => {
-        result = result + e.existences;
+        result = result + Number(e.existences);
       });
 
       return result;
@@ -123,6 +150,16 @@ export default {
       this.productLocal = product;
       this.showModificationDialog = false;
       this.showStockDialog = false;
+    },
+
+    openExistencesDialog(stockItem) {
+      this.stockItemSelected = stockItem;
+      this.showExistencesDialog = true;
+    },
+
+    closeExistencesDialog() {
+      this.showExistencesDialog = false;
+      this.stockItemSelected = null;
     },
   },
 };
