@@ -7,6 +7,7 @@
         </v-toolbar-title>
         <v-spacer></v-spacer>
         <v-btn
+          v-if="hasPermission(520)"
           color="primary"
           :disabled="loading"
           @click="showProductDialog = true"
@@ -126,6 +127,7 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import serverRequestMixin from "@/mixins/serverRequest.mixin";
 
 export default {
@@ -146,6 +148,8 @@ export default {
   }),
 
   computed: {
+    ...mapGetters(["hasPermission"]),
+
     activePage() {
       const { page } = this.$route.query;
       if (!page) return 1;

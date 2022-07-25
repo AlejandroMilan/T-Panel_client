@@ -5,6 +5,7 @@
         <span class="secondary--text">{{ productLocal.name }}</span>
         <v-spacer></v-spacer>
         <product-menu
+          v-if="hasPermission(533) || hasPermission(535) || hasPermission(543)"
           @updateProductInfo="showModificationDialog = true"
           @addStockToBranchOffice="showStockDialog = true"
           @deleteProduct="showDeletionDialog = true"
@@ -49,7 +50,9 @@
                   <span>{{ stockItem.existences }} existencias</span>
                 </v-list-item-subtitle>
               </v-list-item-content>
-              <v-list-item-action>
+              <v-list-item-action
+                v-if="canUpdateToBranchOffice(stockItem.branchOffice._id)"
+              >
                 <v-tooltip left>
                   <template #activator="{ on, attrs }">
                     <v-btn
@@ -107,6 +110,7 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import { currencyFormat } from "@/helpers/numbers.helper";
 
 import productMenu from "./productMenu.vue";
@@ -143,6 +147,8 @@ export default {
   },
 
   computed: {
+    ...mapGetters(["hasPermission", "user"]),
+
     totalStock() {
       let result = 0;
 
@@ -151,6 +157,15 @@ export default {
       });
 
       return result;
+    },
+
+    canUpdateToBranchOffice() {
+      return function (branchId) {
+        if (!this.user.role.role === 0) return true;
+        else if (this.user.branchOffice._id === branchId) return true;
+        else if (this.hasPermission(521)) return true;
+        return false;
+      };
     },
   },
 

@@ -9,6 +9,7 @@
         </v-btn>
       </v-card-title>
       <v-card-text>
+        <v-alert v-if="error" type="error" outlined>{{ error }}</v-alert>
         <span
           >¿Estás segur@ que deseas eliminar este producto? Toma en cuenta lo
           siguiente</span

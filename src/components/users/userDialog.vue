@@ -1,5 +1,5 @@
 <template>
-  <v-dialog width="600" v-model="show" persistent>
+  <v-dialog width="800" v-model="show" persistent>
     <v-card :loading="loading">
       <v-card-title>
         <span>{{ currentUser ? currentUser.name : "Nuevo usuario" }}</span>
@@ -100,7 +100,7 @@
               item-text="name"
               color="secondary"
               item-color="secondary"
-              hint="La sucursal limitará las reparaciones a las que el usuario tendrá accesso"
+              hint="La sucursal limitará las reparaciones a las que el usuario tendrá accesso, en caso de no se cuente con el permiso pertinente"
               :disabled="loading"
               persistent-hint
               outlined

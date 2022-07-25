@@ -14,40 +14,42 @@
             <v-alert type="error" outlined>{{ error }}</v-alert>
           </v-col>
           <v-col cols="12">
-            <v-row v-for="(stockItem, index) in stock" :key="index" dense>
-              <v-col cols="12" md="6">
-                <v-text-field
-                  v-model="stockItem.branchOfficeName"
-                  readonly
-                  label="Sucursal"
-                  color="secondary"
-                  :outlined="index % 2 == 0"
-                  :filled="index % 2 != 0"
-                  dense
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12" md="3">
-                <v-text-field
-                  v-model="stockItem.currentExistences"
-                  readonly
-                  label="Stock actual"
-                  color="secondary"
-                  :outlined="index % 2 == 0"
-                  :filled="index % 2 != 0"
-                  dense
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12" md="3">
-                <v-text-field
-                  v-model="stockItem.existences"
-                  label="A sumar"
-                  color="secondary"
-                  :outlined="index % 2 == 0"
-                  :filled="index % 2 != 0"
-                  dense
-                ></v-text-field>
-              </v-col>
-            </v-row>
+            <div v-for="(stockItem, index) in stock" :key="index">
+              <v-row v-if="canAddToBranchOffice(stockItem.branchOffice)" dense>
+                <v-col cols="12" md="6">
+                  <v-text-field
+                    v-model="stockItem.branchOfficeName"
+                    readonly
+                    label="Sucursal"
+                    color="secondary"
+                    :outlined="index % 2 == 0"
+                    :filled="index % 2 != 0"
+                    dense
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12" md="3">
+                  <v-text-field
+                    v-model="stockItem.currentExistences"
+                    readonly
+                    label="Stock actual"
+                    color="secondary"
+                    :outlined="index % 2 == 0"
+                    :filled="index % 2 != 0"
+                    dense
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12" md="3">
+                  <v-text-field
+                    v-model="stockItem.existences"
+                    label="A sumar"
+                    color="secondary"
+                    :outlined="index % 2 == 0"
+                    :filled="index % 2 != 0"
+                    dense
+                  ></v-text-field>
+                </v-col>
+              </v-row>
+            </div>
           </v-col>
           <v-col cols="12" class="d-flex justify-end">
             <v-btn
@@ -70,6 +72,7 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import serverRequestMixin from "@/mixins/serverRequest.mixin.js";
 
 export default {
@@ -87,6 +90,19 @@ export default {
     stock: [],
     productLocal: null,
   }),
+
+  computed: {
+    ...mapGetters(["user", "hasPermission"]),
+
+    canAddToBranchOffice() {
+      return function (branchId) {
+        if (this.user.role.role === 0) return true;
+        else if (this.user.branchOffice._id === branchId) return true;
+        else if (this.hasPermission(521)) return true;
+        return false;
+      };
+    },
+  },
 
   mounted() {
     this.getBranchOffices();
@@ -123,6 +139,7 @@ export default {
 
       try {
         for (let stockItem of this.stock) {
+          if (!this.canAddToBranchOffice(stockItem.branchOffice)) continue;
           const body = {
             branchOffice: stockItem.branchOffice,
             existences: stockItem.existences,

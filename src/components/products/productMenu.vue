@@ -10,6 +10,7 @@
         <v-list-item
           v-for="menuItem in productMenu"
           :key="menuItem.emitAction"
+          :disabled="!hasPermission(menuItem.permissionRequired)"
           @click="$emit(menuItem.emitAction)"
         >
           <v-list-item-icon class="ma-1 pt-3">
@@ -27,6 +28,8 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 export default {
   data: () => ({
     productMenu: [
@@ -34,19 +37,26 @@ export default {
         text: "Modificar información",
         icon: "mdi-pencil",
         emitAction: "updateProductInfo",
+        permissionRequired: 535,
       },
       {
         text: "Agregar stock a sucursal",
         icon: "mdi-store-plus",
         emitAction: "addStockToBranchOffice",
+        permissionRequired: 533,
       },
       {
         text: "Eliminar producto",
         icon: "mdi-delete",
         emitAction: "deleteProduct",
         color: "error",
+        permissionRequired: 543,
       },
     ],
   }),
+
+  computed: {
+    ...mapGetters(["hasPermission"]),
+  },
 };
 </script>
